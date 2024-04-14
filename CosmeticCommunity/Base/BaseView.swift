@@ -5,7 +5,7 @@
 //  Created by 남현정 on 2024/04/13.
 //
 
-import Foundation
+import UIKit
 
 class BaseView: UIView {
     
@@ -13,7 +13,7 @@ class BaseView: UIView {
         super.init(frame: frame)
         
         configureHierarchy()
-        configureLayout()
+        configureConstraints()
         configureView()
     }
     
@@ -25,7 +25,7 @@ class BaseView: UIView {
         
     }
     
-    func configureLayout() {
+    func configureConstraints() {
         
     }
     

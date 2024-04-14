@@ -6,3 +6,20 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
+
+final class ProfileViewModel: InputOutput {
+    struct Input {
+        
+    }
+    
+    struct Output {
+        
+    }
+    var disposeBag = DisposeBag()
+    
+    func transform(input: Input) -> Output {
+        return Output()
+    }
+}

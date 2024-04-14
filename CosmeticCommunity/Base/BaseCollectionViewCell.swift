@@ -14,7 +14,7 @@ class BaseCollectionViewCell: UICollectionViewCell {
         
         contentView.backgroundColor = .white
         configureHierarchy()
-        configureLayout()
+        configureConstraints()
         configureView()
     }
     
@@ -28,7 +28,7 @@ class BaseCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func configureLayout() {
+    func configureConstraints() {
         
     }
     

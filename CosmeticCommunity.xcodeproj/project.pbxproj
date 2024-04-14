@@ -28,6 +28,17 @@
 		8B428C7F2BCAB93800FD1B69 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8B428C7E2BCAB93800FD1B69 /* SnapKit */; };
 		8B428C822BCAB95100FD1B69 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 8B428C812BCAB95100FD1B69 /* RxCocoa */; };
 		8B428C842BCAB95100FD1B69 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8B428C832BCAB95100FD1B69 /* RxSwift */; };
+		8B428C872BCACA6900FD1B69 /* NotloginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C862BCACA6900FD1B69 /* NotloginView.swift */; };
+		8B428C8A2BCACABA00FD1B69 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C892BCACABA00FD1B69 /* Constants.swift */; };
+		8B428C8C2BCB708000FD1B69 /* PointButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C8B2BCB708000FD1B69 /* PointButton.swift */; };
+		8B428C8E2BCBC25D00FD1B69 /* InputOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C8D2BCBC25D00FD1B69 /* InputOutput.swift */; };
+		8B428C902BCBCA9400FD1B69 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C8F2BCBCA9400FD1B69 /* NetworkManager.swift */; };
+		8B428C922BCBCB3600FD1B69 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C912BCBCB3600FD1B69 /* UserManager.swift */; };
+		8B428C942BCC126200FD1B69 /* UserDefaultKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C932BCC126200FD1B69 /* UserDefaultKey.swift */; };
+		8B428C962BCC128300FD1B69 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C952BCC128300FD1B69 /* Network.swift */; };
+		8B428C982BCC136D00FD1B69 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C972BCC136D00FD1B69 /* Router.swift */; };
+		8B428C9A2BCC13D000FD1B69 /* RouterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C992BCC13D000FD1B69 /* RouterType.swift */; };
+		8B428C9D2BCC233700FD1B69 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C9C2BCC233700FD1B69 /* UserModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +59,17 @@
 		8B428C6B2BCAB84200FD1B69 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		8B428C6E2BCAB88600FD1B69 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		8B428C722BCAB89E00FD1B69 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		8B428C862BCACA6900FD1B69 /* NotloginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotloginView.swift; sourceTree = "<group>"; };
+		8B428C892BCACABA00FD1B69 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8B428C8B2BCB708000FD1B69 /* PointButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointButton.swift; sourceTree = "<group>"; };
+		8B428C8D2BCBC25D00FD1B69 /* InputOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputOutput.swift; sourceTree = "<group>"; };
+		8B428C8F2BCBCA9400FD1B69 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		8B428C912BCBCB3600FD1B69 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		8B428C932BCC126200FD1B69 /* UserDefaultKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultKey.swift; sourceTree = "<group>"; };
+		8B428C952BCC128300FD1B69 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		8B428C972BCC136D00FD1B69 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		8B428C992BCC13D000FD1B69 /* RouterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterType.swift; sourceTree = "<group>"; };
+		8B428C9C2BCC233700FD1B69 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,11 +109,13 @@
 		8B428C402BC980C700FD1B69 /* CosmeticCommunity */ = {
 			isa = PBXGroup;
 			children = (
+				8B428C882BCACAA000FD1B69 /* Enum */,
 				8B428C682BCAB5DC00FD1B69 /* Manager */,
 				8B428C572BC981C200FD1B69 /* Network */,
 				8B428C5B2BCAB4C600FD1B69 /* Extension */,
 				8B428C5C2BCAB4CA00FD1B69 /* Protocol */,
 				8B428C5A2BCAB4C200FD1B69 /* Base */,
+				8B428C852BCACA4300FD1B69 /* CustomView */,
 				8B428C662BCAB5B900FD1B69 /* Code */,
 				8B428C412BC980C700FD1B69 /* AppDelegate.swift */,
 				8B428C432BC980C700FD1B69 /* SceneDelegate.swift */,
@@ -107,7 +131,10 @@
 		8B428C572BC981C200FD1B69 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				8B428C9B2BCC232400FD1B69 /* Model */,
 				8B428C582BC981D100FD1B69 /* APIKey.swift */,
+				8B428C972BCC136D00FD1B69 /* Router.swift */,
+				8B428C8F2BCBCA9400FD1B69 /* NetworkManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -133,6 +160,8 @@
 		8B428C5C2BCAB4CA00FD1B69 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
+				8B428C8D2BCBC25D00FD1B69 /* InputOutput.swift */,
+				8B428C992BCC13D000FD1B69 /* RouterType.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -149,6 +178,7 @@
 		8B428C682BCAB5DC00FD1B69 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				8B428C912BCBCB3600FD1B69 /* UserManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -176,6 +206,33 @@
 				8B428C722BCAB89E00FD1B69 /* ProfileView.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		8B428C852BCACA4300FD1B69 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				8B428C862BCACA6900FD1B69 /* NotloginView.swift */,
+				8B428C8B2BCB708000FD1B69 /* PointButton.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
+		8B428C882BCACAA000FD1B69 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				8B428C892BCACABA00FD1B69 /* Constants.swift */,
+				8B428C932BCC126200FD1B69 /* UserDefaultKey.swift */,
+				8B428C952BCC128300FD1B69 /* Network.swift */,
+			);
+			path = Enum;
+			sourceTree = "<group>";
+		};
+		8B428C9B2BCC232400FD1B69 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8B428C9C2BCC233700FD1B69 /* UserModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,17 +322,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B428C8C2BCB708000FD1B69 /* PointButton.swift in Sources */,
 				8B428C5E2BCAB4D900FD1B69 /* BaseViewController.swift in Sources */,
 				8B428C622BCAB52B00FD1B69 /* BaseCollectionViewCell.swift in Sources */,
 				8B428C652BCAB58300FD1B69 /* UIView+Extension.swift in Sources */,
+				8B428C902BCBCA9400FD1B69 /* NetworkManager.swift in Sources */,
+				8B428C9D2BCC233700FD1B69 /* UserModel.swift in Sources */,
 				8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */,
 				8B428C6F2BCAB88600FD1B69 /* ProfileViewModel.swift in Sources */,
 				8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */,
 				8B428C602BCAB4FF00FD1B69 /* BaseView.swift in Sources */,
 				8B428C6C2BCAB84200FD1B69 /* ProfileViewController.swift in Sources */,
 				8B428C592BC981D100FD1B69 /* APIKey.swift in Sources */,
+				8B428C9A2BCC13D000FD1B69 /* RouterType.swift in Sources */,
+				8B428C8A2BCACABA00FD1B69 /* Constants.swift in Sources */,
+				8B428C982BCC136D00FD1B69 /* Router.swift in Sources */,
+				8B428C962BCC128300FD1B69 /* Network.swift in Sources */,
 				8B428C732BCAB89E00FD1B69 /* ProfileView.swift in Sources */,
+				8B428C872BCACA6900FD1B69 /* NotloginView.swift in Sources */,
+				8B428C942BCC126200FD1B69 /* UserDefaultKey.swift in Sources */,
 				8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */,
+				8B428C8E2BCBC25D00FD1B69 /* InputOutput.swift in Sources */,
+				8B428C922BCBCB3600FD1B69 /* UserManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

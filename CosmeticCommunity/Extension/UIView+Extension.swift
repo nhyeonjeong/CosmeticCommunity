@@ -11,4 +11,10 @@ extension UIView {
     static var identifier: String {
         String(describing: self)
     }
+    
+    func addView(_ views: [UIView]) {
+        for view in views {
+            addSubview(view)
+        }
+    }
 }
