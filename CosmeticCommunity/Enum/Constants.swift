@@ -9,7 +9,7 @@ import UIKit
 
 enum Constants {
     enum Color {
-        static let message = UIColor.systemPink
+        static let point = UIColor.systemPink
         
     }
 }

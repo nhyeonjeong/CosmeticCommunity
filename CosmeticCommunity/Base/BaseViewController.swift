@@ -11,7 +11,6 @@ class BaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(self, #function) // self는 컨트롤러 인스턴스
         view.backgroundColor = .white
         bind()
         configureHierarchy()

@@ -8,7 +8,7 @@
 import Foundation
 
 enum UserDefaultKey {
-    enum User: String {
+    enum Member: String {
         case accessToken
         case refreshToken
         case userId

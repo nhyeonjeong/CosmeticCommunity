@@ -8,13 +8,16 @@
 import UIKit
 import SnapKit
 
-final class NotloginView: BaseView {
-    private let loginButton = {
+final class NotLoginView: BaseView {
+    let loginButton = {
         let view = UIButton()
         view.setTitle("로그인 하러 가기 >", for: .normal)
-        view.setTitleColor(Constants.Color.message, for: .normal)
+        view.setTitleColor(Constants.Color.point, for: .normal)
         return view
     }()
+    @objc func loginButtonClicked() {
+
+    }
     override func configureHierarchy() {
         addSubview(loginButton)
     }

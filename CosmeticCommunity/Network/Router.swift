@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 enum Router {
-    // User
+    // Member
     case login(query: LoginQuery)
     case join(query: JoinQuery)
 //    case validEmail
@@ -54,9 +54,12 @@ extension Router: RouterType {
         }
     }
     
-    var parameters: String? {
+    var parameters: [String: String]? {
         switch self {
-        case .login, .join:
+        case .login(let query):
+            return [ParameterKey.email.rawValue: query.email,
+                    ParameterKey.password.rawValue: query.password]
+        case .join:
             return nil
         }
     }

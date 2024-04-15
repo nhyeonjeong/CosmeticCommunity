@@ -12,7 +12,7 @@ extension UIView {
         String(describing: self)
     }
     
-    func addView(_ views: [UIView]) {
+    func addViews(_ views: [UIView]) {
         for view in views {
             addSubview(view)
         }

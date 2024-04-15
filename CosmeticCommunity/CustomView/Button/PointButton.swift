@@ -10,11 +10,13 @@ import UIKit
 final class PointButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        self.backgroundColor = Constants.Color.message
-        self.setTitleColor(.white, for: .normal)
+        configureView()
     }
-    
+    func configureView() {
+        self.backgroundColor = Constants.Color.point
+        self.setTitleColor(.white, for: .normal)
+        self.layer.cornerRadius = 10
+    }
     func configureTitle(_ title: String) {
         self.setTitle(title, for: .normal)
     }

@@ -25,3 +25,11 @@ struct JoinQuery: Encodable {
 struct RefreshTokenModel: Decodable {
     let accessToken: String
 }
+
+struct LoginModel: Decodable {
+    let user_id: String
+    let email: String
+    let nick: String
+    let accessToken: String
+    let refreshToken: String
+}

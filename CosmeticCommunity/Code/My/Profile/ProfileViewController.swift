@@ -10,18 +10,15 @@ import RxSwift
 import RxCocoa
 
 final class ProfileViewController: BaseViewController {
-    let mainView = ProfileView()
-    let viewModel = ProfileViewModel()
+    private let mainView = ProfileView()
+    private let viewModel = ProfileViewModel()
     
     override func loadView() {
-        // 로그아웃된 상태라면 유저디폴트에 userId가 없다.
-        let userId = UserDefaults.standard.string(forKey: "userId")
-        guard let _ = userId else {
-            view = NotloginView()
-            return
-        }
-        // userid가 있는 상태라면
         view = mainView
+    }
+    
+    deinit {
+        print("ProfileVC Deinit")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -30,6 +27,20 @@ final class ProfileViewController: BaseViewController {
         
     }
     override func bind() {
+        // 로그아웃된 상태라면 유저디폴트에 userId가 없다.
+        let userId = UserDefaults.standard.string(forKey: "userId")
+        // 로그아웃된 상태라면 로그인해달라는 화면
+        guard let _ = userId else {
+            let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let sceneDelegate = scene?.delegate as? SceneDelegate
+            
+            let vc = NotLoginViewController()
+            let nav = UINavigationController(rootViewController: vc)
+
+            sceneDelegate?.window?.rootViewController = nav
+            sceneDelegate?.window?.makeKeyAndVisible()
+            return
+        }
         
     }
     
