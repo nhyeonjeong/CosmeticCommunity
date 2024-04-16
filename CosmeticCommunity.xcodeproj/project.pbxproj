@@ -46,6 +46,10 @@
 		8B428CCA2BCD1CE500FD1B69 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CC92BCD1CE500FD1B69 /* RegisterViewController.swift */; };
 		8B428CCC2BCD1CED00FD1B69 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CCB2BCD1CED00FD1B69 /* RegisterView.swift */; };
 		8B428CCE2BCD1CF400FD1B69 /* ReigsterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CCD2BCD1CF400FD1B69 /* ReigsterViewModel.swift */; };
+		8B428CD32BCE000A00FD1B69 /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CD22BCE000A00FD1B69 /* UploadViewController.swift */; };
+		8B428CD52BCE001400FD1B69 /* UploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CD42BCE001400FD1B69 /* UploadView.swift */; };
+		8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */; };
+		8B428CF32BCE865C00FD1B69 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF22BCE865C00FD1B69 /* PostModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +88,10 @@
 		8B428CC92BCD1CE500FD1B69 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		8B428CCB2BCD1CED00FD1B69 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		8B428CCD2BCD1CF400FD1B69 /* ReigsterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReigsterViewModel.swift; sourceTree = "<group>"; };
+		8B428CD22BCE000A00FD1B69 /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
+		8B428CD42BCE001400FD1B69 /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
+		8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewModel.swift; sourceTree = "<group>"; };
+		8B428CF22BCE865C00FD1B69 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				8B428CA12BCCA98B00FD1B69 /* Member */,
+				8B428CD12BCDFFEE00FD1B69 /* Upload */,
 				8B428C692BCAB62000FD1B69 /* Search */,
 				8B428C6A2BCAB63D00FD1B69 /* My */,
 			);
@@ -246,6 +255,7 @@
 			isa = PBXGroup;
 			children = (
 				8B428C9C2BCC233700FD1B69 /* UserModel.swift */,
+				8B428CF22BCE865C00FD1B69 /* PostModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -294,6 +304,16 @@
 				8B428CCD2BCD1CF400FD1B69 /* ReigsterViewModel.swift */,
 			);
 			path = Register;
+			sourceTree = "<group>";
+		};
+		8B428CD12BCDFFEE00FD1B69 /* Upload */ = {
+			isa = PBXGroup;
+			children = (
+				8B428CD22BCE000A00FD1B69 /* UploadViewController.swift */,
+				8B428CD42BCE001400FD1B69 /* UploadView.swift */,
+				8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */,
+			);
+			path = Upload;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -384,6 +404,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B428CCE2BCD1CF400FD1B69 /* ReigsterViewModel.swift in Sources */,
+				8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */,
+				8B428CD32BCE000A00FD1B69 /* UploadViewController.swift in Sources */,
 				8B428CCA2BCD1CE500FD1B69 /* RegisterViewController.swift in Sources */,
 				8B428C8C2BCB708000FD1B69 /* PointButton.swift in Sources */,
 				8B428C5E2BCAB4D900FD1B69 /* BaseViewController.swift in Sources */,
@@ -394,6 +416,7 @@
 				8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */,
 				8B428C6F2BCAB88600FD1B69 /* ProfileViewModel.swift in Sources */,
 				8B428CA82BCCAA3400FD1B69 /* LoginView.swift in Sources */,
+				8B428CF32BCE865C00FD1B69 /* PostModel.swift in Sources */,
 				8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */,
 				8B428C602BCAB4FF00FD1B69 /* BaseView.swift in Sources */,
 				8B428C6C2BCAB84200FD1B69 /* ProfileViewController.swift in Sources */,
@@ -412,6 +435,7 @@
 				8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */,
 				8B428C8E2BCBC25D00FD1B69 /* InputOutput.swift in Sources */,
 				8B428C922BCBCB3600FD1B69 /* MemberManger.swift in Sources */,
+				8B428CD52BCE001400FD1B69 /* UploadView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

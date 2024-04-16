@@ -29,7 +29,7 @@ final class NetworkManager {
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
-                        print(success)
+//                        print(success)
                         observer.onNext(success)
                         observer.onCompleted()
                         return

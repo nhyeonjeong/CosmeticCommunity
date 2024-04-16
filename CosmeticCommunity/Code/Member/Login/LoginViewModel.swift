@@ -50,6 +50,4 @@ final class LoginViewModel: InputOutput {
         
         return Output(outputLoginButton: outputLoginButton)
     }
-    
-    
 }

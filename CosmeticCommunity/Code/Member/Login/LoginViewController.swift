@@ -17,6 +17,11 @@ final class LoginViewController: BaseViewController {
     override func loadView() {
         view = mainView
     }
+    
+    deinit {
+        print("LoginViewCon Deinit")
+    }
+    
     override func bind() {
         let input = LoginViewModel.Input(inputLoginButton: mainView.loginButton.rx.tap,
                                          inputEmailTextField: mainView.emailTextField.rx.text,

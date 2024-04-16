@@ -12,5 +12,9 @@ enum Constants {
         static let point = UIColor.systemPink
         
     }
+    
+    enum Image {
+        static let defualtProfilePath = "uploads/posts/defaultProfileImage_1713266372313.jpeg"
+    }
 }
 
