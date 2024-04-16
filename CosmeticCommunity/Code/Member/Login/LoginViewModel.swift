@@ -17,12 +17,12 @@ final class LoginViewModel: InputOutput {
         let inputPasswordTextField: ControlProperty<String?>
     }
     struct Output {
-        let outputLoginButton: PublishSubject<Bool>
+        let outputLoginButton: PublishSubject<LoginModel?>
     }
     var disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
-        let outputLoginButton = PublishSubject<Bool>()
+        let outputLoginButton = PublishSubject<LoginModel?>()
         
         let loginObservable = Observable.combineLatest(input.inputEmailTextField.orEmpty, input.inputPasswordTextField.orEmpty) // 두 가지를 비교
             .map{ email, password in
@@ -39,12 +39,12 @@ final class LoginViewModel: InputOutput {
                         let error = error as! APIError
                         print(error.errorMessage)
                         let loginModel = LoginModel(user_id: "", email: "", nick: "", accessToken: "", refreshToken: "")
-                        outputLoginButton.onNext(false)
+                        outputLoginButton.onNext(nil)
                         return Observable<LoginModel>.never()
                     })
             }
             .subscribe(with: self, onNext: { owner, value in
-                outputLoginButton.onNext(true) // 화면전환
+                outputLoginButton.onNext(value) // 화면전환
             })
             .disposed(by: disposeBag)
         

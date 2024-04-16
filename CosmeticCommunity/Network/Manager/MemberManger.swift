@@ -18,15 +18,27 @@ final class MemberManger {
     func getAccessToken() -> String? {
         return UserDefaults.standard.string(forKey: UserDefaultKey.Member.accessToken.rawValue)
     }
+    // accessToken저장
+    func saveAccessToken(_ token: String) {
+        UserDefaults.standard.setValue(token, forKey: UserDefaultKey.Member.accessToken.rawValue)
+    }
     
     // refreshToken가져오기
     func getRefreshToken() -> String? {
         return UserDefaults.standard.string(forKey: UserDefaultKey.Member.refreshToken.rawValue)
     }
+    // RefreshToken저장
+    func saveRefreshToken(_ token: String) {
+        UserDefaults.standard.setValue(token, forKey: UserDefaultKey.Member.accessToken.rawValue)
+    }
     
     // 유저아이디 가져오기
     func getUserId() -> String? {
         return UserDefaults.standard.string(forKey: UserDefaultKey.Member.userId.rawValue)
+    }
+    // 유저아이디 저장
+    func saveUserId(_ id: String) {
+        UserDefaults.standard.setValue(id, forKey: UserDefaultKey.Member.userId.rawValue)
     }
     
     // 엑세스토큰이 만료됐을 때
