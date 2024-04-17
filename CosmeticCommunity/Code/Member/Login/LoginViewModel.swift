@@ -38,13 +38,16 @@ final class LoginViewModel: InputOutput {
                     .catch({ error in
                         let error = error as! APIError
                         print(error.errorMessage)
-                        let loginModel = LoginModel(user_id: "", email: "", nick: "", accessToken: "", refreshToken: "")
                         outputLoginButton.onNext(nil)
                         return Observable<LoginModel>.never()
                     })
             }
             .subscribe(with: self, onNext: { owner, value in
-                outputLoginButton.onNext(value) // 화면전환
+                // 로그인 성공 유저디폴트 저장
+//                MemberManger.shared.saveUserId(value.user_id)
+//                MemberManger.shared.saveAccessToken(value.accessToken)
+//                MemberManger.shared.saveRefreshToken(value.refreshToken)
+                outputLoginButton.onNext(value)
             })
             .disposed(by: disposeBag)
         

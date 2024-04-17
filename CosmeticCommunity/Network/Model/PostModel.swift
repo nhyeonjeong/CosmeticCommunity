@@ -27,7 +27,7 @@ struct PostModel: Decodable {
     let files: [String]
     let likes: [String]
     let hashTags: [String]
-    let commnets: [Comment]
+    let comments: [Comment]
 }
 
 struct Creator: Decodable {

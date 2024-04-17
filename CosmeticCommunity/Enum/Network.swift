@@ -16,9 +16,15 @@ enum HTTPHeader: String {
     case multipartData = "multipart/form-data"
 }
 
-enum ParameterKey: String{
+enum ParameterKey: String {
     case email
     case password
+    case product_id
+    case title
+    case content
+    case content1
+    case content2
+    case files
 }
 
 enum APIError: Error {

@@ -13,9 +13,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        
         guard let scene = (scene as? UIWindowScene) else { return }
+        
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = UINavigationController(rootViewController: ProfileViewController())
+        
+        let tabBarvc = UITabBarController()
+        
+        let firstNav = UINavigationController(rootViewController: SearchViewController())
+        let secondNav = UINavigationController(rootViewController: ProfileViewController())
+        
+        firstNav.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 0)
+        secondNav.tabBarItem = UITabBarItem(title: "내 정보", image: UIImage(systemName: "person.fill"), tag: 1)
+        
+        tabBarvc.tabBar.tintColor = Constants.Color.point
+        tabBarvc.tabBar.barTintColor = Constants.Color.point
+        tabBarvc.viewControllers = [firstNav, secondNav]
+        
+        window?.rootViewController = tabBarvc
         window?.makeKeyAndVisible()
     }
 

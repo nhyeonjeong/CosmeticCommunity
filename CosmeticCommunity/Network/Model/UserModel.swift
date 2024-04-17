@@ -52,3 +52,7 @@ struct LoginModel: Decodable {
         self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     }
 }
+
+struct RefreshAccess: Decodable {
+    let accessToken: String
+}
