@@ -15,6 +15,7 @@ enum Constants {
     
     enum Image {
         static let defualtProfilePath = "uploads/posts/defaultProfileImage_1713266372313.jpeg"
+        static let xButton = "xmark.circle.fill"
     }
 }
 

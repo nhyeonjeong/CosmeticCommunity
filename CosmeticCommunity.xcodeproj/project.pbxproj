@@ -55,6 +55,7 @@
 		8B428CF92BCEA74E00FD1B69 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF82BCEA74E00FD1B69 /* SearchViewController.swift */; };
 		8B428D032BCF9EB500FD1B69 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */; };
 		8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D042BCFA1B600FD1B69 /* PostManager.swift */; };
+		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +103,7 @@
 		8B428CF82BCEA74E00FD1B69 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		8B428D042BCFA1B600FD1B69 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
+		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,6 +329,7 @@
 				8B428CD22BCE000A00FD1B69 /* UploadViewController.swift */,
 				8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */,
 				8B428CD42BCE001400FD1B69 /* UploadView.swift */,
+				8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */,
 			);
 			path = Upload;
 			sourceTree = "<group>";
@@ -430,6 +433,7 @@
 				8B428C902BCBCA9400FD1B69 /* NetworkManager.swift in Sources */,
 				8B428C9D2BCC233700FD1B69 /* UserModel.swift in Sources */,
 				8B428CF72BCEA74800FD1B69 /* SearchView.swift in Sources */,
+				8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */,
 				8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */,
 				8B428C6F2BCAB88600FD1B69 /* ProfileViewModel.swift in Sources */,
 				8B428CA82BCCAA3400FD1B69 /* LoginView.swift in Sources */,

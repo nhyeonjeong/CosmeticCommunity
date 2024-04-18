@@ -11,11 +11,15 @@ import RxCocoa
 
 final class UploadViewModel: InputOutput {
     let postManager = PostManager()
+    
+    var photos: [NSItemProviderReading] = []
+    
     struct Input {
         let inputTitleString: ControlProperty<String?>
         let inputContentString: ControlProperty<String?>
         let inputUploadButton: PublishSubject<Void>
         let inputUploadTrigger: PublishSubject<Void>
+        let inputSelectPhotos: PublishSubject<Void>
     }
     
     struct Output {
@@ -23,7 +27,7 @@ final class UploadViewModel: InputOutput {
         let outputValid: Driver<Bool>
         let outputUploadTrigger: PublishSubject<PostModel?>
         let outputLoginView: Driver<Void>
-
+        let outputPhotoItems: Driver<[NSItemProviderReading]>
     }
     var disposeBag = DisposeBag()
     
@@ -31,6 +35,7 @@ final class UploadViewModel: InputOutput {
         let outputValid = BehaviorRelay<Bool>(value: false)
         let outputUploadTrigger = PublishSubject<PostModel?>()
         let outputLoginView = PublishRelay<Void>()
+        let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
         let accessTokenTrigger = PublishSubject<Void>()
         
         let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty)
@@ -60,6 +65,9 @@ final class UploadViewModel: InputOutput {
         
         input.inputUploadTrigger
             .withLatestFrom(postObservable)
+            .flatMap {
+                // 먼저 이미지 업로드...
+            }
             .flatMap { postData in
                 print("업로드 네트워크")
                 return self.postManager.uploadPost(postData)
@@ -100,6 +108,22 @@ final class UploadViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputValid: outputValid.asDriver(onErrorJustReturn: false), outputUploadTrigger: outputUploadTrigger, outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()))
+        input.inputSelectPhotos
+            .bind(with: self) { owner, _ in
+                outputPhotoItems.accept(owner.photos)
+            }
+            .disposed(by: disposeBag)
+        
+        return Output(outputValid: outputValid.asDriver(onErrorJustReturn: false), outputUploadTrigger: outputUploadTrigger, outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()), outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []))
+    }
+    // 5개 이하의 이미지만 업로드 가능
+    func appendPhotos(_ item: NSItemProviderReading?) {
+        if photos.count > 4 {
+            return
+        }
+        guard let item else {
+            return
+        }
+        photos.append(item)
     }
 }
