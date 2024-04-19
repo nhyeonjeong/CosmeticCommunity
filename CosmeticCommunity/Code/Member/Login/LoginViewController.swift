@@ -32,11 +32,6 @@ final class LoginViewController: BaseViewController {
         output.outputLoginButton
             .bind(with: self) { owner, value in
                 if let data = value {
-                    // userId, accessToken, refreshToken저장
-                    MemberManger.shared.saveUserId(data.user_id)
-                    MemberManger.shared.saveAccessToken(data.accessToken)
-                    MemberManger.shared.saveRefreshToken(data.refreshToken)
-                    
                     owner.dismiss(animated: true)
                     owner.navigationController?.pushViewController(RegisterViewController(), animated: true)
                     owner.mainView.loginButton.setTitle("로그인", for: .normal)

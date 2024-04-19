@@ -43,10 +43,6 @@ final class LoginViewModel: InputOutput {
                     })
             }
             .subscribe(with: self, onNext: { owner, value in
-                // 로그인 성공 유저디폴트 저장
-//                MemberManger.shared.saveUserId(value.user_id)
-//                MemberManger.shared.saveAccessToken(value.accessToken)
-//                MemberManger.shared.saveRefreshToken(value.refreshToken)
                 outputLoginButton.onNext(value)
             })
             .disposed(by: disposeBag)

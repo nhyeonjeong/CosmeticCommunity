@@ -50,7 +50,11 @@ final class MemberManger {
     
     func login(_ data: LoginQuery) -> Observable<LoginModel> {
 //        print(data)
-        return NetworkManager.shared.fetchAPI(type: LoginModel.self, router: Router.login(query: data))
+        return NetworkManager.shared.fetchAPI(type: LoginModel.self, router: Router.login(query: data), completionHandler: { response in
+            MemberManger.shared.saveUserId(response.user_id)
+            MemberManger.shared.saveAccessToken(response.accessToken)
+            MemberManger.shared.saveRefreshToken(response.refreshToken)
+        })
     }
     
     func join() {
