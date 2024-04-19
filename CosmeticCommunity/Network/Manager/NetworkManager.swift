@@ -69,10 +69,6 @@ final class NetworkManager {
     func dataAPI<T: Decodable>(type: T.Type, router: Router, completionHandler: @escaping ((T) -> Void) = { _ in }) -> Observable<T> {
         return Observable<T>.create { observer in
 
-//            AF.request(router.path, method: router.method, parameters: router.parameters, encoding: JSONEncoding(), headers: router.header).responseString { data in
-//                print(data)
-//            }
-             
             AF.upload(multipartFormData: { multipartFormData in
                 // 헤더키는 withname에 해당한다 -> files
                 // fileName -
@@ -81,6 +77,22 @@ final class NetworkManager {
                 }
                 for data in datas {
                     multipartFormData.append(data, withName: ParameterKey.files.rawValue, fileName: "\(Date())-\(Int.random(in: 1...1000))", mimeType: "image/png")
+                }
+
+
+            }, to: router.path, headers: router.headers).responseString { data in
+                print("responseString", data)
+            }
+             
+            AF.upload(multipartFormData: { multipartFormData in
+                // 헤더키는 withname에 해당한다 -> files
+                // fileName -
+                guard let datas = router.multipartBody else {
+                    return
+                }
+                for data in datas {
+                    let date = Calendar.current.component(.day, from: Date())
+                    multipartFormData.append(data, withName: ParameterKey.files.rawValue, fileName: "\(date)-\(Int.random(in: 1...1000))", mimeType: "image/png")
                 }
 
 

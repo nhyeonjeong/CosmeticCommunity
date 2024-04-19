@@ -56,6 +56,7 @@
 		8B428D032BCF9EB500FD1B69 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */; };
 		8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D042BCFA1B600FD1B69 /* PostManager.swift */; };
 		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
+		8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		8B428D042BCFA1B600FD1B69 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
+		8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProviderReading+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +189,7 @@
 			children = (
 				8B428C642BCAB58300FD1B69 /* UIView+Extension.swift */,
 				8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */,
+				8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -430,6 +433,7 @@
 				8B428C5E2BCAB4D900FD1B69 /* BaseViewController.swift in Sources */,
 				8B428C622BCAB52B00FD1B69 /* BaseCollectionViewCell.swift in Sources */,
 				8B428C652BCAB58300FD1B69 /* UIView+Extension.swift in Sources */,
+				8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */,
 				8B428C902BCBCA9400FD1B69 /* NetworkManager.swift in Sources */,
 				8B428C9D2BCC233700FD1B69 /* UserModel.swift in Sources */,
 				8B428CF72BCEA74800FD1B69 /* SearchView.swift in Sources */,

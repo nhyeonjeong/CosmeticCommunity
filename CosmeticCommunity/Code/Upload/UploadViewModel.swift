@@ -5,7 +5,7 @@
 //  Created by 남현정 on 2024/04/16.
 //
 
-import UIKit //
+import Foundation
 import RxSwift
 import RxCocoa
 
@@ -13,8 +13,8 @@ final class UploadViewModel: InputOutput {
     let postManager = PostManager()
     
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
-
-    var photoString: [String] = []
+    var photoString = BehaviorSubject<[String]>(value: [])
+        
     struct Input {
         let inputTitleString: ControlProperty<String?>
         let inputContentString: ControlProperty<String?>
@@ -40,10 +40,9 @@ final class UploadViewModel: InputOutput {
         let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
         let accessTokenTrigger = PublishSubject<Void>()
 
-        let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty)
-            .map { title, content in
-                return PostQuery(product_id: "nhj_test", title: title, content: content, content1: "웜톤", content2: "건성", files: self.photoString)
-                
+        let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty, photoString.asObserver())
+            .map { title, content, images in
+                return PostQuery(product_id: "nhj_test", title: title, content: content, content1: "df", content2: "re", files: images)
             }
         
         input.inputUploadButton
@@ -73,15 +72,11 @@ final class UploadViewModel: InputOutput {
                     return Observable<PostImageStingModel>.never()
                 }
                 print("image flatMap")
-                var photoDatas: [Data] = [] // Data타입으로 변경한 사진들(네트워크)
+                var photoDatas: [Data]? = [] // Data타입으로 변경한 사진들(네트워크)
                 for photo in self.photos {
-                    
-                    if let photo = photo as? UIImage, let data = photo.pngData() {
-                        
-                        photoDatas.append(data)
-                    }
+                    photoDatas?.append(photo.changeToData())
                 }
-                print("inputUploadImagesTrigger network")
+
                 return self.postManager.uploadPostImages(photoDatas)
                     .catch { error in
                         let error = error as! APIError
@@ -97,8 +92,9 @@ final class UploadViewModel: InputOutput {
             }
             .debug()
             .subscribe(with: self) { owner, value in
-                owner.photoString = value.files
-
+//                owner.photoString = value.files
+                owner.photoString.onNext(value.files)
+                print("사진 업로드성공 후 \(value.files)")
                 input.inputUploadTrigger.onNext(())
 
                 

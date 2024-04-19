@@ -11,7 +11,7 @@ import RxCocoa
 
 final class PostManager {
     
-    func uploadPostImages(_ items: [Data]) -> Observable<PostImageStingModel> {
+    func uploadPostImages(_ items: [Data]?) -> Observable<PostImageStingModel> {
         return NetworkManager.shared.dataAPI(type: PostImageStingModel.self, router: Router.uploadPostImage(query: items))
     }
     func uploadPost(_ data: PostQuery) -> Observable<PostModel> {
