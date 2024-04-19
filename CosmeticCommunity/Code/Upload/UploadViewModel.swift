@@ -86,13 +86,10 @@ final class UploadViewModel: InputOutput {
                             
                         }
                         outputUploadTrigger.onNext(nil)
-                        // 사진업로드 실패해도 글은 올라가는 상태,?
                         return Observable<PostImageStingModel>.never()
                     }
             }
-            .debug()
             .subscribe(with: self) { owner, value in
-//                owner.photoString = value.files
                 owner.photoString.onNext(value.files)
                 print("사진 업로드성공 후 \(value.files)")
                 input.inputUploadTrigger.onNext(())

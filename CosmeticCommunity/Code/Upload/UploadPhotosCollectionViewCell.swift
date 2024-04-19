@@ -18,7 +18,7 @@ final class UploadPhotosCollectionViewCell: BaseCollectionViewCell {
     }()
     let xButton = {
         let view = UIButton()
-        view.setImage(UIImage(systemName: Constants.Image.xButton), for: .normal)
+        view.setImage(Constants.Image.xButton, for: .normal)
         view.layer.cornerRadius = 20
         view.tintColor = Constants.Color.point
         return view
