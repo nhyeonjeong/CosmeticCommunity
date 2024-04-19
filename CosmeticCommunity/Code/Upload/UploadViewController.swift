@@ -43,11 +43,11 @@ final class UploadViewController: BaseViewController {
     override func bind() {
         
         bindGallery() // 사진첩 열기 rx 연결
-        
+        let inputUploadImageTrigger = PublishSubject<Void>()
         let inputUploadTrigger = PublishSubject<Void>()
         let input = UploadViewModel.Input(inputTitleString: mainView.title.rx.text,
                                           inputContentString: mainView.content.rx.text,
-        inputUploadButton: inputUploadButton,
+                                          inputUploadButton: inputUploadButton, inputUploadImagesTrigger: inputUploadImageTrigger,
                                           inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems)
         
         let output = viewModel.transform(input: input)
@@ -57,7 +57,7 @@ final class UploadViewController: BaseViewController {
                 // 다 작성했으면
                 if value {
                     owner.alert(message: "업로드 하시겠습니까?") {
-                        inputUploadTrigger.onNext(())
+                        inputUploadImageTrigger.onNext(()) // 이미지 먼저 올리기..
                     }
                 } else {
                     owner.view.makeToast("제목과 내용을 입력해주세요", duration: 1.0, position: .top)

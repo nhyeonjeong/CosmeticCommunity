@@ -16,6 +16,10 @@ struct PostQuery: Encodable {
     let files: [String]? // 사진을 안 올릴수도.,,
 }
 
+struct PostImageStingModel: Decodable {
+    let files: [String]
+}
+
 struct PostModel: Decodable {
     let product_id: String // 게시판..
     let title: String // 제목

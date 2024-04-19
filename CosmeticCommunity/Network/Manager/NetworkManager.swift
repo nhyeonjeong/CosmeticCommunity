@@ -31,7 +31,7 @@ final class NetworkManager {
 //            }
              
             
-            AF.request(router.path, method: router.method, parameters: router.parameters, encoding: JSONEncoding(), headers: router.header)
+            AF.request(router.path, method: router.method, parameters: router.parameters, encoding: JSONEncoding(), headers: router.headers)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
@@ -62,6 +62,58 @@ final class NetworkManager {
                     }
                 }
              
+            return Disposables.create()
+        }
+    }
+
+    func dataAPI<T: Decodable>(type: T.Type, router: Router, completionHandler: @escaping ((T) -> Void) = { _ in }) -> Observable<T> {
+        return Observable<T>.create { observer in
+
+//            AF.request(router.path, method: router.method, parameters: router.parameters, encoding: JSONEncoding(), headers: router.header).responseString { data in
+//                print(data)
+//            }
+             
+            AF.upload(multipartFormData: { multipartFormData in
+                // 헤더키는 withname에 해당한다 -> files
+                // fileName -
+                guard let datas = router.multipartBody else {
+                    return
+                }
+                for data in datas {
+                    multipartFormData.append(data, withName: ParameterKey.files.rawValue, fileName: "\(Date())-\(Int.random(in: 1...1000))", mimeType: "image/png")
+                }
+
+
+            }, to: router.path, headers: router.headers) // 어떤 헤더가 들어갈지 명시해줘야
+            .responseDecodable(of: T.self) { response in
+                switch response.result {
+                case .success(let success):
+                    print(success)
+                    completionHandler(success) // 성공시 실행할 게 있다면 실행하기
+                    observer.onNext(success)
+                    observer.onCompleted()
+                    return
+                case .failure(let failure):
+                    print("failure: \(failure)")
+                    switch response.response?.statusCode {
+                    case 420:
+                        observer.onError(APIError.sesacKeyError_420)
+                    case 400:
+                        observer.onError(APIError.requestError_400)
+                    case 401:
+                        observer.onError(APIError.invalidUserError_401)
+                    case 418:
+                        observer.onError(APIError.refreshTokenExpired_418)
+                    case 419:
+                        observer.onError(APIError.accessTokenExpired_419)
+                    case .none:
+                        return
+                    case .some(_):
+                        return
+                    }
+                    return
+                }
+            }
             return Disposables.create()
         }
     }

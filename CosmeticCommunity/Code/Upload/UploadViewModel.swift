@@ -5,19 +5,21 @@
 //  Created by 남현정 on 2024/04/16.
 //
 
-import Foundation
+import UIKit //
 import RxSwift
 import RxCocoa
 
 final class UploadViewModel: InputOutput {
     let postManager = PostManager()
     
-    var photos: [NSItemProviderReading] = []
-    
+    var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
+
+    var photoString: [String] = []
     struct Input {
         let inputTitleString: ControlProperty<String?>
         let inputContentString: ControlProperty<String?>
         let inputUploadButton: PublishSubject<Void>
+        let inputUploadImagesTrigger: PublishSubject<Void>
         let inputUploadTrigger: PublishSubject<Void>
         let inputSelectPhotos: PublishSubject<Void>
     }
@@ -37,10 +39,10 @@ final class UploadViewModel: InputOutput {
         let outputLoginView = PublishRelay<Void>()
         let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
         let accessTokenTrigger = PublishSubject<Void>()
-        
+
         let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty)
             .map { title, content in
-                return PostQuery(product_id: "nhj_test", title: title, content: content, content1: "웜톤", content2: "건성", files: nil)
+                return PostQuery(product_id: "nhj_test", title: title, content: content, content1: "웜톤", content2: "건성", files: self.photoString)
                 
             }
         
@@ -57,19 +59,57 @@ final class UploadViewModel: InputOutput {
                 if title == "" || content == ""  {
                     outputValid.accept(false)
                 } else {
-                    print("업로드 api통신할꺼야")
                     outputValid.accept(true)
                 }
             }
             .disposed(by: disposeBag)
         
+        input.inputUploadImagesTrigger
+            .debug()
+            .flatMap {
+                if self.photos.isEmpty {
+                    print("비어있음")
+                    input.inputUploadTrigger.onNext(())
+                    return Observable<PostImageStingModel>.never()
+                }
+                print("image flatMap")
+                var photoDatas: [Data] = [] // Data타입으로 변경한 사진들(네트워크)
+                for photo in self.photos {
+                    
+                    if let photo = photo as? UIImage, let data = photo.pngData() {
+                        
+                        photoDatas.append(data)
+                    }
+                }
+                print("inputUploadImagesTrigger network")
+                return self.postManager.uploadPostImages(photoDatas)
+                    .catch { error in
+                        let error = error as! APIError
+                        if error == APIError.accessTokenExpired_419 {
+                            // 엑세스 토근 재발행
+                            accessTokenTrigger.onNext(())
+                            
+                        }
+                        outputUploadTrigger.onNext(nil)
+                        // 사진업로드 실패해도 글은 올라가는 상태,?
+                        return Observable<PostImageStingModel>.never()
+                    }
+            }
+            .debug()
+            .subscribe(with: self) { owner, value in
+                owner.photoString = value.files
+
+                input.inputUploadTrigger.onNext(())
+
+                
+            }
+            .disposed(by: disposeBag)
+        
         input.inputUploadTrigger
             .withLatestFrom(postObservable)
-            .flatMap {
-                // 먼저 이미지 업로드...
-            }
             .flatMap { postData in
                 print("업로드 네트워크")
+                print("inputUploadTrigger network")
                 return self.postManager.uploadPost(postData)
                     .catch { error in
                         let error = error as! APIError

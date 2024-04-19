@@ -11,7 +11,7 @@ import Alamofire
 protocol RouterType: URLRequestConvertible {
     var baseURL: String { get }
     var method: HTTPMethod { get }
-    var header: HTTPHeaders { get }
+    var headers: HTTPHeaders { get }
     var path: String { get }
     // 아래는 없을 수도 있어서 옵셔널
     var parameters: [String: Encodable]? { get }

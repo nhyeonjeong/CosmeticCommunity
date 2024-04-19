@@ -22,7 +22,6 @@ extension UIViewController {
         // 2. 버튼 생성
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let yes = UIAlertAction(title: "업로드", style: .default) { action in
-            print("upload")
             yesAction()
         }
         alert.addAction(cancel)
