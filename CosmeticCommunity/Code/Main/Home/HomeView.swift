@@ -8,35 +8,24 @@
 import UIKit
 import SnapKit
 
-final class SearchView: BaseView {
-    let searchTextField = {
-        let view = UITextField()
-        view.backgroundColor = .lightGray
-        view.placeholder = "검색해주세여"
-        return view
-    }()
+final class HomeView: BaseView {
     lazy var collectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
-        view.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
+        view.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
         return view
     }()
     override func configureHierarchy() {
-        addViews([searchTextField, collectionView])
+        addSubview(collectionView)
     }
     override func configureConstraints() {
-        searchTextField.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
-            make.height.equalTo(30)
-        }
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            make.bottom.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(safeAreaLayoutGuide).inset(10)
+            make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
         }
     }
 }
 
-extension SearchView {
+extension HomeView {
     func collectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         let inset: CGFloat = 10

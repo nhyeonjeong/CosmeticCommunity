@@ -86,7 +86,7 @@ final class UploadViewController: BaseViewController {
         
         output.outputLoginView
             .drive(with: self) { owner, _ in
-                owner.changeRootVC(vc: SearchViewController()) // 다시 루트뷰 바꾸기
+                owner.changeRootVC(vc: HomeViewController()) // 다시 루트뷰 바꾸기
                 let vc = UINavigationController(rootViewController: NotLoginViewController())
                 owner.navigationController?.present(vc, animated: true)
             }

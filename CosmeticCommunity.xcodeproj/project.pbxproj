@@ -50,15 +50,17 @@
 		8B428CD52BCE001400FD1B69 /* UploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CD42BCE001400FD1B69 /* UploadView.swift */; };
 		8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */; };
 		8B428CF32BCE865C00FD1B69 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF22BCE865C00FD1B69 /* PostModel.swift */; };
-		8B428CF52BCEA73F00FD1B69 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF42BCEA73E00FD1B69 /* SearchViewModel.swift */; };
-		8B428CF72BCEA74800FD1B69 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF62BCEA74800FD1B69 /* SearchView.swift */; };
-		8B428CF92BCEA74E00FD1B69 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF82BCEA74E00FD1B69 /* SearchViewController.swift */; };
+		8B428CF52BCEA73F00FD1B69 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF42BCEA73E00FD1B69 /* HomeViewModel.swift */; };
+		8B428CF72BCEA74800FD1B69 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF62BCEA74800FD1B69 /* HomeView.swift */; };
+		8B428CF92BCEA74E00FD1B69 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF82BCEA74E00FD1B69 /* HomeViewController.swift */; };
 		8B428D032BCF9EB500FD1B69 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */; };
 		8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D042BCFA1B600FD1B69 /* PostManager.swift */; };
 		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
 		8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */; };
-		8B57ABB52BD26B52004BC76E /* SearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* SearchCollectionViewCell.swift */; };
+		8B57ABB52BD26B52004BC76E /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* HomeCollectionViewCell.swift */; };
 		8B57ABB82BD26F6E004BC76E /* PostDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB72BD26F6E004BC76E /* PostDetailsView.swift */; };
+		8B57ABBC2BD2C302004BC76E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABBB2BD2C302004BC76E /* SearchViewController.swift */; };
+		8B57ABBE2BD2C395004BC76E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABBD2BD2C395004BC76E /* SearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,15 +103,17 @@
 		8B428CD42BCE001400FD1B69 /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
 		8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewModel.swift; sourceTree = "<group>"; };
 		8B428CF22BCE865C00FD1B69 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
-		8B428CF42BCEA73E00FD1B69 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
-		8B428CF62BCEA74800FD1B69 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		8B428CF82BCEA74E00FD1B69 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		8B428CF42BCEA73E00FD1B69 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		8B428CF62BCEA74800FD1B69 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		8B428CF82BCEA74E00FD1B69 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		8B428D042BCFA1B600FD1B69 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProviderReading+Extension.swift"; sourceTree = "<group>"; };
-		8B57ABB42BD26B52004BC76E /* SearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		8B57ABB42BD26B52004BC76E /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB72BD26F6E004BC76E /* PostDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsView.swift; sourceTree = "<group>"; };
+		8B57ABBB2BD2C302004BC76E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		8B57ABBD2BD2C395004BC76E /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,7 +216,7 @@
 			children = (
 				8B428CA12BCCA98B00FD1B69 /* Member */,
 				8B428CD12BCDFFEE00FD1B69 /* Upload */,
-				8B428C692BCAB62000FD1B69 /* Search */,
+				8B428C692BCAB62000FD1B69 /* Main */,
 				8B428C6A2BCAB63D00FD1B69 /* My */,
 			);
 			path = Code;
@@ -228,15 +232,13 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		8B428C692BCAB62000FD1B69 /* Search */ = {
+		8B428C692BCAB62000FD1B69 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				8B428CF82BCEA74E00FD1B69 /* SearchViewController.swift */,
-				8B428CF42BCEA73E00FD1B69 /* SearchViewModel.swift */,
-				8B428CF62BCEA74800FD1B69 /* SearchView.swift */,
-				8B57ABB42BD26B52004BC76E /* SearchCollectionViewCell.swift */,
+				8B57ABB92BD2C2E4004BC76E /* Home */,
+				8B57ABBA2BD2C2ED004BC76E /* Search */,
 			);
-			path = Search;
+			path = Main;
 			sourceTree = "<group>";
 		};
 		8B428C6A2BCAB63D00FD1B69 /* My */ = {
@@ -351,6 +353,26 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		8B57ABB92BD2C2E4004BC76E /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				8B428CF82BCEA74E00FD1B69 /* HomeViewController.swift */,
+				8B428CF42BCEA73E00FD1B69 /* HomeViewModel.swift */,
+				8B428CF62BCEA74800FD1B69 /* HomeView.swift */,
+				8B57ABB42BD26B52004BC76E /* HomeCollectionViewCell.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		8B57ABBA2BD2C2ED004BC76E /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				8B57ABBB2BD2C302004BC76E /* SearchViewController.swift */,
+				8B57ABBD2BD2C395004BC76E /* SearchView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -450,15 +472,16 @@
 				8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */,
 				8B428C902BCBCA9400FD1B69 /* NetworkManager.swift in Sources */,
 				8B428C9D2BCC233700FD1B69 /* UserModel.swift in Sources */,
-				8B428CF72BCEA74800FD1B69 /* SearchView.swift in Sources */,
+				8B428CF72BCEA74800FD1B69 /* HomeView.swift in Sources */,
 				8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */,
 				8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */,
+				8B57ABBC2BD2C302004BC76E /* SearchViewController.swift in Sources */,
 				8B428C6F2BCAB88600FD1B69 /* ProfileViewModel.swift in Sources */,
 				8B428CA82BCCAA3400FD1B69 /* LoginView.swift in Sources */,
 				8B428CF32BCE865C00FD1B69 /* PostModel.swift in Sources */,
-				8B428CF52BCEA73F00FD1B69 /* SearchViewModel.swift in Sources */,
+				8B428CF52BCEA73F00FD1B69 /* HomeViewModel.swift in Sources */,
 				8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */,
-				8B57ABB52BD26B52004BC76E /* SearchCollectionViewCell.swift in Sources */,
+				8B57ABB52BD26B52004BC76E /* HomeCollectionViewCell.swift in Sources */,
 				8B428C602BCAB4FF00FD1B69 /* BaseView.swift in Sources */,
 				8B428C6C2BCAB84200FD1B69 /* ProfileViewController.swift in Sources */,
 				8B428C592BC981D100FD1B69 /* APIKey.swift in Sources */,
@@ -469,12 +492,13 @@
 				8B428C9A2BCC13D000FD1B69 /* RouterType.swift in Sources */,
 				8B428CCC2BCD1CED00FD1B69 /* RegisterView.swift in Sources */,
 				8B428C8A2BCACABA00FD1B69 /* Constants.swift in Sources */,
+				8B57ABBE2BD2C395004BC76E /* SearchView.swift in Sources */,
 				8B428C982BCC136D00FD1B69 /* Router.swift in Sources */,
 				8B428CA02BCCA7E700FD1B69 /* NotLoginViewController.swift in Sources */,
 				8B428C962BCC128300FD1B69 /* Network.swift in Sources */,
 				8B428C732BCAB89E00FD1B69 /* ProfileView.swift in Sources */,
 				8B428C872BCACA6900FD1B69 /* NotLoginView.swift in Sources */,
-				8B428CF92BCEA74E00FD1B69 /* SearchViewController.swift in Sources */,
+				8B428CF92BCEA74E00FD1B69 /* HomeViewController.swift in Sources */,
 				8B428C942BCC126200FD1B69 /* UserDefaultKey.swift in Sources */,
 				8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */,
 				8B428C8E2BCBC25D00FD1B69 /* InputOutput.swift in Sources */,

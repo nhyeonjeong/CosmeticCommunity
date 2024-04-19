@@ -1,0 +1,51 @@
+//
+//  SearchViewController.swift
+//  CosmeticCommunity
+//
+//  Created by 남현정 on 2024/04/16.
+//
+
+import UIKit
+import RxSwift
+import RxCocoa
+
+final class HomeViewController: BaseViewController {
+    let mainView = HomeView()
+    let viewModel = HomeViewModel()
+    let disposeBar = DisposeBag()
+    let data = ["dsfsdfsdfsdf", "wtwetwt", "34234"]
+    override func loadView() {
+        view = mainView
+    }
+    deinit {
+        print("HomeVC Deinit")
+    }
+    override func bind() {
+        let input = HomeViewModel.Input()
+        BehaviorSubject<[String]>(value: data)
+            .asDriver(onErrorJustReturn: [])
+            .drive(mainView.collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) {(row, element, cell) in
+                cell.upgradeCell(element)
+            }
+            .disposed(by: disposeBar)
+    }
+    override func configureView() {
+        setNavigationBar()
+    }
+    @objc func uploadButtonClikced() {
+        navigationController?.pushViewController(UploadViewController(), animated: true)
+    }
+    @objc func searchButtonClicked() {
+        navigationController?.pushViewController(SearchViewController(), animated: true)
+    }
+}
+
+extension HomeViewController {
+    func setNavigationBar() {
+        navigationItem.title = "CoCo"
+        let uploadButton = UIBarButtonItem(title: "글쓰기", style: .plain, target: self, action: #selector(uploadButtonClikced))
+        let searchButton = UIBarButtonItem(image: Constants.Image.searchButton                                         , style: .plain, target: self, action: #selector(searchButtonClicked))
+        
+        navigationItem.rightBarButtonItems = [uploadButton, searchButton]
+    }
+}

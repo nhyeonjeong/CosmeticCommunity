@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SearchCollectionViewCell: BaseCollectionViewCell {
+class HomeCollectionViewCell: BaseCollectionViewCell {
     let photoImage = {
         let view = UIImageView()
         view.layer.cornerRadius = 10
