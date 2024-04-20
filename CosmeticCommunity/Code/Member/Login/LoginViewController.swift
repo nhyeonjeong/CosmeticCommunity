@@ -12,7 +12,6 @@ import RxCocoa
 final class LoginViewController: BaseViewController {
     let mainView = LoginView()
     let viewModel = LoginViewModel()
-    let disposeBag = DisposeBag()
     
     override func loadView() {
         view = mainView

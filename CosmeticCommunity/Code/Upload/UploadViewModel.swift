@@ -11,7 +11,7 @@ import RxCocoa
 
 final class UploadViewModel: InputOutput {
     let postManager = PostManager()
-    
+    var disposeBag = DisposeBag()
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
     var photoString = BehaviorSubject<[String]>(value: [])
         
@@ -31,7 +31,6 @@ final class UploadViewModel: InputOutput {
         let outputLoginView: Driver<Void>
         let outputPhotoItems: Driver<[NSItemProviderReading]>
     }
-    var disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         let outputValid = BehaviorRelay<Bool>(value: false)

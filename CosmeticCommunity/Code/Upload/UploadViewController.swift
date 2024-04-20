@@ -16,7 +16,6 @@ final class UploadViewController: BaseViewController {
     private let mainView = UploadView()
     private let viewModel = UploadViewModel()
 
-    private let disposeBag = DisposeBag()
     // 업로드 버튼 눌렀을 때
     private let inputUploadButton = PublishSubject<Void>()
     // 사진 선택 시

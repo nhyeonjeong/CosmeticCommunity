@@ -11,6 +11,7 @@ import RxCocoa
 
 final class HomeViewModel: InputOutput {
     let postManager = PostManager()
+    
     var disposedBag = DisposeBag()
     
     var nextCursor = "0" // 결과로 가져온 다음 커서

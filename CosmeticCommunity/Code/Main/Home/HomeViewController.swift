@@ -12,8 +12,6 @@ import RxCocoa
 final class HomeViewController: BaseViewController {
     let mainView = HomeView()
     let viewModel = HomeViewModel()
-    let disposeBar = DisposeBag()
-    
     // 데이터 통신 트리거
     let inputPostsTrigger = PublishSubject<Void>()
     override func loadView() {
@@ -46,7 +44,7 @@ final class HomeViewController: BaseViewController {
                 
                 cell.upgradeCell(element)
             }
-            .disposed(by: disposeBar)
+            .disposed(by: disposeBag)
 
     }
     
@@ -54,10 +52,10 @@ final class HomeViewController: BaseViewController {
         mainView.collectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, postData in
                 let vc = PostDetailViewController()
-                vc.postData = postData
+                vc.postId = postData.post_id
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
-            .disposed(by: disposeBar)
+            .disposed(by: disposeBag)
     }
     
     override func configureView() {
