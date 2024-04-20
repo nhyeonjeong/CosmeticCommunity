@@ -18,7 +18,6 @@ struct PostQuery: Encodable {
     let title: String // 제목
     let content: String // 내용
     let content1: String // 웜쿨
-    let content2: String // 피부타입
     let files: [String]? // 사진을 안 올릴수도.,,
 }
 
@@ -35,7 +34,6 @@ struct PostModel: Decodable {
     let title: String // 제목
     let content: String // 내용
     let content1: String? // 웜쿨
-    let content2: String? // 피부타입
     let createdAt: String
     let creator: Creator
     let files: [String]

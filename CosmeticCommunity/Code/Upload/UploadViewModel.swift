@@ -42,7 +42,7 @@ final class UploadViewModel: InputOutput {
 
         let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty, photoString.asObserver())
             .map { title, content, images in
-                return PostQuery(product_id: "nhj_test", title: title, content: content, content1: "df", content2: "re", files: images)
+                return PostQuery(product_id: "nhj_test", title: title, content: content, content1: "df", files: images)
             }
         
         input.inputUploadButton

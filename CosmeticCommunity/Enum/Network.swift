@@ -22,8 +22,7 @@ enum ParameterKey: String {
     case product_id
     case title
     case content
-    case content1
-    case content2
+    case content1 // 퍼스널 컬러
     case files
 }
 enum QueryKey: String {

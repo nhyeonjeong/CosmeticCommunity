@@ -98,7 +98,6 @@ extension Router: RouterType {
                     ParameterKey.title.rawValue: query.title,
                     ParameterKey.content.rawValue: query.content,
                     ParameterKey.content1.rawValue: query.content1,
-                    ParameterKey.content2.rawValue: query.content2,
                     ParameterKey.files.rawValue: query.files ?? []]
         }
     }
