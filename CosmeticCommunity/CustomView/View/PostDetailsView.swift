@@ -68,14 +68,10 @@ final class PostDetailsView: BaseView {
         }
     }
     
-    func upgradeView(_ item: String) {
-        /*
+    func upgradeView(_ item: PostModel) {
+        
         likeCountLabel.text = item.likes.count.formatted()
         personalColorLabel.text = item.content1
         skinTypeLabel.text = item.content2
-         */
-        likeCountLabel.text = item
-        personalColorLabel.text = item
-        skinTypeLabel.text = item
     }
 }

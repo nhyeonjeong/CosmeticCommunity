@@ -14,7 +14,7 @@ protocol RouterType: URLRequestConvertible {
     var headers: HTTPHeaders { get }
     var path: String { get }
     // 아래는 없을 수도 있어서 옵셔널
-    var parameters: [String: Encodable]? { get }
+    var parameters: Parameters? { get }
     var queryItem: [URLQueryItem]? { get }
     var body: Data? { get } // 사진이나 영상, 음악을 올린다고 할 때 데이터 형식이다.
 }
@@ -22,17 +22,14 @@ protocol RouterType: URLRequestConvertible {
 extension RouterType {
     func asURLRequest() throws -> URLRequest {
         // asURL : 이 메서드를 사용해서 URLConvertable에 구현되어 있음
-        let url = try baseURL.asURL()
-        var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
-        /*
-        do {
-            urlRequest.httpBody = try JSONEncoder().encode(parameters)
-        } catch {
-            return urlRequest
+        var url = try baseURL.asURL()
+        if let queryItem {
+            url.append(queryItems: queryItem)
         }
-        urlRequest.allHTTPHeaderFields = header
+        var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
+        urlRequest.headers = headers
+        urlRequest.httpBody = parameters?.description.data(using: .utf8)
         urlRequest.httpBody = body
-         */
         return urlRequest
     }
 }

@@ -13,7 +13,9 @@ final class HomeViewController: BaseViewController {
     let mainView = HomeView()
     let viewModel = HomeViewModel()
     let disposeBar = DisposeBag()
-    let data = ["dsfsdfsdfsdf", "wtwetwt", "34234"]
+    
+    // 데이터 통신 트리거
+    let inputPostsTrigger = PublishSubject<Void>()
     override func loadView() {
         view = mainView
     }
@@ -21,13 +23,14 @@ final class HomeViewController: BaseViewController {
         print("HomeVC Deinit")
     }
     override func bind() {
-        let input = HomeViewModel.Input()
-        BehaviorSubject<[String]>(value: data)
-            .asDriver(onErrorJustReturn: [])
+        let input = HomeViewModel.Input(inputFetchPostsTrigger: inputPostsTrigger)
+        let output = viewModel.transform(input: input)
+        output.outputPostsItems
             .drive(mainView.collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBar)
+
     }
     override func configureView() {
         setNavigationBar()

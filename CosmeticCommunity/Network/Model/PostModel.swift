@@ -7,6 +7,12 @@
 
 import Foundation
 
+struct CheckPostQuery {
+    let next: String
+    let limit: String
+    let product_id: String
+}
+
 struct PostQuery: Encodable {
     let product_id: String // 게시판..
     let title: String // 제목
@@ -16,6 +22,10 @@ struct PostQuery: Encodable {
     let files: [String]? // 사진을 안 올릴수도.,,
 }
 
+struct CheckPostModel: Decodable {
+    let data: [PostModel]
+    let next_cursor: String
+}
 struct PostImageStingModel: Decodable {
     let files: [String]
 }

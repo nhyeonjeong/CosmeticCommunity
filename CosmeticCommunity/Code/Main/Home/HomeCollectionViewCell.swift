@@ -35,7 +35,7 @@ class HomeCollectionViewCell: BaseCollectionViewCell {
         super.prepareForReuse()
         photoImage.image = nil
     }
-    func upgradeCell(_ item: String) {
+    func upgradeCell(_ item: PostModel) {
         photoImage.image = UIImage(systemName: "star")
         detailsView.upgradeView(item)
     }

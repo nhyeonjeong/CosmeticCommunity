@@ -19,7 +19,8 @@ enum Router {
     
     // Post
     case uploadPostImage(query: [Data]?)
-    case upload(query: PostQuery, accessToken: String)
+    case upload(query: PostQuery)
+    case checkPosts(query: CheckPostQuery)
     // Commmet
     
     // Follow
@@ -36,7 +37,7 @@ extension Router: RouterType {
         switch self {
         case .login, .join, .uploadPostImage, .upload:
             return .post
-        case .tokenRefresh:
+        case .tokenRefresh, .checkPosts:
             return .get
         }
     }
@@ -45,7 +46,7 @@ extension Router: RouterType {
         switch self {
         case .tokenRefresh:
             return [HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
-                HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
+                    HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.refreshToken.rawValue: MemberManger.shared.getRefreshToken() ?? ""] // refreshToken도 들어가야함
         case .login, .join:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
@@ -56,10 +57,13 @@ extension Router: RouterType {
                     HTTPHeader.contentType.rawValue: HTTPHeader.multipartData.rawValue,
                     HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? ""]
             
-        case .upload(_, let accessToken):
+        case .upload:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
-                    HTTPHeader.authorization.rawValue: accessToken,
+                    HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
+        case .checkPosts:
+            return [ HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
+                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
             
         }
     }
@@ -67,33 +71,32 @@ extension Router: RouterType {
     var path: String {
         switch self {
         case .tokenRefresh:
-            return "\(baseURL)/v1/auth/refresh"
+            return "/v1/auth/refresh"
         case .login:
-            return "\(baseURL)/v1/users/login"
+            return "/v1/users/login"
         case .join:
-            return "\(baseURL)/v1/users/join"
+            return "/v1/users/join"
         case .uploadPostImage:
-            return "\(baseURL)/v1/posts/files"
-        case .upload:
-            return "\(baseURL)/v1/posts"
+            return "/v1/posts/files"
+        case .upload, .checkPosts:
+            return "/v1/posts"
+            
         }
     }
-    
-    var parameters: [String: Encodable]? {
+    var parameters: Parameters? {
         switch self {
         case .login(let query):
             return [ParameterKey.email.rawValue: query.email,
                     ParameterKey.password.rawValue: query.password]
-        case .join, .tokenRefresh, .uploadPostImage:
+        case .join, .tokenRefresh, .uploadPostImage, .checkPosts:
             return nil
-        case .upload(let query, _):
+        case .upload(let query):
             return [ParameterKey.product_id.rawValue: query.product_id,
                     ParameterKey.title.rawValue: query.title,
                     ParameterKey.content.rawValue: query.content,
                     ParameterKey.content1.rawValue: query.content1,
                     ParameterKey.content2.rawValue: query.content2,
                     ParameterKey.files.rawValue: query.files ?? []]
- 
         }
     }
     
@@ -101,17 +104,11 @@ extension Router: RouterType {
         switch self {
         case .login, .join, .upload, .tokenRefresh, .uploadPostImage:
             return nil
+        case .checkPosts(let query):
+            return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
+                    URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
+                    URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id)]
         }
-        /*
-        switch self {
-        case .trending:
-            ["": ""] // 빈 거 보내는 것도 가능
-        case .search(let query):
-            ["language": "ko-KR", "query": query]
-        case .photo:
-            ["":""] // 여기도 딱히 queryString없음
-        }
-         */
     }
     
     var body: Data? {
@@ -119,28 +116,31 @@ extension Router: RouterType {
         case .tokenRefresh:
             return nil
         case .login(let query):
-            let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
-            return try? encoder.encode(query)
+            return jsonEncoding(query)
         case .join(let query):
-            let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
-            return try? encoder.encode(query)
-        case .upload(let query, _):
-            let encoder = JSONEncoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
-            return try? encoder.encode(query)
-        case .uploadPostImage:
+            return jsonEncoding(query)
+        case .upload(let query):
+            return jsonEncoding(query)
+        case .uploadPostImage, .checkPosts:
             return nil
         }
     }
-    
+        
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .upload:
+        case .tokenRefresh, .login, .join, .upload, .checkPosts:
             return nil
         case .uploadPostImage(let query):
             return query
         }
     }
 }
+
+extension Router {
+    func jsonEncoding<T: Encodable>(_ query: T) -> Data? {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        return try? encoder.encode(query)
+    }
+}
+

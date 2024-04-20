@@ -18,20 +18,15 @@ final class NetworkManager {
     
     func fetchAPI<T: Decodable>(type: T.Type, router: Router, completionHandler: @escaping ((T) -> Void) = { _ in }) -> Observable<T> {
         return Observable<T>.create { observer in
-//            var urlRequest: URLRequest
-//            do {
-//                urlRequest = try router.asURLRequest()
-//            } catch {
-//                observer.onError(APIError.invalidURLError_444)
-//                return Disposables.create()
-//            }
+            var urlRequest: URLRequest
+            do {
+                urlRequest = try router.asURLRequest()
+            } catch {
+                observer.onError(APIError.invalidURLError_444)
+                return Disposables.create()
+            }
             
-//            AF.request(router.path, method: router.method, parameters: router.parameters, encoding: JSONEncoding(), headers: router.header).responseString { data in
-//                print(data)
-//            }
-             
-            
-            AF.request(router.path, method: router.method, parameters: router.parameters, encoding: JSONEncoding(), headers: router.headers)
+            AF.request(urlRequest)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
@@ -65,10 +60,12 @@ final class NetworkManager {
             return Disposables.create()
         }
     }
+}
 
+extension NetworkManager {
     func dataAPI<T: Decodable>(type: T.Type, router: Router, completionHandler: @escaping ((T) -> Void) = { _ in }) -> Observable<T> {
         return Observable<T>.create { observer in
-
+/*
             AF.upload(multipartFormData: { multipartFormData in
                 // 헤더키는 withname에 해당한다 -> files
                 // fileName -
@@ -80,9 +77,10 @@ final class NetworkManager {
                 }
 
 
-            }, to: router.path, headers: router.headers).responseString { data in
+            }, to: router.baseURL+router.path, headers: router.headers).responseString { data in
                 print("responseString", data)
             }
+ */
              
             AF.upload(multipartFormData: { multipartFormData in
                 // 헤더키는 withname에 해당한다 -> files
@@ -96,7 +94,7 @@ final class NetworkManager {
                 }
 
 
-            }, to: router.path, headers: router.headers) // 어떤 헤더가 들어갈지 명시해줘야
+            }, to: router.baseURL+router.path, headers: router.headers) // 어떤 헤더가 들어갈지 명시해줘야
             .responseDecodable(of: T.self) { response in
                 switch response.result {
                 case .success(let success):
@@ -126,6 +124,7 @@ final class NetworkManager {
                     return
                 }
             }
+              
             return Disposables.create()
         }
     }

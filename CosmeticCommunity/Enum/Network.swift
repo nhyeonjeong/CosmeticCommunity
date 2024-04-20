@@ -26,7 +26,11 @@ enum ParameterKey: String {
     case content2
     case files
 }
-
+enum QueryKey: String {
+    case next
+    case limit
+    case product_id
+}
 enum APIError: Error {
     case sesacKeyError_420
     case overCallError_429
