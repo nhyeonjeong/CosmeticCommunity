@@ -16,22 +16,20 @@ final class PostDetailsView: BaseView {
     }()
     let likeCountLabel = {
         let view = UILabel()
-        view.font = Constants.Font.small
-        view.textColor = Constants.Color.text
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.small)
         return view
     }()
     
     let titleLabel = {
         let view = UILabel()
         view.numberOfLines = 2
-        view.textColor = Constants.Color.text
-        view.font = Constants.Font.boldTitle
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.boldTitle)
         return view
     }()
     
     let personalColorLabel = {
         let view = UILabel()
-        view.font = Constants.Font.small
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.small)
         view.layer.cornerRadius = 5
         view.clipsToBounds = true
         return view
@@ -66,9 +64,6 @@ final class PostDetailsView: BaseView {
     func upgradeView(_ item: PostModel) {
         likeCountLabel.text = item.likes.count.formatted()
         titleLabel.text = item.title
-        
-        
-
         if let text = item.content1, let type = PersonalColor(rawValue: text) {
             personalColorLabel.text = "  \(text)  "
             personalColorLabel.textColor = type.textColor
