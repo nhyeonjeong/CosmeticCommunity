@@ -29,7 +29,7 @@ extension HomeView {
     func collectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         let inset: CGFloat = 10
-        layout.itemSize = CGSize(width: (UIScreen.main.bounds.width-inset*3) / 2 , height: 140) // 없으면 안됨
+        layout.itemSize = CGSize(width: (UIScreen.main.bounds.width-inset*3) / 2 , height: 240) // 없으면 안됨
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)

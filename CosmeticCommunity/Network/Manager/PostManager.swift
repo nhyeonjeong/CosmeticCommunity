@@ -20,4 +20,5 @@ final class PostManager {
     func checkPosts(_ data: CheckPostQuery) -> Observable<CheckPostModel> {
         return NetworkManager.shared.fetchAPI(type: CheckPostModel.self, router: Router.checkPosts(query: data))
     }
+    
 }

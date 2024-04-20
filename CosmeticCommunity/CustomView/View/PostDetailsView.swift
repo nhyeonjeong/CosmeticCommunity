@@ -8,7 +8,6 @@
 import UIKit
 
 final class PostDetailsView: BaseView {
-    let stackView = UIStackView()
     let likeSymbol = {
         let view = UIImageView()
         view.image = Constants.Image.clikcedLike
@@ -22,26 +21,23 @@ final class PostDetailsView: BaseView {
         return view
     }()
     
+    let titleLabel = {
+        let view = UILabel()
+        view.numberOfLines = 2
+        view.textColor = Constants.Color.text
+        view.font = Constants.Font.boldTitle
+        return view
+    }()
+    
     let personalColorLabel = {
         let view = UILabel()
         view.textColor = Constants.Color.point
         view.font = Constants.Font.small
-        view.backgroundColor = .yellow
-        return view
-    }()
-    let skinTypeLabel = {
-        let view = UILabel()
-        view.textColor = Constants.Color.point
-        view.font = Constants.Font.small
-        view.backgroundColor = .yellow
         return view
     }()
     
     override func configureHierarchy() {
-        
-        stackView.addArrangedSubview(personalColorLabel)
-        stackView.addArrangedSubview(skinTypeLabel)
-        addViews([likeSymbol, likeCountLabel, stackView])
+        addViews([likeSymbol, likeCountLabel, titleLabel, personalColorLabel])
     }
     override func configureConstraints() {
         likeSymbol.snp.makeConstraints { make in
@@ -53,25 +49,22 @@ final class PostDetailsView: BaseView {
             make.top.trailing.equalToSuperview()
             make.height.equalTo(20)
         }
-        stackView.snp.makeConstraints { make in
+        
+        titleLabel.snp.makeConstraints { make in
             make.top.equalTo(likeSymbol.snp.bottom).offset(4)
             make.horizontalEdges.equalToSuperview()
+//            make.height.equalTo(20)
         }
         personalColorLabel.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalToSuperview()
-            make.height.equalTo(20)
-        }
-        skinTypeLabel.snp.makeConstraints { make in
-            make.top.equalTo(personalColorLabel.snp.bottom)
-            make.horizontalEdges.bottom.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom)
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(20)
         }
     }
     
     func upgradeView(_ item: PostModel) {
-        
         likeCountLabel.text = item.likes.count.formatted()
+        titleLabel.text = item.title
         personalColorLabel.text = item.content1
-        skinTypeLabel.text = item.content2
     }
 }

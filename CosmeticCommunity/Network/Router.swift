@@ -26,6 +26,9 @@ enum Router {
     // Follow
     
     // Hashtag
+    
+    // Image
+//    case getImage(query: [String])
 }
 
 extension Router: RouterType {
@@ -71,15 +74,15 @@ extension Router: RouterType {
     var path: String {
         switch self {
         case .tokenRefresh:
-            return "/v1/auth/refresh"
+            return "v1/auth/refresh"
         case .login:
-            return "/v1/users/login"
+            return "v1/users/login"
         case .join:
-            return "/v1/users/join"
+            return "v1/users/join"
         case .uploadPostImage:
-            return "/v1/posts/files"
+            return "v1/posts/files"
         case .upload, .checkPosts:
-            return "/v1/posts"
+            return "v1/posts"
             
         }
     }

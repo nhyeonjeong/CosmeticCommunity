@@ -22,14 +22,32 @@ final class HomeViewController: BaseViewController {
     deinit {
         print("HomeVC Deinit")
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        inputPostsTrigger.onNext(())
+    }
     override func bind() {
         let input = HomeViewModel.Input(inputFetchPostsTrigger: inputPostsTrigger)
+        
         let output = viewModel.transform(input: input)
-        output.outputPostsItems
+ 
+        output.outputPostItems
+            .flatMap { data -> Driver<[PostModel]> in
+                guard let posts = data else {
+                    return Driver.never()
+                }
+                return BehaviorRelay(value: posts).asDriver()
+                
+            }
             .drive(mainView.collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) {(row, element, cell) in
+                
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBar)
+
+
+
 
     }
     override func configureView() {

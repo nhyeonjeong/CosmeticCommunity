@@ -11,10 +11,6 @@ enum Constants {
     enum Color {
         static let point = UIColor.systemPink
         static let text = UIColor.black
-//        enum classifyColor {
-//            static let
-//        }
-        
     }
     
     enum Image {
@@ -28,6 +24,7 @@ enum Constants {
         static let large = UIFont.systemFont(ofSize: 17)
         static let boldTitle = UIFont.systemFont(ofSize: 17)
         static let normal = UIFont.systemFont(ofSize: 15)
+        static let smallTitle = UIFont.boldSystemFont(ofSize: 13)
         static let small = UIFont.systemFont(ofSize: 13)
     }
 }

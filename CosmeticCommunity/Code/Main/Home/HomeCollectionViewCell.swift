@@ -7,8 +7,10 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class HomeCollectionViewCell: BaseCollectionViewCell {
+    let kingfisherManager = KingfisherManager()
     let photoImage = {
         let view = UIImageView()
         view.layer.cornerRadius = 10
@@ -23,11 +25,12 @@ class HomeCollectionViewCell: BaseCollectionViewCell {
     }
     override func configureConstraints() {
         photoImage.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalToSuperview()
-            make.height.equalTo(100)
+            make.top.horizontalEdges.equalTo(contentView)
+            make.height.equalTo(150)
         }
         detailsView.snp.makeConstraints { make in
             make.top.equalTo(photoImage.snp.bottom).offset(4)
+            make.horizontalEdges.equalTo(contentView)
             make.height.equalTo(40)
         }
     }
@@ -36,8 +39,14 @@ class HomeCollectionViewCell: BaseCollectionViewCell {
         photoImage.image = nil
     }
     func upgradeCell(_ item: PostModel) {
-        photoImage.image = UIImage(systemName: "star")
+        
+        kingfisherManager.getImage(path: item.files.first) { url in
+            if let url {
+                photoImage.kf.setImage(with: url, options: [.requestModifier(kingfisherManager.modifier)])
+            } else {
+                photoImage.image = UIImage(systemName: "nosign")
+            }
+        }
         detailsView.upgradeView(item)
     }
-    
 }

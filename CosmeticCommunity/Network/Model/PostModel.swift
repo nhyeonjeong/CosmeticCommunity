@@ -8,9 +8,9 @@
 import Foundation
 
 struct CheckPostQuery {
-    let next: String
-    let limit: String
-    let product_id: String
+    let next: String?
+    let limit: String = "20"
+    let product_id: String?
 }
 
 struct PostQuery: Encodable {

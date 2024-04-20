@@ -79,7 +79,10 @@ final class UploadViewModel: InputOutput {
 
                 return self.postManager.uploadPostImages(photoDatas)
                     .catch { error in
-                        let error = error as! APIError
+                        guard let error = error as? APIError else {
+                            outputUploadTrigger.onNext(nil)
+                            return Observable<PostImageStingModel>.never()
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             // 엑세스 토근 재발행
                             accessTokenTrigger.onNext(())
@@ -105,7 +108,10 @@ final class UploadViewModel: InputOutput {
                 print("inputUploadTrigger network")
                 return self.postManager.uploadPost(postData)
                     .catch { error in
-                        let error = error as! APIError
+                        guard let error = error as? APIError else {
+                            outputUploadTrigger.onNext(nil)
+                            return Observable<PostModel>.never()
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             // 엑세스 토근 재발행
                             accessTokenTrigger.onNext(())
@@ -125,7 +131,10 @@ final class UploadViewModel: InputOutput {
                 print("토큰 재발행 네트워크")
                 return MemberManger.shared.tokenRefresh()
                     .catch { error in
-                        let error = error as! APIError
+                        guard let error = error as? APIError else {
+                            outputUploadTrigger.onNext(nil)
+                            return Observable<RefreshAccess>.never()
+                        }
                         // 리프레시 토큰이 만료된거라면 로그인 화면으로...
                         if error == .refreshTokenExpired_418 {
                             outputLoginView.accept(())

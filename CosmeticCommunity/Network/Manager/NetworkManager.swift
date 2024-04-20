@@ -26,11 +26,16 @@ final class NetworkManager {
                 return Disposables.create()
             }
             
+//            AF.request(urlRequest)
+//                .responseString { response in
+//                    print("responseString : \(response)")
+//                }
+            
             AF.request(urlRequest)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
-                        print(success)
+//                        print(success)
                         completionHandler(success) // 성공시 실행할 게 있다면 실행하기
                         observer.onNext(success)
                         observer.onCompleted()
@@ -90,7 +95,7 @@ extension NetworkManager {
                 }
                 for data in datas {
                     let date = Calendar.current.component(.day, from: Date())
-                    multipartFormData.append(data, withName: ParameterKey.files.rawValue, fileName: "\(date)-\(Int.random(in: 1...1000))", mimeType: "image/png")
+                    multipartFormData.append(data, withName: ParameterKey.files.rawValue, fileName: "\(date)_\(Int.random(in: 1...1000))", mimeType: "image/png")
                 }
 
 
@@ -98,7 +103,7 @@ extension NetworkManager {
             .responseDecodable(of: T.self) { response in
                 switch response.result {
                 case .success(let success):
-                    print(success)
+//                    print(success)
                     completionHandler(success) // 성공시 실행할 게 있다면 실행하기
                     observer.onNext(success)
                     observer.onCompleted()
@@ -117,10 +122,13 @@ extension NetworkManager {
                     case 419:
                         observer.onError(APIError.accessTokenExpired_419)
                     case .none:
+                        print("error ----------> none Error")
                         return
                     case .some(_):
+                        print("error ---------------> some Error")
                         return
                     }
+                    print("time out..?")
                     return
                 }
             }

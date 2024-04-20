@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B3AFC962BD3DCF50069773F /* KingfisherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFC952BD3DCF50069773F /* KingfisherManager.swift */; };
+		8B3AFC982BD3E5D20069773F /* PersonalColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFC972BD3E5D20069773F /* PersonalColor.swift */; };
 		8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C412BC980C700FD1B69 /* AppDelegate.swift */; };
 		8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C432BC980C700FD1B69 /* SceneDelegate.swift */; };
 		8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C452BC980C700FD1B69 /* ViewController.swift */; };
@@ -64,6 +66,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8B3AFC952BD3DCF50069773F /* KingfisherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingfisherManager.swift; sourceTree = "<group>"; };
+		8B3AFC972BD3E5D20069773F /* PersonalColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalColor.swift; sourceTree = "<group>"; };
 		8B428C3E2BC980C700FD1B69 /* CosmeticCommunity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CosmeticCommunity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B428C412BC980C700FD1B69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B428C432BC980C700FD1B69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -228,6 +232,7 @@
 				8B428C8F2BCBCA9400FD1B69 /* NetworkManager.swift */,
 				8B428C912BCBCB3600FD1B69 /* MemberManger.swift */,
 				8B428D042BCFA1B600FD1B69 /* PostManager.swift */,
+				8B3AFC952BD3DCF50069773F /* KingfisherManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -275,6 +280,7 @@
 				8B428C892BCACABA00FD1B69 /* Constants.swift */,
 				8B428C932BCC126200FD1B69 /* UserDefaultKey.swift */,
 				8B428C952BCC128300FD1B69 /* Network.swift */,
+				8B3AFC972BD3E5D20069773F /* PersonalColor.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -485,6 +491,7 @@
 				8B428C602BCAB4FF00FD1B69 /* BaseView.swift in Sources */,
 				8B428C6C2BCAB84200FD1B69 /* ProfileViewController.swift in Sources */,
 				8B428C592BC981D100FD1B69 /* APIKey.swift in Sources */,
+				8B3AFC982BD3E5D20069773F /* PersonalColor.swift in Sources */,
 				8B57ABB82BD26F6E004BC76E /* PostDetailsView.swift in Sources */,
 				8B428CA42BCCAA2600FD1B69 /* LoginViewController.swift in Sources */,
 				8B428CA62BCCAA2E00FD1B69 /* LoginViewModel.swift in Sources */,
@@ -503,6 +510,7 @@
 				8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */,
 				8B428C8E2BCBC25D00FD1B69 /* InputOutput.swift in Sources */,
 				8B428C922BCBCB3600FD1B69 /* MemberManger.swift in Sources */,
+				8B3AFC962BD3DCF50069773F /* KingfisherManager.swift in Sources */,
 				8B428CD52BCE001400FD1B69 /* UploadView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
