@@ -28,6 +28,8 @@ final class HomeViewController: BaseViewController {
         inputPostsTrigger.onNext(())
     }
     override func bind() {
+        
+        bindItemSelected()
         let input = HomeViewModel.Input(inputFetchPostsTrigger: inputPostsTrigger)
         
         let output = viewModel.transform(input: input)
@@ -46,10 +48,18 @@ final class HomeViewController: BaseViewController {
             }
             .disposed(by: disposeBar)
 
-
-
-
     }
+    
+    private func bindItemSelected() {
+        mainView.collectionView.rx.modelSelected(PostModel.self)
+            .bind(with: self) { owner, postData in
+                let vc = PostDetailViewController()
+                vc.postData = postData
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBar)
+    }
+    
     override func configureView() {
         setNavigationBar()
     }

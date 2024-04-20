@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class HomeCollectionViewCell: BaseCollectionViewCell {
+final class HomeCollectionViewCell: BaseCollectionViewCell {
     let kingfisherManager = KingfisherManager()
     let photoImage = {
         let view = UIImageView()

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class UploadView: BaseView {
+final class UploadView: BaseView {
 
     let addPhotoButton = {
         let view = UIButton()
