@@ -15,6 +15,8 @@ class HomeCollectionViewCell: BaseCollectionViewCell {
         let view = UIImageView()
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
+        view.tintColor = .systemGray6
         return view
     }()
     
@@ -36,6 +38,7 @@ class HomeCollectionViewCell: BaseCollectionViewCell {
     }
     override func prepareForReuse() {
         super.prepareForReuse()
+        photoImage.contentMode = .scaleAspectFill
         photoImage.image = nil
     }
     func upgradeCell(_ item: PostModel) {
@@ -45,6 +48,7 @@ class HomeCollectionViewCell: BaseCollectionViewCell {
                 photoImage.kf.setImage(with: url, options: [.requestModifier(kingfisherManager.modifier)])
             } else {
                 photoImage.image = UIImage(systemName: "nosign")
+                photoImage.contentMode = .scaleAspectFit
             }
         }
         detailsView.upgradeView(item)
