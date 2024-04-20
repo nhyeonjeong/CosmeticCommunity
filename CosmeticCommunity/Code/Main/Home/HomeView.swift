@@ -30,7 +30,7 @@ extension HomeView {
         let layout = UICollectionViewFlowLayout()
         let inset: CGFloat = 10
         layout.itemSize = CGSize(width: (UIScreen.main.bounds.width-inset*3) / 2 , height: 240) // 없으면 안됨
-        layout.minimumLineSpacing = 5
+        layout.minimumLineSpacing = 10 // 세로간
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         layout.scrollDirection = .vertical // 스크롤 방향도 FlowLayout에 속한다 -> contentMode때문에 Fill로

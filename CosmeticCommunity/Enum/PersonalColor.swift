@@ -12,7 +12,7 @@ enum PersonalColor: String {
     case summer = "여름쿨"
     case fall = "가을웜"
     case winter = "겨울쿨"
-    
+
     var backgroundColor: UIColor {
         switch self {
         case .spring:

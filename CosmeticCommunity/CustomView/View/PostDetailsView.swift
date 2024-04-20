@@ -31,8 +31,9 @@ final class PostDetailsView: BaseView {
     
     let personalColorLabel = {
         let view = UILabel()
-        view.textColor = Constants.Color.point
         view.font = Constants.Font.small
+        view.layer.cornerRadius = 5
+        view.clipsToBounds = true
         return view
     }()
     
@@ -56,8 +57,8 @@ final class PostDetailsView: BaseView {
 //            make.height.equalTo(20)
         }
         personalColorLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom)
-            make.horizontalEdges.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.leading.equalToSuperview()
             make.height.equalTo(20)
         }
     }
@@ -65,6 +66,14 @@ final class PostDetailsView: BaseView {
     func upgradeView(_ item: PostModel) {
         likeCountLabel.text = item.likes.count.formatted()
         titleLabel.text = item.title
-        personalColorLabel.text = item.content1
+        
+        
+
+        if let text = item.content1, let type = PersonalColor(rawValue: text) {
+            personalColorLabel.text = "  \(text)  "
+            personalColorLabel.textColor = type.textColor
+            personalColorLabel.backgroundColor = type.backgroundColor
+        }
+        
     }
 }

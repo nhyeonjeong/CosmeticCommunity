@@ -42,10 +42,11 @@ final class MemberManger {
     }
     
     // 엑세스토큰이 만료됐을 때
-    // 엑세스토큰이 만료됐을 때
     func tokenRefresh() -> Observable<RefreshAccess> {
 
-        return NetworkManager.shared.fetchAPI(type: RefreshAccess.self, router: Router.tokenRefresh)
+        return NetworkManager.shared.fetchAPI(type: RefreshAccess.self, router: Router.tokenRefresh) { response in
+            self.saveAccessToken(response.accessToken)
+        }
     }
     
     func login(_ data: LoginQuery) -> Observable<LoginModel> {
