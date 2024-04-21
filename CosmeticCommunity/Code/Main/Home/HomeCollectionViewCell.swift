@@ -52,5 +52,6 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
             }
         }
         detailsView.upgradeView(item)
+        detailsView.upgradeLikeCountLabel(item.likes.count)
     }
 }

@@ -34,7 +34,7 @@ final class PostDetailsView: BaseView {
         view.clipsToBounds = true
         return view
     }()
-    
+
     override func configureHierarchy() {
         addViews([likeSymbol, likeCountLabel, titleLabel, personalColorLabel])
     }
@@ -62,7 +62,6 @@ final class PostDetailsView: BaseView {
     }
     
     func upgradeView(_ item: PostModel) {
-        likeCountLabel.text = item.likes.count.formatted()
         titleLabel.text = item.title
         if let text = item.content1, let type = PersonalColor(rawValue: text) {
             personalColorLabel.text = "  \(text)  "
@@ -70,5 +69,8 @@ final class PostDetailsView: BaseView {
             personalColorLabel.backgroundColor = type.backgroundColor
         }
         
+    }
+    func upgradeLikeCountLabel(_ likeCount: Int) {
+        likeCountLabel.text = likeCount.formatted()
     }
 }
