@@ -30,9 +30,13 @@ final class PostDetailViewController: BaseViewController {
     }
     
     override func bind() {
-        let input = PostDetailViewModel.Input(inputPostIdTrigger: inputPostIdTrigger)
+        let input = PostDetailViewModel.Input(inputPostIdTrigger: inputPostIdTrigger, inputClickLikeButtonTrigger: mainView.likeButton.rx.tap)
 
         let output = viewModel.transform(input: input)
+        
+        bindImageItems()
+        bindCommentItems()
+        
         output.outputLoginView
             .drive(with: self) { owner, _ in
                 owner.changeRootVC(vc: HomeViewController()) // 다시 루트뷰 바꾸기
@@ -45,6 +49,8 @@ final class PostDetailViewController: BaseViewController {
             .drive(with: self) { owner, value in
                 if let value {
                     owner.imageItems.onNext(value.files)
+//                    let likeButtonImage = owner.viewModel.isClickedLikeButton(value) ? Constants.Image.clikcedLike : Constants.Image.unclickedLike
+//                    owner.mainView.likeButton.setImage(likeButtonImage, for: .normal)
                     owner.mainView.creatorView.upgradeView(value.creator)
                     owner.mainView.detailsView.upgradeView(value)
                     owner.mainView.contentLabel.text = value.content
@@ -56,10 +62,15 @@ final class PostDetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        bindImageItems()
-        bindCommentItems()
+        output.outputLikeButton
+            .drive(with: self) { owner, value in
+                if let value {
+                    let image = value ? Constants.Image.clikcedLike : Constants.Image.unclickedLike
+                    owner.mainView.likeButton.setImage(image, for: .normal)
+                }
+            }
+            .disposed(by: disposeBag)
     }
-
 }
 extension PostDetailViewController {
     private func bindImageItems() {

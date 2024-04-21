@@ -49,7 +49,7 @@ final class PostDetailView: BaseView {
         }
         likeButton.snp.makeConstraints { make in
             make.trailing.bottom.equalTo(imageCollectionView).inset(10)
-            make.size.equalTo(30)
+            make.size.equalTo(60)
         }
         creatorView.snp.makeConstraints { make in
             make.top.equalTo(imageCollectionView.snp.bottom).offset(10)

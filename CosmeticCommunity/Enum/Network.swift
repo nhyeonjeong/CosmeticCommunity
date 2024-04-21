@@ -24,6 +24,7 @@ enum ParameterKey: String {
     case content
     case content1 // 퍼스널 컬러
     case files
+    case like_status
 }
 enum QueryKey: String {
     case next

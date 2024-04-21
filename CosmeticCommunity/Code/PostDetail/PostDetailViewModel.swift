@@ -11,22 +11,28 @@ import RxCocoa
 
 final class PostDetailViewModel: InputOutput {
     let postManager = PostManager()
+    let commentManager = CommentManager()
+    
     var disposeBag = DisposeBag()
     var postId = ""
+    var likeStatus = PublishSubject<Bool>()
     struct Input {
         let inputPostIdTrigger: PublishSubject<String>
+        let inputClickLikeButtonTrigger: ControlEvent<Void>
     }
     
     struct Output {
         let outputPostData: Driver<PostModel?> // PostModel정보 VC으로 전달
         let outputLoginView: Driver<Void>
+        let outputLikeButton: Driver<Bool?>
     }
 
     func transform(input: Input) -> Output {
         let outputPostData = PublishRelay<PostModel?>()
-        
-        let accessTokenTrigger = PublishSubject<Void>()
         let outputLoginView = PublishRelay<Void>()
+        let outputLikeButton = PublishRelay<Bool?>()
+        let accessTokenTrigger = PublishSubject<Void>()
+        
         
         input.inputPostIdTrigger
             .flatMap { id in
@@ -46,7 +52,10 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
-                outputPostData.accept(value)
+                var status = self.isClickedLikeButton(value) ? true : false
+//                owner.likeStatus.onNext(newStatus)
+                outputLikeButton.accept(status) // 버튼에 이벤트 전달
+                outputPostData.accept(value) // 버튼제외 부분에 이벤트 전달
             }
             .disposed(by: disposeBag)
         
@@ -72,6 +81,47 @@ final class PostDetailViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputPostData: outputPostData.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()))
+        input.inputClickLikeButtonTrigger
+            .withLatestFrom(outputLikeButton)
+            .debug()
+            .flatMap { value in
+                guard let value else {
+                    outputLikeButton.accept(nil)
+                    return Observable<CommentModel>.never()
+                }
+                let newStatus = value ? false : true
+                var query = CommentQuery(like_status: newStatus)
+
+                return self.commentManager.changeLikeStatus(query, postId: self.postId)
+                    .catch { error in
+                        guard let error = error as? APIError else {
+                            outputLikeButton.accept(nil)
+                            return Observable<CommentModel>.never()
+                        }
+                        if error == APIError.accessTokenExpired_419 {
+                            // 엑세스 토근 재발행
+                            accessTokenTrigger.onNext(())
+                            
+                        }
+                        outputLikeButton.accept(nil)
+                        return Observable<CommentModel>.never()
+                    }
+            }
+            .debug()
+            .subscribe(with: self) { owner, value in
+                outputLikeButton.accept(value.like_status)
+            }
+            .disposed(by: disposeBag)
+        
+        return Output(outputPostData: outputPostData.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()), outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil))
+    }
+}
+
+extension PostDetailViewModel {
+    func isClickedLikeButton(_ postData: PostModel?) -> Bool {
+        guard let postData else {
+            return false
+        }
+        return postData.likes.contains(MemberManger.shared.getUserId() ?? "") ? true : false
     }
 }

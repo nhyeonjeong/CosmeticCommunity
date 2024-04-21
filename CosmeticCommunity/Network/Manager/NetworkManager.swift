@@ -21,7 +21,7 @@ final class NetworkManager {
             var urlRequest: URLRequest
             do {
                 urlRequest = try router.asURLRequest()
-                print("urlRequest: ", urlRequest)
+//                print("urlRequest: ", urlRequest)
             } catch {
                 observer.onError(APIError.invalidURLError_444)
                 return Disposables.create()

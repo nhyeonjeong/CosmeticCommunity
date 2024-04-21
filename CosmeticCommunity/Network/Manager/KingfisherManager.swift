@@ -21,13 +21,10 @@ final class KingfisherManager {
     }
     
     func getImageURL(path: String?, completionHandler: (URL?) -> Void) {
-        print("imagePath:", path)
         if let path, let url = URL(string: "\(APIKey.baseURL.rawValue)v1/" + path) {
             completionHandler(url)
         } else {
             completionHandler(nil)
         }
-
-        
     }
 }
