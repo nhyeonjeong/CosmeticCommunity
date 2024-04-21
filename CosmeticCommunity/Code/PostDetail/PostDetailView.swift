@@ -16,7 +16,11 @@ final class PostDetailView: BaseView {
         view.isPagingEnabled = true
         return view
     }()
-    
+    let likeButton = {
+        let view = UIButton()
+        view.tintColor = Constants.Color.point
+        return view
+    }()
     let creatorView = CreatorView(profileImageSize: .creator)
     let detailsView = PostDetailsView()
     let contentLabel = {
@@ -35,13 +39,17 @@ final class PostDetailView: BaseView {
         return view
     }()
     override func configureHierarchy() {
-        addViews([imageCollectionView, creatorView, detailsView, contentLabel, commentsTableView])
+        addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView])
     }
     override func configureConstraints(){
         
         imageCollectionView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(300)
+        }
+        likeButton.snp.makeConstraints { make in
+            make.trailing.bottom.equalTo(imageCollectionView).inset(10)
+            make.size.equalTo(30)
         }
         creatorView.snp.makeConstraints { make in
             make.top.equalTo(imageCollectionView.snp.bottom).offset(10)

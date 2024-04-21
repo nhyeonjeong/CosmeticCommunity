@@ -20,6 +20,7 @@ final class CommentTableViewCell: BaseTableViewCell {
     }()
     let contentLabel = {
         let view = UILabel()
+        view.numberOfLines = 0
         view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
         return view
     }()
@@ -28,17 +29,18 @@ final class CommentTableViewCell: BaseTableViewCell {
     }
     override func configureConstraints() {
         commentCreatorView.snp.makeConstraints { make in
-            make.top.leading.equalTo(contentView)
+            make.top.leading.equalTo(contentView).inset(4)
         }
         createdTimeLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(contentView)
+            make.trailing.equalTo(contentView).inset(10)
             make.centerY.equalTo(commentCreatorView.snp.centerY)
             make.height.equalTo(20)
         }
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(commentCreatorView.snp.bottom)
-            make.leading.equalTo(8+CreatorView.ProfileImageSize.commentCreator.rawValue)
-            make.trailing.bottom.equalTo(contentView)
+            make.leading.equalTo(18+CreatorView.ProfileImageSize.commentCreator.rawValue)
+            make.bottom.equalTo(contentView).inset(4)
+            make.trailing.equalTo(contentView).inset(10)
         }
     }
 //    override func configureView() {
