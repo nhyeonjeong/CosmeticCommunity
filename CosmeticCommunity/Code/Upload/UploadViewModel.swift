@@ -15,6 +15,9 @@ final class UploadViewModel: InputOutput {
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
     var photoString = BehaviorSubject<[String]>(value: [])
         
+    deinit {
+        print("UploadViewModel Deinit")
+    }
     struct Input {
         let inputTitleString: ControlProperty<String?>
         let inputContentString: ControlProperty<String?>
@@ -28,7 +31,7 @@ final class UploadViewModel: InputOutput {
         // 글쓰기를 할 수 있는지 유효성 검사
         let outputValid: Driver<Bool>
         let outputUploadTrigger: PublishSubject<PostModel?>
-        let outputLoginView: Driver<Void>
+        let outputLoginView: PublishRelay<Void>
         let outputPhotoItems: Driver<[NSItemProviderReading]>
     }
     
@@ -37,7 +40,7 @@ final class UploadViewModel: InputOutput {
         let outputUploadTrigger = PublishSubject<PostModel?>()
         let outputLoginView = PublishRelay<Void>()
         let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
-        let accessTokenTrigger = PublishSubject<Void>()
+//        let accessTokenTrigger = PublishSubject<Void>()
 
         let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty, photoString.asObserver())
             .map { title, content, images in
@@ -84,9 +87,13 @@ final class UploadViewModel: InputOutput {
                             return Observable<PostImageStingModel>.never()
                         }
                         if error == APIError.accessTokenExpired_419 {
-                            // 엑세스 토근 재발행
-                            accessTokenTrigger.onNext(())
-                            
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputUploadImagesTrigger.onNext(())
+                            } failureHandler: {
+                                outputUploadTrigger.onNext(nil)
+                            } loginAgainHandler: {
+                                outputLoginView.accept(())
+                            }
                         }
                         outputUploadTrigger.onNext(nil)
                         return Observable<PostImageStingModel>.never()
@@ -112,38 +119,22 @@ final class UploadViewModel: InputOutput {
                             return Observable<PostModel>.never()
                         }
                         if error == APIError.accessTokenExpired_419 {
-                            // 엑세스 토근 재발행
-                            accessTokenTrigger.onNext(())
-                            
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputUploadTrigger.onNext(())
+                            } failureHandler: {
+                                outputUploadTrigger.onNext(nil)
+                            } loginAgainHandler: {
+                                print("다시 로그인해야돼용")
+                                outputLoginView.accept(())
+                            }
                         }
                         outputUploadTrigger.onNext(nil)
                         return Observable<PostModel>.never()
                     }
             }
             .subscribe(with: self) { onwer, value in
+                print("inputUploadTrigger subscribe")
                 outputUploadTrigger.onNext(value)
-            }
-            .disposed(by: disposeBag)
-        
-        accessTokenTrigger
-            .flatMap {
-                print("토큰 재발행 네트워크")
-                return MemberManger.shared.tokenRefresh()
-                    .catch { error in
-                        guard let error = error as? APIError else {
-                            outputUploadTrigger.onNext(nil)
-                            return Observable<RefreshAccessModel>.never()
-                        }
-                        // 리프레시 토큰이 만료된거라면 로그인 화면으로...
-                        if error == .refreshTokenExpired_418 {
-                            outputLoginView.accept(())
-                        }
-                        
-                        return Observable<RefreshAccessModel>.never()
-                    }
-            }
-            .subscribe(with: self) { owner, value in
-                input.inputUploadImagesTrigger.onNext(())
             }
             .disposed(by: disposeBag)
         
@@ -153,7 +144,7 @@ final class UploadViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputValid: outputValid.asDriver(onErrorJustReturn: false), outputUploadTrigger: outputUploadTrigger, outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()), outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []))
+        return Output(outputValid: outputValid.asDriver(onErrorJustReturn: false), outputUploadTrigger: outputUploadTrigger, outputLoginView: outputLoginView, outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []))
     }
     // 5개 이하의 이미지만 업로드 가능
     func appendPhotos(_ item: NSItemProviderReading?) {

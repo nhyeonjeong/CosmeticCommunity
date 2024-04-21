@@ -50,7 +50,7 @@ final class UploadViewController: BaseViewController {
                                           inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems)
         
         let output = viewModel.transform(input: input)
-
+        outputLoginView = output.outputLoginView
         output.outputValid
             .drive(with: self) { owner, value in
                 // 다 작성했으면
@@ -80,14 +80,6 @@ final class UploadViewController: BaseViewController {
             .drive(mainView.photoCollectionView.rx.items(cellIdentifier: UploadPhotosCollectionViewCell.identifier, cellType: UploadPhotosCollectionViewCell.self)) {(row, element, cell) in
                 
                 cell.upgradeCell(element)
-            }
-            .disposed(by: disposeBag)
-        
-        output.outputLoginView
-            .drive(with: self) { owner, _ in
-                owner.changeRootVC(vc: HomeViewController()) // 다시 루트뷰 바꾸기
-                let vc = UINavigationController(rootViewController: NotLoginViewController())
-                owner.navigationController?.present(vc, animated: true)
             }
             .disposed(by: disposeBag)
     }

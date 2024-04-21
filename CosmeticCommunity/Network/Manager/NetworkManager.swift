@@ -26,19 +26,18 @@ final class NetworkManager {
                 observer.onError(APIError.invalidURLError_444)
                 return Disposables.create()
             }
-            /*
+        
             AF.request(urlRequest)
                 .responseString { response in
                     print("responseString : \(response)")
                 }
 
-*/
             
               AF.request(urlRequest)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
-                        print(success)
+//                        print(success)
                         completionHandler(success) // 성공시 실행할 게 있다면 실행하기
                         observer.onNext(success)
                         observer.onCompleted()

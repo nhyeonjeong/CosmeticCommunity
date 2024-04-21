@@ -7,8 +7,11 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 class BaseViewController: UIViewController, RxProtocol {
+    var outputLoginView = PublishRelay<Void>()
+    
     let disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +20,7 @@ class BaseViewController: UIViewController, RxProtocol {
         configureHierarchy()
         configureConstraints()
         configureView()
+        bindLoginView()
     }
     func bind() {
         
@@ -32,6 +36,17 @@ class BaseViewController: UIViewController, RxProtocol {
     
     func configureView() {
 
+    }
+    
+    func bindLoginView() {
+        outputLoginView
+            .asDriver(onErrorJustReturn: ())
+            .drive(with: self) { owner, _ in
+                let vc = UINavigationController(rootViewController: NotLoginViewController())
+                vc.modalPresentationStyle = .fullScreen
+                owner.navigationController?.present(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
 }
