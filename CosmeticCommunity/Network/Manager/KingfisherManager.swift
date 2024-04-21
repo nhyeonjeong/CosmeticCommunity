@@ -9,6 +9,8 @@ import Foundation
 import Kingfisher
 
 final class KingfisherManager {
+    static let shared = KingfisherManager()
+    private init() { }
     let modifier = AnyModifier { request in
         var r = request
         r.method = .get
@@ -18,7 +20,7 @@ final class KingfisherManager {
         return r
     }
     
-    func getImage(path: String?, completionHandler: (URL?) -> Void) {
+    func getImageURL(path: String?, completionHandler: (URL?) -> Void) {
         if let path, let url = URL(string: "\(APIKey.baseURL.rawValue)v1/" + path) {
             completionHandler(url)
         } else {

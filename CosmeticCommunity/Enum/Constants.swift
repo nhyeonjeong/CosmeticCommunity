@@ -12,9 +12,11 @@ enum Constants {
         static let point = UIColor.systemPink
         static let text = UIColor.black
         static let subText = UIColor.lightGray
+        static let noImageTint = UIColor.systemGray6
     }
     
     enum Image {
+        static let defulatProfileImage: UIImage = .defaultProfile
         static let defualtProfilePath = "uploads/posts/defaultProfileImage_1713266372313.jpeg"
         static let xButton = UIImage(systemName: "xmark.circle.fill")
         static let unclickedLike = UIImage(systemName: "heart")

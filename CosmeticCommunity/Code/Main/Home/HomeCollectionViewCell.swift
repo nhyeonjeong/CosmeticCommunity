@@ -10,13 +10,13 @@ import SnapKit
 import Kingfisher
 
 final class HomeCollectionViewCell: BaseCollectionViewCell {
-    let kingfisherManager = KingfisherManager()
+    let kingfisher = KingfisherManager.shared
     let photoImage = {
         let view = UIImageView()
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         view.contentMode = .scaleAspectFill
-        view.tintColor = .systemGray6
+        view.tintColor = Constants.Color.noImageTint
         return view
     }()
     
@@ -43,9 +43,9 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     }
     func upgradeCell(_ item: PostModel) {
         
-        kingfisherManager.getImage(path: item.files.first) { url in
+        kingfisher.getImageURL(path: item.files.first) { url in
             if let url {
-                photoImage.kf.setImage(with: url, options: [.requestModifier(kingfisherManager.modifier)])
+                photoImage.kf.setImage(with: url, options: [.requestModifier(kingfisher.modifier)])
             } else {
                 photoImage.image = UIImage(systemName: "nosign")
                 photoImage.contentMode = .scaleAspectFit

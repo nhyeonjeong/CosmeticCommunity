@@ -18,7 +18,7 @@ struct PostQuery: Encodable {
     let title: String // 제목
     let content: String // 내용
     let content1: String // 웜쿨
-    let files: [String]? // 사진을 안 올릴수도.,,
+    let files: [String] // 사진을 안 올릴수도.,,
 }
 
 struct CheckPostModel: Decodable {
@@ -30,6 +30,7 @@ struct PostImageStingModel: Decodable {
 }
 
 struct PostModel: Decodable {
+    let post_id: String
     let product_id: String // 게시판..
     let title: String // 제목
     let content: String // 내용
