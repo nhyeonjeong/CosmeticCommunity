@@ -145,8 +145,6 @@ final class UploadViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
-                // 엑세스토큰 갱신에 성공했다면 다시 inputUploadTrigger에 이벤트전달
-                MemberManger.shared.saveAccessToken(value.accessToken)
                 input.inputUploadImagesTrigger.onNext(())
             }
             .disposed(by: disposeBag)

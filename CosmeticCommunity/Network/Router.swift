@@ -47,6 +47,7 @@ extension Router: RouterType {
     }
     
     var headers: HTTPHeaders {
+        print(MemberManger.shared.getAccessToken())
         switch self {
         case .tokenRefresh:
             return [HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",

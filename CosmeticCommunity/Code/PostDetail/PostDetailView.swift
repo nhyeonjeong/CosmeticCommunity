@@ -17,12 +17,13 @@ final class PostDetailView: BaseView {
         return view
     }()
     
-    let creatorView = CreatorView()
+    let creatorView = CreatorView(profileImageSize: .creator)
     let detailsView = PostDetailsView()
-    let contentTextView = {
-        let view = UITextView()
-        view.textColor = Constants.Color.text
-        view.font = Constants.Font.normal
+    let contentLabel = {
+        let view = UILabel()
+        view.backgroundColor = .yellow
+        view.numberOfLines = 0
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
         return view
     }()
     
@@ -30,10 +31,11 @@ final class PostDetailView: BaseView {
     let commentsTableView = {
         let view = UITableView()
         view.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
+        view.rowHeight = UITableView.automaticDimension
         return view
     }()
     override func configureHierarchy() {
-        addViews([imageCollectionView, creatorView, detailsView, contentTextView, contentTextView, commentsTableView])
+        addViews([imageCollectionView, creatorView, detailsView, contentLabel, commentsTableView])
     }
     override func configureConstraints(){
         
@@ -44,22 +46,25 @@ final class PostDetailView: BaseView {
         creatorView.snp.makeConstraints { make in
             make.top.equalTo(imageCollectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(50)
         }
         detailsView.snp.makeConstraints { make in
             make.top.equalTo(creatorView.snp.bottom).offset(4)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(240)
+            make.height.equalTo(100)
         }
-        contentTextView.snp.makeConstraints { make in
-            make.top.equalTo(detailsView.snp.bottom).offset(20)
+        contentLabel.snp.makeConstraints { make in
+            make.top.equalTo(detailsView.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(10)
         }
         commentsTableView.snp.makeConstraints { make in
-            make.top.equalTo(contentTextView.snp.bottom).offset(10)
+            make.top.equalTo(contentLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-            
+            make.bottom.equalTo(safeAreaLayoutGuide)
         }
+    }
+    override func configureView() {
+        detailsView.backgroundColor = .systemGreen
+        commentsTableView.backgroundColor = .separator
     }
 }
 extension PostDetailView {

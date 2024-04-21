@@ -47,7 +47,7 @@ final class PostDetailViewController: BaseViewController {
                     owner.imageItems.onNext(value.files)
                     owner.mainView.creatorView.upgradeView(value.creator)
                     owner.mainView.detailsView.upgradeView(value)
-                    owner.mainView.contentTextView.text = value.content
+                    owner.mainView.contentLabel.text = value.content
                     owner.commentItems.onNext(value.comments)
                     
                 } else {
@@ -72,7 +72,7 @@ extension PostDetailViewController {
     private func bindCommentItems() {
         commentItems
             .bind(to: mainView.commentsTableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) {(row, element, cell) in
-//                cell.upgradeCell(element)
+                cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
     }

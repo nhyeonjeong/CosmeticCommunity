@@ -10,11 +10,24 @@ import SnapKit
 import Kingfisher
 
 final class CreatorView: BaseView {
+    enum ProfileImageSize: CGFloat {
+        case creator = 40
+        case commentCreator = 30
+    }
+    var profileImageSize: CGFloat = ProfileImageSize.commentCreator.rawValue
     let kingfisher = KingfisherManager.shared
-    let profileImage = {
+    
+    init(profileImageSize: ProfileImageSize) { // 디폴트 30
+        super.init(frame: .zero)
+        self.profileImageSize = profileImageSize.rawValue
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    lazy var profileImage = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = profileImageSize / 2
         view.clipsToBounds = true
         return view
     }()
@@ -30,7 +43,8 @@ final class CreatorView: BaseView {
     override func configureConstraints() {
         profileImage.snp.makeConstraints { make in
             make.leading.top.equalToSuperview()
-            make.size.equalTo(40)
+            make.size.equalTo(profileImageSize)
+            make.bottom.equalToSuperview()
         }
         nickname.snp.makeConstraints { make in
             make.leading.equalTo(profileImage.snp.trailing).offset(8)
