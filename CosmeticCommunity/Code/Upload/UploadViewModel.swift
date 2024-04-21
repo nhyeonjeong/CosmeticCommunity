@@ -41,6 +41,7 @@ final class UploadViewModel: InputOutput {
 
         let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty, photoString.asObserver())
             .map { title, content, images in
+                print(title, content)
                 return PostQuery(product_id: "nhj_test", title: title, content: content, content1: "겨울쿨", files: images)
             }
         
@@ -103,6 +104,7 @@ final class UploadViewModel: InputOutput {
         input.inputUploadTrigger
             .withLatestFrom(postObservable)
             .flatMap { postData in
+                print(postData)
                 print("업로드 네트워크")
                 print("inputUploadTrigger network")
                 return self.postManager.uploadPost(postData)
@@ -145,7 +147,7 @@ final class UploadViewModel: InputOutput {
             .subscribe(with: self) { owner, value in
                 // 엑세스토큰 갱신에 성공했다면 다시 inputUploadTrigger에 이벤트전달
                 MemberManger.shared.saveAccessToken(value.accessToken)
-                input.inputUploadTrigger.onNext(())
+                input.inputUploadImagesTrigger.onNext(())
             }
             .disposed(by: disposeBag)
         

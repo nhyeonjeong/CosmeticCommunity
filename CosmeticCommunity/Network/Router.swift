@@ -21,6 +21,7 @@ enum Router {
     case uploadPostImage(query: [Data]?)
     case upload(query: PostQuery)
     case checkPosts(query: CheckPostQuery)
+    case checkSpecificPost(postId: String)
     // Commmet
     
     // Follow
@@ -40,7 +41,7 @@ extension Router: RouterType {
         switch self {
         case .login, .join, .uploadPostImage, .upload:
             return .post
-        case .tokenRefresh, .checkPosts:
+        case .tokenRefresh, .checkPosts, .checkSpecificPost:
             return .get
         }
     }
@@ -55,16 +56,11 @@ extension Router: RouterType {
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
             
-        case .uploadPostImage:
+        case .uploadPostImage, .upload:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.multipartData.rawValue,
                     HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? ""]
-            
-        case .upload:
-            return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
-                    HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
-                    HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
-        case .checkPosts:
+        case .checkPosts, .checkSpecificPost:
             return [ HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
                      HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
             
@@ -83,7 +79,8 @@ extension Router: RouterType {
             return "v1/posts/files"
         case .upload, .checkPosts:
             return "v1/posts"
-            
+        case .checkSpecificPost(let postId):
+            return "v1/posts/\(postId)"
         }
     }
     var parameters: Parameters? {
@@ -91,25 +88,25 @@ extension Router: RouterType {
         case .login(let query):
             return [ParameterKey.email.rawValue: query.email,
                     ParameterKey.password.rawValue: query.password]
-        case .join, .tokenRefresh, .uploadPostImage, .checkPosts:
-            return nil
         case .upload(let query):
             return [ParameterKey.product_id.rawValue: query.product_id,
                     ParameterKey.title.rawValue: query.title,
                     ParameterKey.content.rawValue: query.content,
                     ParameterKey.content1.rawValue: query.content1,
-                    ParameterKey.files.rawValue: query.files ?? []]
+                    ParameterKey.files.rawValue: query.files]
+        case .join, .tokenRefresh, .uploadPostImage, .checkPosts, .checkSpecificPost:
+            return nil
         }
     }
     
     var queryItem: [URLQueryItem]? {
         switch self {
-        case .login, .join, .upload, .tokenRefresh, .uploadPostImage:
-            return nil
         case .checkPosts(let query):
             return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id)]
+        case .login, .join, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost:
+            return nil
         }
     }
     
@@ -123,14 +120,14 @@ extension Router: RouterType {
             return jsonEncoding(query)
         case .upload(let query):
             return jsonEncoding(query)
-        case .uploadPostImage, .checkPosts:
+        case .uploadPostImage, .checkPosts, .checkSpecificPost:
             return nil
         }
     }
         
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .upload, .checkPosts:
+        case .tokenRefresh, .login, .join, .upload, .checkPosts, .checkSpecificPost:
             return nil
         case .uploadPostImage(let query):
             return query

@@ -21,17 +21,20 @@ final class NetworkManager {
             var urlRequest: URLRequest
             do {
                 urlRequest = try router.asURLRequest()
+                print("urlRequest: ", urlRequest)
             } catch {
                 observer.onError(APIError.invalidURLError_444)
                 return Disposables.create()
             }
-            
-//            AF.request(urlRequest)
-//                .responseString { response in
-//                    print("responseString : \(response)")
-//                }
-            
+            /*
             AF.request(urlRequest)
+                .responseString { response in
+                    print("responseString : \(response)")
+                }
+
+*/
+            
+              AF.request(urlRequest)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
@@ -54,15 +57,19 @@ final class NetworkManager {
                         case 419:
                             observer.onError(APIError.accessTokenExpired_419)
                         case .none:
+                            print("error ----------> none Error")
                             return
                         case .some(_):
+                            print("error ---------------> some Error")
                             return
                         }
+                        print("time out..?")
                         return
                     }
                 }
              
             return Disposables.create()
+ 
         }
     }
 }

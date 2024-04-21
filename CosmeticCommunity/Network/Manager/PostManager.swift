@@ -17,8 +17,13 @@ final class PostManager {
     func uploadPost(_ data: PostQuery) -> Observable<PostModel> {
         return NetworkManager.shared.fetchAPI(type: PostModel.self, router: Router.upload(query: data))
     }
+    // 포스트 조회
     func checkPosts(_ data: CheckPostQuery) -> Observable<CheckPostModel> {
         return NetworkManager.shared.fetchAPI(type: CheckPostModel.self, router: Router.checkPosts(query: data))
+    }
+    // 특정 포스트 조회
+    func checkSpecificPost(postId: String) -> Observable<PostModel> {
+        return NetworkManager.shared.fetchAPI(type: PostModel.self, router: Router.checkSpecificPost(postId: postId))
     }
     
 }
