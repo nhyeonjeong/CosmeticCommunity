@@ -19,6 +19,8 @@ final class PostDetailViewModel: InputOutput {
     struct Input {
         let inputPostIdTrigger: PublishSubject<String>
         let inputClickLikeButtonTrigger: ControlEvent<Void>
+        let inputCommentButtonTrigger: ControlEvent<Void>
+        let inputCommentTextTrigger: ControlProperty<String?>
     }
     
     struct Output {
@@ -91,7 +93,7 @@ final class PostDetailViewModel: InputOutput {
                 
                 let newStatus = self.isClickedLikeButton(value) ? false : true
                 var query = CommentQuery(like_status: newStatus)
-                return self.commentManager.changeLikeStatus(query, postId: self.postId)
+                return self.postManager.changeLikeStatus(query, postId: self.postId)
                     .catch { error in
                         guard let error = error as? APIError else {
                             outputLikeButton.accept(nil)
@@ -111,31 +113,17 @@ final class PostDetailViewModel: InputOutput {
                 input.inputPostIdTrigger.onNext(owner.postId)
             }
             .disposed(by: disposeBag)
-//            .debug()
-//            .flatMap {
-//                let newStatus = value ? false : true
-//                var query = CommentQuery(like_status: newStatus)
-//
-//                return self.commentManager.changeLikeStatus(query, postId: self.postId)
-//                    .catch { error in
-//                        guard let error = error as? APIError else {
-//                            outputLikeButton.accept(nil)
-//                            return Observable<CommentModel>.never()
-//                        }
-//                        if error == APIError.accessTokenExpired_419 {
-//                            // 엑세스 토근 재발행
-//                            accessTokenTrigger.onNext(())
-//                            
-//                        }
-//                        outputLikeButton.accept(nil)
-//                        return Observable<CommentModel>.never()
-//                    }
-//            }
-//            .debug()
-//            .subscribe(with: self) { owner, value in
-//                outputLikeButton.accept(value.like_status)
-//            }
-//            .disposed(by: disposeBag)
+
+        
+        input.inputCommentButtonTrigger
+            .withLatestFrom(input.inputCommentTextTrigger)
+            .flatMap {
+                return commentManager.
+            }
+            .subscribe(with: self) { owner, value in
+                
+            }
+            .disposed(by: disposeBag)
         
         return Output(outputPostData: outputPostData.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()), outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil))
     }

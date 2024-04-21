@@ -25,5 +25,4 @@ final class PostManager {
     func checkSpecificPost(postId: String) -> Observable<PostModel> {
         return NetworkManager.shared.fetchAPI(type: PostModel.self, router: Router.checkSpecificPost(postId: postId))
     }
-    
 }
