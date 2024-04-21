@@ -36,35 +36,12 @@ struct PostModel: Decodable {
     let content: String // 내용
     let content1: String? // 웜쿨
     let createdAt: String
-    let creator: Creator
+    let creator: CreatorModel
     let files: [String]
     let likes: [String]
     let hashTags: [String]
-    let comments: [Comment]
+    let comments: [CommentModel]
 }
 
-struct Creator: Decodable {
-    let user_id: String
-    let nick: String
-    let profileImage: String // 없으면 기본 이미지
-    
-    enum CodingKeys: CodingKey {
-        case user_id
-        case nick
-        case profileImage
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.user_id = try container.decode(String.self, forKey: .user_id)
-        self.nick = try container.decode(String.self, forKey: .nick)
-        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? Constants.Image.defualtProfilePath
-    }
-}
 
-struct Comment: Decodable {
-    let comment_id: String
-    let content: String
-    let createdAt: String
-    let creator: Creator
-}
+

@@ -8,9 +8,12 @@
 import Foundation
 
 struct CommentQuery: Encodable {
-    let like_status: Bool
+    let content: String
 }
 
 struct CommentModel: Decodable {
-    let like_status: Bool
+    let comment_id: String
+    let content: String
+    let createdAt: String
+    let creator: CreatorModel
 }
