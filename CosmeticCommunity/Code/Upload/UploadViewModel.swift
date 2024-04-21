@@ -96,8 +96,6 @@ final class UploadViewModel: InputOutput {
                 owner.photoString.onNext(value.files)
                 print("사진 업로드성공 후 \(value.files)")
                 input.inputUploadTrigger.onNext(())
-
-                
             }
             .disposed(by: disposeBag)
         
@@ -134,14 +132,14 @@ final class UploadViewModel: InputOutput {
                     .catch { error in
                         guard let error = error as? APIError else {
                             outputUploadTrigger.onNext(nil)
-                            return Observable<RefreshAccess>.never()
+                            return Observable<RefreshAccessModel>.never()
                         }
                         // 리프레시 토큰이 만료된거라면 로그인 화면으로...
                         if error == .refreshTokenExpired_418 {
                             outputLoginView.accept(())
                         }
                         
-                        return Observable<RefreshAccess>.never()
+                        return Observable<RefreshAccessModel>.never()
                     }
             }
             .subscribe(with: self) { owner, value in

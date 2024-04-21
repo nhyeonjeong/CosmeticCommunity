@@ -10,6 +10,7 @@ import SnapKit
 
 final class CommentTableViewCell: BaseTableViewCell {
 
+    
     let commentCreatorView = CreatorView(profileImageSize: .commentCreator)
     let createdTimeLabel = {
         let view = UILabel()
@@ -24,6 +25,13 @@ final class CommentTableViewCell: BaseTableViewCell {
         view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
         return view
     }()
+    
+//    let menuButton = {
+//        let view = UIMenu()
+//        let delete = UIMenuItem(title: "삭제", action: <#T##Selector#>)
+//        view.children
+//        view.
+//    }
     override func configureHierarchy() {
         contentView.addViews([commentCreatorView, createdTimeLabel, contentLabel])
     }
@@ -47,7 +55,7 @@ final class CommentTableViewCell: BaseTableViewCell {
 //        commentCreatorView.layer.borderColor = UIColor.red.cgColor
 //        commentCreatorView.layer.borderWidth = 1
 //    }
-    func upgradeCell(_ item: Comment) {
+    func upgradeCell(_ item: CommentModel) {
         commentCreatorView.upgradeView(item.creator)
         createdTimeLabel.text = item.createdAt
         contentLabel.text = item.content

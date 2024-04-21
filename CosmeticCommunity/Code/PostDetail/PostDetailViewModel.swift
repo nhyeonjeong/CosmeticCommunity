@@ -11,11 +11,11 @@ import RxCocoa
 
 final class PostDetailViewModel: InputOutput {
     let postManager = PostManager()
+    let likeManager = LikeManager()
     let commentManager = CommentManager()
     
     var disposeBag = DisposeBag()
     var postId = ""
-//    var likeStatus = PublishSubject<Bool>()
     struct Input {
         let inputPostIdTrigger: PublishSubject<String>
         let inputClickLikeButtonTrigger: ControlEvent<Void>
@@ -27,14 +27,20 @@ final class PostDetailViewModel: InputOutput {
         let outputPostData: Driver<PostModel?> // PostModel정보 VC으로 전달
         let outputLoginView: Driver<Void>
         let outputLikeButton: Driver<PostModel?>
+        let outputNotValid: Driver<Void>
+//        let outputCommentButtonTrigger: Driver<Void>
     }
 
     func transform(input: Input) -> Output {
         let outputPostData = PublishRelay<PostModel?>()
         let outputLoginView = PublishRelay<Void>()
         let outputLikeButton = PublishRelay<PostModel?>()
+        let outputNotValid = PublishRelay<Void>()
         let accessTokenTrigger = PublishSubject<Void>()
         
+        let commentObservable = input.inputCommentTextTrigger.orEmpty.map { text in
+            return CommentQuery(content: text)
+        }
         
         input.inputPostIdTrigger
             .flatMap { id in
@@ -67,14 +73,14 @@ final class PostDetailViewModel: InputOutput {
                     .catch { error in
                         guard let error = error as? APIError else {
                             outputPostData.accept(nil)
-                            return Observable<RefreshAccess>.never()
+                            return Observable<RefreshAccessModel>.never()
                         }
                         // 리프레시 토큰이 만료된거라면 로그인 화면으로...
                         if error == .refreshTokenExpired_418 {
                             outputLoginView.accept(())
                         }
                         
-                        return Observable<RefreshAccess>.never()
+                        return Observable<RefreshAccessModel>.never()
                     }
             }
             .subscribe(with: self) { owner, value in
@@ -88,16 +94,16 @@ final class PostDetailViewModel: InputOutput {
             .flatMap { value in
                 guard let value else {
                     outputLikeButton.accept(nil)
-                    return Observable<CommentModel>.never()
+                    return Observable<LikeModel>.never()
                 }
                 
                 let newStatus = self.isClickedLikeButton(value) ? false : true
-                var query = CommentQuery(like_status: newStatus)
-                return self.postManager.changeLikeStatus(query, postId: self.postId)
+                let query = LikeQuery(like_status: newStatus)
+                return self.likeManager.changeLikeStatus(query, postId: self.postId)
                     .catch { error in
                         guard let error = error as? APIError else {
                             outputLikeButton.accept(nil)
-                            return Observable<CommentModel>.never()
+                            return Observable<LikeModel>.never()
                         }
                         if error == APIError.accessTokenExpired_419 {
                             // 엑세스 토근 재발행
@@ -105,7 +111,7 @@ final class PostDetailViewModel: InputOutput {
 
                         }
                         outputLikeButton.accept(nil)
-                        return Observable<CommentModel>.never()
+                        return Observable<LikeModel>.never()
                     }
             }
             .bind(with: self) { owner, _ in
@@ -116,16 +122,39 @@ final class PostDetailViewModel: InputOutput {
 
         
         input.inputCommentButtonTrigger
-            .withLatestFrom(input.inputCommentTextTrigger)
-            .flatMap {
-                return commentManager.
+            .withLatestFrom(commentObservable)
+            .flatMap { query in
+                if query.content.trimmingCharacters(in: .whitespaces) == "" {
+                    // 비어있으면 댓글 입력하지 말기
+                    print("비어있음")
+                    outputNotValid.accept(())
+                    return Observable<CommentModel>.never()
+                }
+                return self.commentManager.uploadComment(query, postId: self.postId)
+                    .catch { error in
+                        guard let error = error as? APIError else {
+                            return Observable<CommentModel>.never()
+                        }
+                        // 리프레시 토큰이 만료된거라면 로그인 화면으로...
+                        if error == APIError.accessTokenExpired_419 {
+                            // 엑세스 토근 재발행
+                            accessTokenTrigger.onNext(())
+                            
+                        }
+                        print(error.errorMessage)
+                        return Observable<CommentModel>.never()
+                    }
             }
-            .subscribe(with: self) { owner, value in
-                
+            .subscribe(with: self) { owner, vaue in
+                print("댓글 업로드 api통신 성공")
+                input.inputPostIdTrigger.onNext(owner.postId)
             }
             .disposed(by: disposeBag)
         
-        return Output(outputPostData: outputPostData.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()), outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil))
+        return Output(outputPostData: outputPostData.asDriver(onErrorJustReturn: nil),
+                      outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()),
+                      outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil),
+                      outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()))
     }
 }
 

@@ -53,7 +53,7 @@ final class CreatorView: BaseView {
         }
     }
     
-    func upgradeView(_ item: Creator) {
+    func upgradeView(_ item: CreatorModel) {
         kingfisher.getImageURL(path: item.profileImage) { url in
             if let url {
                 profileImage.kf.setImage(with: url)

@@ -38,7 +38,7 @@ final class NetworkManager {
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
-//                        print(success)
+                        print(success)
                         completionHandler(success) // 성공시 실행할 게 있다면 실행하기
                         observer.onNext(success)
                         observer.onCompleted()

@@ -38,8 +38,28 @@ final class PostDetailView: BaseView {
         view.rowHeight = UITableView.automaticDimension
         return view
     }()
+    let uploadCommentView = {
+        let view = UIView()
+        view.backgroundColor = Constants.Color.point.withAlphaComponent(0.3)
+        return view
+    }()
+    let commentTextView = {
+        let view = UITextView()
+        view.layer.borderColor = UIColor.red.cgColor
+        view.layer.borderWidth = 1
+        view.font = Constants.Font.normal
+        return view
+    }()
+    let commentButton = {
+        let view = UIButton()
+        view.setTitle(" 댓글쓰기 ", for: .normal)
+        view.setTitleColor(Constants.Color.point, for: .normal)
+        view.backgroundColor = .white
+        return view
+    }()
     override func configureHierarchy() {
-        addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView])
+        uploadCommentView.addViews([commentTextView, commentButton])
+        addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView, uploadCommentView])
     }
     override func configureConstraints(){
         
@@ -68,6 +88,20 @@ final class PostDetailView: BaseView {
             make.top.equalTo(contentLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
             make.bottom.equalTo(safeAreaLayoutGuide)
+        }
+        uploadCommentView.snp.makeConstraints { make in
+            make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(50)
+        }
+        commentTextView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(5)
+            make.leading.equalToSuperview().inset(10)
+        }
+        commentButton.snp.makeConstraints { make in
+            make.leading.equalTo(commentTextView.snp.trailing).offset(8)
+            make.bottom.equalToSuperview().inset(5)
+            make.trailing.equalToSuperview().inset(10)
+//            make.height.equalTo(30)
         }
     }
     override func configureView() {

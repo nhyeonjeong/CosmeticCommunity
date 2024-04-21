@@ -22,8 +22,12 @@ enum Router {
     case upload(query: PostQuery)
     case checkPosts(query: CheckPostQuery)
     case checkSpecificPost(postId: String)
+    // Likst
+    case likeStatus(query: LikeQuery, postId: String)
+    
     // Commmet
-    case likeStatus(query: CommentQuery, postId: String)
+    case uploadComment(query: CommentQuery, postId: String)
+    
     // Follow
     
     // Hashtag
@@ -39,7 +43,7 @@ extension Router: RouterType {
     
     var method: HTTPMethod {
         switch self {
-        case .login, .join, .uploadPostImage, .upload, .likeStatus:
+        case .login, .join, .uploadPostImage, .upload, .likeStatus, .uploadComment:
             return .post
         case .tokenRefresh, .checkPosts, .checkSpecificPost:
             return .get
@@ -47,7 +51,7 @@ extension Router: RouterType {
     }
     
     var headers: HTTPHeaders {
-        print("----network---", self.path, "headersAccessToken", MemberManger.shared.getAccessToken())
+        print("----network---", self.path, ", \n headersAccessToken", MemberManger.shared.getAccessToken())
         switch self {
         case .tokenRefresh:
             return [HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
@@ -56,7 +60,7 @@ extension Router: RouterType {
         case .login, .join:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
-        case  .upload, .likeStatus:
+        case  .upload, .likeStatus, .uploadComment:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? ""]
@@ -87,6 +91,8 @@ extension Router: RouterType {
             return "v1/posts/\(postId)"
         case .likeStatus(_, let postId):
             return "v1/posts/\(postId)/like"
+        case .uploadComment(_, let postId):
+            return "v1/posts/\(postId)/comments"
         }
     }
     var parameters: Parameters? {
@@ -102,6 +108,8 @@ extension Router: RouterType {
                     ParameterKey.files.rawValue: query.files]
         case .likeStatus(let query, _):
             return [ParameterKey.like_status.rawValue: query.like_status]
+        case .uploadComment(let query, _):
+            return [ParameterKey.content.rawValue: query.content]
         case .join, .tokenRefresh, .uploadPostImage, .checkPosts, .checkSpecificPost:
             return nil
         }
@@ -113,7 +121,7 @@ extension Router: RouterType {
             return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id)]
-        case .login, .join, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .likeStatus:
+        case .login, .join, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .likeStatus, .uploadComment:
             return nil
         }
     }
@@ -130,6 +138,8 @@ extension Router: RouterType {
             return jsonEncoding(query)
         case .likeStatus(let query, _):
             return jsonEncoding(query)
+        case .uploadComment(let query, _):
+            return jsonEncoding(query)
         case .uploadPostImage, .checkPosts, .checkSpecificPost:
             return nil
         }
@@ -137,7 +147,7 @@ extension Router: RouterType {
         
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .upload, .checkPosts, .checkSpecificPost, .likeStatus:
+        case .tokenRefresh, .login, .join, .upload, .checkPosts, .checkSpecificPost, .likeStatus, .uploadComment:
             return nil
         case .uploadPostImage(let query):
             return query

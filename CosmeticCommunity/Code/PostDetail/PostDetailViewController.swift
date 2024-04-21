@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 final class PostDetailViewController: BaseViewController {
     var postId: String? // 받아온 post정보
@@ -17,7 +18,7 @@ final class PostDetailViewController: BaseViewController {
     
     private let inputPostIdTrigger = PublishSubject<String>()
     private let imageItems = PublishSubject<[String]>()
-    private let commentItems = PublishSubject<[Comment]>()
+    private let commentItems = PublishSubject<[CommentModel]>()
     override func loadView() {
         view = mainView
     }
@@ -30,7 +31,10 @@ final class PostDetailViewController: BaseViewController {
     }
     
     override func bind() {
-        let input = PostDetailViewModel.Input(inputPostIdTrigger: inputPostIdTrigger, inputClickLikeButtonTrigger: mainView.likeButton.rx.tap)
+        let input = PostDetailViewModel.Input(inputPostIdTrigger: inputPostIdTrigger,
+                                              inputClickLikeButtonTrigger: mainView.likeButton.rx.tap,
+                                              inputCommentButtonTrigger: mainView.commentButton.rx.tap,
+                                              inputCommentTextTrigger: mainView.commentTextView.rx.text)
 
         let output = viewModel.transform(input: input)
         
@@ -69,6 +73,12 @@ final class PostDetailViewController: BaseViewController {
                     owner.mainView.likeButton.setImage(image, for: .normal) // 추천 버튼 실기간 변경
                     owner.mainView.detailsView.upgradeLikeCountLabel(value.likes.count)
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        output.outputNotValid
+            .drive(with: self) { owner, _ in
+                owner.view?.makeToast("댓글을 입력해주세요", duration: 1.0, position: .center)
             }
             .disposed(by: disposeBag)
     }

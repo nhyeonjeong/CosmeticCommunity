@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 final class LikeManager {
-    func changeLikeStatus(_ data: CommentQuery, postId: String) -> Observable<CommentModel> {
-        return NetworkManager.shared.fetchAPI(type: CommentModel.self, router: Router.likeStatus(query: data, postId: postId))
+    func changeLikeStatus(_ data: LikeQuery, postId: String) -> Observable<LikeModel> {
+        return NetworkManager.shared.fetchAPI(type: LikeModel.self, router: Router.likeStatus(query: data, postId: postId))
     }
 
 }
