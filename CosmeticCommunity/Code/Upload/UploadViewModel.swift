@@ -14,7 +14,7 @@ final class UploadViewModel: InputOutput {
     var disposeBag = DisposeBag()
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
     var photoString = BehaviorSubject<[String]>(value: [])
-        
+    let outputLoginView = PublishRelay<Void>()
     deinit {
         print("UploadViewModel Deinit")
     }
@@ -38,7 +38,6 @@ final class UploadViewModel: InputOutput {
     func transform(input: Input) -> Output {
         let outputValid = BehaviorRelay<Bool>(value: false)
         let outputUploadTrigger = PublishSubject<PostModel?>()
-        let outputLoginView = PublishRelay<Void>()
         let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
 //        let accessTokenTrigger = PublishSubject<Void>()
 
@@ -92,7 +91,7 @@ final class UploadViewModel: InputOutput {
                             } failureHandler: {
                                 outputUploadTrigger.onNext(nil)
                             } loginAgainHandler: {
-                                outputLoginView.accept(())
+                                self.outputLoginView.accept(())
                             }
                         }
                         outputUploadTrigger.onNext(nil)
@@ -125,7 +124,7 @@ final class UploadViewModel: InputOutput {
                                 outputUploadTrigger.onNext(nil)
                             } loginAgainHandler: {
                                 print("다시 로그인해야돼용")
-                                outputLoginView.accept(())
+                                self.outputLoginView.accept(())
                             }
                         }
                         outputUploadTrigger.onNext(nil)

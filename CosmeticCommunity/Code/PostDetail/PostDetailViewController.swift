@@ -37,18 +37,9 @@ final class PostDetailViewController: BaseViewController {
                                               inputCommentTextTrigger: mainView.commentTextView.rx.text)
 
         let output = viewModel.transform(input: input)
-        
+        outputLoginView = output.outputLoginView
         bindImageItems()
         bindCommentItems()
-        
-        output.outputLoginView
-            .drive(with: self) { owner, _ in
-                owner.changeRootVC(vc: HomeViewController()) // 다시 루트뷰 바꾸기
-                let vc = UINavigationController(rootViewController: NotLoginViewController())
-                owner.navigationController?.present(vc, animated: true)
-            }
-            .disposed(by: disposeBag)
-        
         output.outputPostData
             .drive(with: self) { owner, value in
                 if let value {

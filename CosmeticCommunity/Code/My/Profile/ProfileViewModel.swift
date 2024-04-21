@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 
 final class ProfileViewModel: InputOutput {
+    let outputLoginView = PublishRelay<Void>()
     struct Input {
         
     }

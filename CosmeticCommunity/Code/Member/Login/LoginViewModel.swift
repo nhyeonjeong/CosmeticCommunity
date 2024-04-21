@@ -20,6 +20,7 @@ final class LoginViewModel: InputOutput {
         let outputLoginButton: PublishSubject<LoginModel?>
     }
     var disposeBag = DisposeBag()
+    let outputLoginView = PublishRelay<Void>()
     
     func transform(input: Input) -> Output {
         let outputLoginButton = PublishSubject<LoginModel?>()

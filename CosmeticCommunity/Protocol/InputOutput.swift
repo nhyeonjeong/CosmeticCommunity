@@ -14,6 +14,6 @@ protocol InputOutput: RxProtocol {
     associatedtype Output
     
     var disposeBag: DisposeBag { get }
-    
+    var outputLoginView: PublishRelay<Void> { get }
     func transform(input: Input) -> Output
 }

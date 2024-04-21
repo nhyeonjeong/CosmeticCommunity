@@ -10,6 +10,8 @@ import RxSwift
 import RxCocoa
 
 final class PostDetailViewModel: InputOutput {
+
+    let outputLoginView = PublishRelay<Void>()
     let postManager = PostManager()
     let likeManager = LikeManager()
     let commentManager = CommentManager()
@@ -25,7 +27,7 @@ final class PostDetailViewModel: InputOutput {
     
     struct Output {
         let outputPostData: Driver<PostModel?> // PostModel정보 VC으로 전달
-        let outputLoginView: Driver<Void>
+        let outputLoginView: PublishRelay<Void>
         let outputLikeButton: Driver<PostModel?>
         let outputNotValid: Driver<Void>
 //        let outputCommentButtonTrigger: Driver<Void>
@@ -66,28 +68,6 @@ final class PostDetailViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        accessTokenTrigger
-            .flatMap {
-                print("토큰 재발행 네트워크")
-                return MemberManger.shared.tokenRefresh()
-                    .catch { error in
-                        guard let error = error as? APIError else {
-                            outputPostData.accept(nil)
-                            return Observable<RefreshAccessModel>.never()
-                        }
-                        // 리프레시 토큰이 만료된거라면 로그인 화면으로...
-                        if error == .refreshTokenExpired_418 {
-                            outputLoginView.accept(())
-                        }
-                        
-                        return Observable<RefreshAccessModel>.never()
-                    }
-            }
-            .subscribe(with: self) { owner, value in
-                input.inputPostIdTrigger.onNext(owner.postId)
-            }
-            .disposed(by: disposeBag)
-        
         input.inputClickLikeButtonTrigger
             .withLatestFrom(outputLikeButton)
             .debug()
@@ -106,8 +86,14 @@ final class PostDetailViewModel: InputOutput {
                             return Observable<LikeModel>.never()
                         }
                         if error == APIError.accessTokenExpired_419 {
-                            // 엑세스 토근 재발행
-                            accessTokenTrigger.onNext(())
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputPostIdTrigger.onNext(self.postId)
+                            } failureHandler: {
+                                outputPostData.accept(nil)
+                            } loginAgainHandler: {
+                                print("다시 로그인해야돼용")
+                                self.outputLoginView.accept(())
+                            }
 
                         }
                         outputLikeButton.accept(nil)
@@ -137,9 +123,14 @@ final class PostDetailViewModel: InputOutput {
                         }
                         // 리프레시 토큰이 만료된거라면 로그인 화면으로...
                         if error == APIError.accessTokenExpired_419 {
-                            // 엑세스 토근 재발행
-                            accessTokenTrigger.onNext(())
-                            
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputPostIdTrigger.onNext(self.postId)
+                            } failureHandler: {
+                                outputPostData.accept(nil)
+                            } loginAgainHandler: {
+                                print("다시 로그인해야돼용")
+                                self.outputLoginView.accept(())
+                            }
                         }
                         print(error.errorMessage)
                         return Observable<CommentModel>.never()
@@ -152,7 +143,7 @@ final class PostDetailViewModel: InputOutput {
             .disposed(by: disposeBag)
         
         return Output(outputPostData: outputPostData.asDriver(onErrorJustReturn: nil),
-                      outputLoginView: outputLoginView.asDriver(onErrorJustReturn: ()),
+                      outputLoginView: outputLoginView,
                       outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil),
                       outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()))
     }

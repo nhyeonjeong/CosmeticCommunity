@@ -11,7 +11,7 @@ import RxCocoa
 
 final class HomeViewModel: InputOutput {
     let postManager = PostManager()
-    
+    let outputLoginView = PublishRelay<Void>()
     var disposedBag = DisposeBag()
     
     var nextCursor = "0" // 결과로 가져온 다음 커서
@@ -24,6 +24,7 @@ final class HomeViewModel: InputOutput {
     
     struct Output {
         let outputPostItems: Driver<[PostModel]?>
+        let outputLoginView: PublishRelay<Void>
     }
     var disposeBag = DisposeBag()
     
@@ -35,11 +36,20 @@ final class HomeViewModel: InputOutput {
                 // 포스트 불러오기
                 return self.postManager.checkPosts(data)
                     .catch { error in
-                        /*
+                        
                         guard let error = error as? APIError else {
-                            outputPostsItems.accept(nil)
+//                            outputPostsItems.accept(nil)
+                            outputPostItems.accept(nil)
+                            return Observable<CheckPostModel>.never()
                         }
-                        */
+                        TokenManager.shared.accessTokenAPI {
+                            input.inputFetchPostsTrigger.onNext(())
+                        } failureHandler: {
+                            outputPostItems.accept(nil)
+                        } loginAgainHandler: {
+                            print("다시 로그인해야돼용")
+                            self.outputLoginView.accept(())
+                        }
                         outputPostItems.accept(nil)
                         return Observable<CheckPostModel>.never()
                     }
@@ -51,6 +61,6 @@ final class HomeViewModel: InputOutput {
             }
             .disposed(by: disposedBag)
         
-        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: []))
+        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView)
     }
 }

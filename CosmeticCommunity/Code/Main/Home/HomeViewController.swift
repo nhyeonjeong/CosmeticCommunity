@@ -31,7 +31,7 @@ final class HomeViewController: BaseViewController {
         let input = HomeViewModel.Input(inputFetchPostsTrigger: inputPostsTrigger)
         
         let output = viewModel.transform(input: input)
- 
+        outputLoginView = output.outputLoginView
         output.outputPostItems
             .flatMap { data -> Driver<[PostModel]> in
                 guard let posts = data else {
