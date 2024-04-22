@@ -60,7 +60,7 @@ final class PostDetailViewController: BaseViewController {
         output.outputLikeButton
             .drive(with: self) { owner, value in
                 if let value {
-                    let image = owner.viewModel.isClickedLikeButton(value) ? Constants.Image.clikcedLike : Constants.Image.unclickedLike
+                    let image = owner.viewModel.isClickedLikeButton(value) ? Constants.Image.clickedLike : Constants.Image.unclickedLike
                     owner.mainView.likeButton.setImage(image, for: .normal) // 추천 버튼 실기간 변경
                     owner.mainView.detailsView.upgradeLikeCountLabel(value.likes.count)
                 }

@@ -41,6 +41,7 @@ final class CustomSegmentedControl<T: SegmentCase>: UISegmentedControl {
         for segment in T.allCases {
             self.insertSegment(withTitle: segment.segmentTitle, at: segment.segmentIdx, animated: true)
         }
+        self.selectedSegmentIndex = 0 // 처음에는 0이 선택된 상태
     }
     func configureUnderLine() {
         addSubview(underlineView)

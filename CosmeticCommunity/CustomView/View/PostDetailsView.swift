@@ -10,7 +10,7 @@ import UIKit
 final class PostDetailsView: BaseView {
     let likeSymbol = {
         let view = UIImageView()
-        view.image = Constants.Image.clikcedLike
+        view.image = Constants.Image.clickedLike
         view.tintColor = Constants.Color.point
         return view
     }()

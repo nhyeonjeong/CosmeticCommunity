@@ -30,7 +30,7 @@ final class LoginViewController: BaseViewController {
         // 로그인버튼
         output.outputLoginButton
             .bind(with: self) { owner, value in
-                if let data = value {
+                if let _ = value {
                     owner.dismiss(animated: true)
                     owner.navigationController?.pushViewController(RegisterViewController(), animated: true)
                     owner.mainView.loginButton.setTitle("로그인", for: .normal)

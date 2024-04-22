@@ -9,8 +9,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class ProfileViewController: BaseViewController {
-    private let mainView = ProfileView()
+final class ProfileViewController<T: ProfileProtocol>: BaseViewController {
+    private let mainView = ProfileView<T>()
     private let viewModel = ProfileViewModel()
     private let inputFetchProfile = PublishSubject<Void>()
     override func loadView() {
