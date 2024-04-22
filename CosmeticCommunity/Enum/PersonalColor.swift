@@ -12,6 +12,7 @@ enum PersonalColor: String {
     case summer = "여름쿨"
     case fall = "가을웜"
     case winter = "겨울쿨"
+    case none = "" // 회원가입시 입력하지 않았거나 잘못가져왔을 때
 
     var backgroundColor: UIColor {
         switch self {
@@ -23,6 +24,8 @@ enum PersonalColor: String {
             return .fallBackground
         case .winter:
             return .winterBackground
+        case .none:
+            return .white
         }
     }
     
@@ -36,6 +39,8 @@ enum PersonalColor: String {
             return .white
         case .winter:
             return .white
+        case .none:
+            return Constants.Color.text
         }
     }
 }

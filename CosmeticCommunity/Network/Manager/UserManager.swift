@@ -10,8 +10,8 @@ import RxSwift
 import RxCocoa
 import Alamofire
 
-final class MemberManger {
-    static let shared = MemberManger()
+final class UserManager {
+    static let shared = UserManager()
     
     private init() { }
     // accessToken가져오기

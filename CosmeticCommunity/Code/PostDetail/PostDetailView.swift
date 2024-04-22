@@ -21,7 +21,7 @@ final class PostDetailView: BaseView {
         view.tintColor = Constants.Color.point
         return view
     }()
-    let creatorView = CreatorView(profileImageSize: .creator)
+    let creatorView = UserDataView(profileImageSize: .creator)
     let detailsView = PostDetailsView()
     let contentLabel = {
         let view = UILabel()

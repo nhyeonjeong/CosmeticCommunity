@@ -51,25 +51,25 @@ extension Router: RouterType {
     }
     
     var headers: HTTPHeaders {
-        print("----network---", self.path, ", \n headersAccessToken", MemberManger.shared.getAccessToken())
+        print("----network---", self.path, ", \n headersAccessToken", UserManager.shared.getAccessToken())
         switch self {
         case .tokenRefresh:
-            return [HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
+            return [HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? "",
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
-                    HTTPHeader.refreshToken.rawValue: MemberManger.shared.getRefreshToken() ?? ""] // refreshToken도 들어가야함
+                    HTTPHeader.refreshToken.rawValue: UserManager.shared.getRefreshToken() ?? ""] // refreshToken도 들어가야함
         case .login, .join:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
         case  .upload, .likeStatus, .uploadComment:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
-                    HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? ""]
+                    HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
         case .uploadPostImage:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.multipartData.rawValue,
-                    HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? ""]
+                    HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
         case .checkPosts, .checkSpecificPost, .myProfile:
-            return [ HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
+            return [ HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? "",
                      HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
             
         }

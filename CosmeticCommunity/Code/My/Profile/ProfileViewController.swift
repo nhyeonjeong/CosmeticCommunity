@@ -12,30 +12,34 @@ import RxCocoa
 final class ProfileViewController: BaseViewController {
     private let mainView = ProfileView()
     private let viewModel = ProfileViewModel()
-    
+    private let inputFetchProfile = PublishSubject<Void>()
     override func loadView() {
         view = mainView
     }
-    
+            
     deinit {
         print("ProfileVC Deinit")
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        // 로그아웃된 상태라면 유저디폴트에 userId가 없다.
-        let userId = UserDefaults.standard.string(forKey: "userId")
-        // 로그아웃된 상태라면 로그인해달라는 화면
-        guard let _ = userId else {
-            let vc = UINavigationController(rootViewController: NotLoginViewController())
-            vc.modalPresentationStyle = .fullScreen
-            navigationController?.present(vc, animated: true)
-            return
-        }
+        inputFetchProfile.onNext(())
     }
     override func bind() {
-       
-        
+        let input = ProfileViewModel.Input(inputFetchProfile: inputFetchProfile)
+        let output = viewModel.transform(input: input)
+        output.outputProfileResult
+            .drive(with: self) { owner, data in
+                if let data {
+                    owner.mainView.upgradeView(data)
+                } else {
+                    owner.view.makeToast("통신에 실패했습니다", duration: 1.0, position: .top)
+                }
+            }
+            .disposed(by: disposeBag)
     }
-    
+}
+extension ProfileViewController {
+    func configureNavigationBar() {
+        navigationItem.title = "프로필"
+    }
 }

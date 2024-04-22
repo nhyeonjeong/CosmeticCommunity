@@ -14,7 +14,7 @@ final class KingfisherManager {
     let modifier = AnyModifier { request in
         var r = request
         r.method = .get
-        r.headers = [HTTPHeader.authorization.rawValue: MemberManger.shared.getAccessToken() ?? "",
+        r.headers = [HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? "",
                      HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
         return r

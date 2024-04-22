@@ -11,7 +11,7 @@ import SnapKit
 final class CommentTableViewCell: BaseTableViewCell {
 
     
-    let commentCreatorView = CreatorView(profileImageSize: .commentCreator)
+    let commentCreatorView = UserDataView(profileImageSize: .commentCreator)
     let createdTimeLabel = {
         let view = UILabel()
 //        view.layer.borderColor = UIColor.red.cgColor
@@ -46,7 +46,7 @@ final class CommentTableViewCell: BaseTableViewCell {
         }
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(commentCreatorView.snp.bottom)
-            make.leading.equalTo(18+CreatorView.ProfileImageSize.commentCreator.rawValue)
+            make.leading.equalTo(18+UserDataView.ProfileImageSize.commentCreator.rawValue)
             make.bottom.equalTo(contentView).inset(4)
             make.trailing.equalTo(contentView).inset(10)
         }
@@ -56,7 +56,7 @@ final class CommentTableViewCell: BaseTableViewCell {
 //        commentCreatorView.layer.borderWidth = 1
 //    }
     func upgradeCell(_ item: CommentModel) {
-        commentCreatorView.upgradeView(item.creator)
+        commentCreatorView.upgradeView(profileImage: item.creator.profileImage, nick: item.creator.nick)
         createdTimeLabel.text = item.createdAt
         contentLabel.text = item.content
     }

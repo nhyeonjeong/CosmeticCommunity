@@ -46,7 +46,7 @@ final class PostDetailViewController: BaseViewController {
                     owner.imageItems.onNext(value.files)
 //                    let likeButtonImage = owner.viewModel.isClickedLikeButton(value) ? Constants.Image.clikcedLike : Constants.Image.unclickedLike
 //                    owner.mainView.likeButton.setImage(likeButtonImage, for: .normal)
-                    owner.mainView.creatorView.upgradeView(value.creator)
+                    owner.mainView.creatorView.upgradeView(profileImage: value.creator.profileImage, nick: value.creator.nick)
                     owner.mainView.detailsView.upgradeView(value)
                     owner.mainView.contentLabel.text = value.content
                     owner.commentItems.onNext(value.comments)

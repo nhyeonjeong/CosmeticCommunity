@@ -35,7 +35,7 @@ final class LoginViewModel: InputOutput {
         input.inputLoginButton
             .withLatestFrom(loginObservable)
             .flatMap { loginData in
-                MemberManger.shared.login(loginData)
+                UserManager.shared.login(loginData)
                     .catch({ error in
                         let error = error as! APIError
                         print(error.errorMessage)

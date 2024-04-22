@@ -11,23 +11,30 @@ import Kingfisher
 
 final class UserDataView: BaseView {
     enum ProfileImageSize: CGFloat {
+        case profile = 70
         case creator = 40
         case commentCreator = 30
     }
-    var profileImageSize: CGFloat = ProfileImageSize.commentCreator.rawValue
+    var profileImageSize: ProfileImageSize = .creator // 초기화
+    var size: CGFloat {
+        print("profileSIze", profileImageSize.rawValue)
+        return profileImageSize.rawValue
+    }
     let kingfisher = KingfisherManager.shared
     
-    init(profileImageSize: ProfileImageSize) { // 디폴트 30
+    init(profileImageSize: ProfileImageSize) {
+        print("init: \(profileImageSize.rawValue)")
         super.init(frame: .zero)
-        self.profileImageSize = profileImageSize.rawValue
+        self.profileImageSize = profileImageSize
+//        print("profileImageSize: \(self.profileImageSize)")
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    lazy var profileImage = {
+    lazy var profileImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = profileImageSize / 2
+        view.layer.cornerRadius = profileImageSize.rawValue / 2
         view.clipsToBounds = true
         return view
     }()
@@ -38,29 +45,33 @@ final class UserDataView: BaseView {
     }()
     
     override func configureHierarchy() {
-        addViews([profileImage, nickname])
+        addViews([profileImageView, nickname])
     }
     override func configureConstraints() {
-        profileImage.snp.makeConstraints { make in
+        profileImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview()
-            make.size.equalTo(profileImageSize)
+            make.size.equalTo(40)
+//            DispatchQueue.main.async {
+//                print("snp: \(self.profileImageSize.rawValue)")
+//                make.size.equalTo(self.profileImageSize.rawValue)
+//            }
             make.bottom.equalToSuperview()
         }
         nickname.snp.makeConstraints { make in
-            make.leading.equalTo(profileImage.snp.trailing).offset(8)
-            make.centerY.equalTo(profileImage.snp.centerY)
+            make.leading.equalTo(profileImageView.snp.trailing).offset(8)
+            make.centerY.equalTo(profileImageView.snp.centerY)
             make.trailing.equalToSuperview()
         }
     }
     
-    func upgradeView(_ item: CreatorModel) {
-        kingfisher.getImageURL(path: item.profileImage) { url in
+    func upgradeView(profileImage: String, nick: String) {
+        kingfisher.getImageURL(path: profileImage) { url in
             if let url {
-                profileImage.kf.setImage(with: url)
+                profileImageView.kf.setImage(with: url)
             } else {
-                profileImage.image = Constants.Image.defulatProfileImage
+                profileImageView.image = Constants.Image.defulatProfileImage
             }
         }
-        nickname.text = item.nick
+        nickname.text = nick
     }
 }
