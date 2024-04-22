@@ -17,7 +17,7 @@ final class TokenManager {
     //
     func accessTokenAPI(completionHandler: @escaping(() -> Void), failureHandler: @escaping (() -> Void), loginAgainHandler: @escaping (() -> Void)) {
         print("엑세스토큰 재발행")
-        MemberManger.shared.tokenRefresh()
+        tokenRefresh()
             .catch { error in
                 guard let error = error as? APIError else {
                     failureHandler()
@@ -33,6 +33,13 @@ final class TokenManager {
                 completionHandler()
             }
             .disposed(by: disposeBag)
+    }
+    // 엑세스토큰이 만료됐을 때
+    func tokenRefresh() -> Observable<RefreshAccessModel> {
+
+        return NetworkManager.shared.fetchAPI(type: RefreshAccessModel.self, router: Router.tokenRefresh) { response in
+            MemberManger.shared.saveAccessToken(response.accessToken)
+        }
     }
         
 }

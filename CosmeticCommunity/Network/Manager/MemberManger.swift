@@ -41,14 +41,6 @@ final class MemberManger {
         UserDefaults.standard.setValue(id, forKey: UserDefaultKey.Member.userId.rawValue)
     }
     
-    // 엑세스토큰이 만료됐을 때
-    func tokenRefresh() -> Observable<RefreshAccessModel> {
-
-        return NetworkManager.shared.fetchAPI(type: RefreshAccessModel.self, router: Router.tokenRefresh) { response in
-            self.saveAccessToken(response.accessToken)
-        }
-    }
-    
     func login(_ data: LoginQuery) -> Observable<LoginModel> {
 //        print(data)
         return NetworkManager.shared.fetchAPI(type: LoginModel.self, router: Router.login(query: data), completionHandler: { response in
@@ -70,6 +62,10 @@ final class MemberManger {
     
     func checkInvalidEmail() {
         
+    }
+    // 내 프로필 확인
+    func checkMyProfile() -> Observable<UserModel> {
+        return NetworkManager.shared.fetchAPI(type: UserModel.self, router: Router.myProfile)
     }
     
 }

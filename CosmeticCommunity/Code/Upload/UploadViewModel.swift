@@ -39,7 +39,6 @@ final class UploadViewModel: InputOutput {
         let outputValid = BehaviorRelay<Bool>(value: false)
         let outputUploadTrigger = PublishSubject<PostModel?>()
         let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
-//        let accessTokenTrigger = PublishSubject<Void>()
 
         let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty, photoString.asObserver())
             .map { title, content, images in

@@ -22,11 +22,6 @@ struct JoinQuery: Encodable {
 }
 
 // Decodable
-struct RefreshAccessModel: Decodable {
-    let accessToken: String
-}
-
-
 struct LoginModel: Decodable {
     let user_id: String
     let email: String
@@ -53,6 +48,38 @@ struct LoginModel: Decodable {
         self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     }
 }
+
+struct UserModel: Decodable {
+    let user_id: String
+    let nick: String
+    let birthDay: String
+    let profileImage: String
+    let followers: [String]
+    let following: [String]
+    let posts: [String]
+    
+    enum CodingKeys: CodingKey {
+        case user_id
+        case nick
+        case birthDay
+        case profileImage
+        case followers
+        case following
+        case posts
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.user_id = try container.decode(String.self, forKey: .user_id)
+        self.nick = try container.decode(String.self, forKey: .nick)
+        self.birthDay = try container.decode(String.self, forKey: .birthDay)
+        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? Constants.Image.defualtProfilePath
+        self.followers = try container.decode([String].self, forKey: .followers)
+        self.following = try container.decode([String].self, forKey: .following)
+        self.posts = try container.decode([String].self, forKey: .posts)
+    }
+}
+
 struct CreatorModel: Decodable {
     let user_id: String
     let nick: String

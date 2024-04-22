@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class CreatorView: BaseView {
+final class UserDataView: BaseView {
     enum ProfileImageSize: CGFloat {
         case creator = 40
         case commentCreator = 30
