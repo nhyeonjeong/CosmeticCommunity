@@ -9,7 +9,26 @@ import UIKit
 import SnapKit
 
 final class ProfileView: BaseView {
-
+    // rawtype을 가진 case들이라 enum은 타입을 가지지 못한다.
+    enum ProfileSegmentCase: Int, SegmentCase {
+        case posts = 0
+        case followers
+        case following
+        var segmentTitle: String {
+            switch self {
+            case .posts: return "게시글"
+            case .followers: return "팔로워"
+            case .following: return "팔로잉"
+            }
+        }
+        var segmentIdx: Int {
+            switch self {
+            case .posts: return 0
+            case .followers: return 1
+            case .following: return 2
+            }
+        }
+    }
     let profileView = UserDataView(profileImageSize: .profile)
     let personalLable = {
         let view = UILabel()
@@ -50,7 +69,12 @@ final class ProfileView: BaseView {
         return view
     }()
     // segment
-//    let segment = CustomSegmentedControl()
+    let segment = {
+        let view = CustomSegmentedControl<ProfileSegmentCase>()
+        view.selectedSegmentIndex = 0
+        return view
+    }()
+
     // 페이지컨트롤러
     let postVC: UIViewController = {
         let vc = UIViewController()
@@ -79,7 +103,7 @@ final class ProfileView: BaseView {
     override func configureHierarchy() {
         buttonStack.addArrangedSubview(EditProfileButton)
         buttonStack.addArrangedSubview(logoutButton)
-        addViews([profileView, personalLable, buttonStack/*, segment*/, pageViewContoller.view])
+        addViews([profileView, personalLable, buttonStack, segment, pageViewContoller.view])
     }
     override func configureConstraints() {
         profileView.snp.makeConstraints { make in
@@ -102,8 +126,13 @@ final class ProfileView: BaseView {
         logoutButton.snp.makeConstraints { make in
             make.verticalEdges.trailing.equalToSuperview()
         }
-        pageViewContoller.view.snp.makeConstraints { make in
+        segment.snp.makeConstraints { make in
             make.top.equalTo(buttonStack.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(30)
+        }
+        pageViewContoller.view.snp.makeConstraints { make in
+            make.top.equalTo(segment.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
     }
@@ -114,6 +143,12 @@ final class ProfileView: BaseView {
         personalLable.textColor = data.personalColor.textColor
         personalLable.text = data.personalColor.rawValue
         personalLable.backgroundColor = data.personalColor.backgroundColor
-
+    }
+    // 세그먼트만 따로 업데이트
+    func upgradeSegment(_ data: UserModel) {
+        // 타이틀 바꾸기
+        let postTitle = "\(ProfileSegmentCase.posts.segmentTitle) \(data.posts.count)"
+        let followersCount = "\(ProfileSegmentCase.followers.segmentTitle) \(data.followers.count)"
+        let followingCount = "\(ProfileSegmentCase.following.segmentTitle) \(data.following.count)"
     }
 }

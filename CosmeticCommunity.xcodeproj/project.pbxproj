@@ -26,6 +26,7 @@
 		8B3AFCBE2BD539920069773F /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFCBD2BD539920069773F /* TokenManager.swift */; };
 		8B3AFCC02BD566210069773F /* TokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFCBF2BD566210069773F /* TokenModel.swift */; };
 		8B3AFCC32BD56B540069773F /* CustomSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFCC22BD56B540069773F /* CustomSegmentedControl.swift */; };
+		8B3AFCE02BD6958A0069773F /* SegmentCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFCDF2BD6958A0069773F /* SegmentCase.swift */; };
 		8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C412BC980C700FD1B69 /* AppDelegate.swift */; };
 		8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C432BC980C700FD1B69 /* SceneDelegate.swift */; };
 		8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C452BC980C700FD1B69 /* ViewController.swift */; };
@@ -101,6 +102,7 @@
 		8B3AFCBD2BD539920069773F /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		8B3AFCBF2BD566210069773F /* TokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenModel.swift; sourceTree = "<group>"; };
 		8B3AFCC22BD56B540069773F /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
+		8B3AFCDF2BD6958A0069773F /* SegmentCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentCase.swift; sourceTree = "<group>"; };
 		8B428C3E2BC980C700FD1B69 /* CosmeticCommunity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CosmeticCommunity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B428C412BC980C700FD1B69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B428C432BC980C700FD1B69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				8B428C8D2BCBC25D00FD1B69 /* InputOutput.swift */,
 				8B428C992BCC13D000FD1B69 /* RouterType.swift */,
 				8B3AFCA62BD420E30069773F /* RxProtocol.swift */,
+				8B3AFCDF2BD6958A0069773F /* SegmentCase.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -564,6 +567,7 @@
 				8B428CF52BCEA73F00FD1B69 /* HomeViewModel.swift in Sources */,
 				8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */,
 				8B57ABB52BD26B52004BC76E /* HomeCollectionViewCell.swift in Sources */,
+				8B3AFCE02BD6958A0069773F /* SegmentCase.swift in Sources */,
 				8B428C602BCAB4FF00FD1B69 /* BaseView.swift in Sources */,
 				8B428C6C2BCAB84200FD1B69 /* ProfileViewController.swift in Sources */,
 				8B428C592BC981D100FD1B69 /* APIKey.swift in Sources */,
