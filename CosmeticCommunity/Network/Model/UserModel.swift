@@ -52,7 +52,7 @@ struct LoginModel: Decodable {
 struct UserModel: Decodable {
     let user_id: String
     let nick: String
-    let birthDay: String
+    let personalColor: PersonalColor
     let profileImage: String
     let followers: [String]
     let following: [String]
@@ -72,7 +72,10 @@ struct UserModel: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.user_id = try container.decode(String.self, forKey: .user_id)
         self.nick = try container.decode(String.self, forKey: .nick)
-        self.birthDay = try container.decode(String.self, forKey: .birthDay)
+
+        let personalColorString = try container.decodeIfPresent(String.self, forKey: .birthDay) ?? PersonalColor.none.rawValue
+        self.personalColor = PersonalColor(rawValue: personalColorString) ?? PersonalColor.none
+        
         self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? Constants.Image.defualtProfilePath
         self.followers = try container.decode([String].self, forKey: .followers)
         self.following = try container.decode([String].self, forKey: .following)
