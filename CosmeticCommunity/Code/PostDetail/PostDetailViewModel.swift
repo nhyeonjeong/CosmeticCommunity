@@ -35,7 +35,6 @@ final class PostDetailViewModel: InputOutput {
 
     func transform(input: Input) -> Output {
         let outputPostData = PublishRelay<PostModel?>()
-        let outputLoginView = PublishRelay<Void>()
         let outputLikeButton = PublishRelay<PostModel?>()
         let outputNotValid = PublishRelay<Void>()
         let accessTokenTrigger = PublishSubject<Void>()
@@ -55,11 +54,18 @@ final class PostDetailViewModel: InputOutput {
                             return Observable<PostModel>.never()
                         }
                         if error == APIError.accessTokenExpired_419 {
-                            accessTokenTrigger.onNext(())
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputPostIdTrigger.onNext(self.postId)
+                            } failureHandler: {
+                                outputPostData.accept(nil)
+                            } loginAgainHandler: {
+                                print("다시 로그인해야돼용")
+                                self.outputLoginView.accept(())
+                            }
+
                         }
                         outputPostData.accept(nil)
                         return Observable<PostModel>.never()
-                        
                     }
             }
             .subscribe(with: self) { owner, value in
@@ -151,6 +157,6 @@ final class PostDetailViewModel: InputOutput {
 
 extension PostDetailViewModel {
     func isClickedLikeButton(_ postData: PostModel) -> Bool {
-        return postData.likes.contains(MemberManger.shared.getUserId() ?? "") ? true : false
+        return postData.likes.contains(UserManager.shared.getUserId() ?? "") ? true : false
     }
 }

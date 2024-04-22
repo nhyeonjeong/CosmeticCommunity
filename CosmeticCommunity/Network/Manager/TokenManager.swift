@@ -38,7 +38,7 @@ final class TokenManager {
     func tokenRefresh() -> Observable<RefreshAccessModel> {
 
         return NetworkManager.shared.fetchAPI(type: RefreshAccessModel.self, router: Router.tokenRefresh) { response in
-            MemberManger.shared.saveAccessToken(response.accessToken)
+            UserManager.shared.saveAccessToken(response.accessToken)
         }
     }
         
