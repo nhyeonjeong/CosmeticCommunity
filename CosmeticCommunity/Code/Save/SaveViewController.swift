@@ -28,6 +28,8 @@ final class SaveViewController: BaseViewController {
         let input = SaveViewModel.Input(inputFetchLikedPosts: inputFetchLikedPosts, inputRecentPosts: inputRecentPosts)
         
         let output = viewModel.transform(input: input)
+        // 로그인화면으로 넘어가는 로직과 연결
+        outputLoginView = output.outputLoginView
         output.outputFetchLikedPosts
             .flatMap { data -> Driver<[PostModel]> in
                 guard let posts = data else {

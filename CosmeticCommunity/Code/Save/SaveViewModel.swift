@@ -21,6 +21,7 @@ final class SaveViewModel: InputOutput{
     struct Output {
         let outputFetchLikedPosts: Driver<[PostModel]?>
         let outputRecentPosts: Driver<[PostModel]?>
+        let outputLoginView: PublishRelay<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -53,7 +54,7 @@ final class SaveViewModel: InputOutput{
             }
             .disposed(by: disposeBag)
         
-        return Output(outputFetchLikedPosts: outputFetchLikedPosts.asDriver(onErrorJustReturn: nil), outputRecentPosts: outputRecentPosts.asDriver(onErrorJustReturn: nil))
+        return Output(outputFetchLikedPosts: outputFetchLikedPosts.asDriver(onErrorJustReturn: nil), outputRecentPosts: outputRecentPosts.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView)
     
     }
 }

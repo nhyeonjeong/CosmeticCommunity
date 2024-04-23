@@ -20,6 +20,7 @@ final class MyProfileViewModel: InputOutput {
     struct Output {
         let outputProfileResult: Driver<UserModel?>
         let outputPostItems: Driver<[PostModel]?>
+        let outputLoginView: PublishRelay<Void>
     }
     var disposeBag = DisposeBag()
     
@@ -27,7 +28,6 @@ final class MyProfileViewModel: InputOutput {
         let outputProfileResult = PublishSubject<UserModel?>()
         let fetchMyPostsSubject = PublishSubject<[String]?>()
         let outputPostItems = PublishSubject<[PostModel]?>()
-
         input.inputFetchProfile
             .flatMap {
                 return self.userManager.checkMyProfile()
@@ -89,6 +89,6 @@ final class MyProfileViewModel: InputOutput {
                 outputPostItems.onNext(value.data)
             }
             .disposed(by: disposeBag)
-        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil))
+        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView)
     }
 }

@@ -41,7 +41,7 @@ final class HomeViewController: BaseViewController {
         let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputFetchPostsTrigger: inputPostsTrigger)
         
         let output = viewModel.transform(input: input)
-        outputLoginView = output.outputLoginView
+        outputLoginView = output.outputLoginView // 로그인화면으로 넘기는 로직연결
         output.outputPostItems
             .flatMap { data -> Driver<[PostModel]> in
                 guard let posts = data else {

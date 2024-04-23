@@ -27,7 +27,7 @@ final class MyProfileViewController: BaseViewController {
     override func bind() {
         let input = MyProfileViewModel.Input(inputFetchProfile: inputFetchProfile)
         let output = viewModel.transform(input: input)
-        
+        outputLoginView = output.outputLoginView
         output.outputProfileResult
             .drive(with: self) { owner, data in
                 if let data {
