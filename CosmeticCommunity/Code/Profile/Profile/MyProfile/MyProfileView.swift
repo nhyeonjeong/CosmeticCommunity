@@ -124,16 +124,16 @@ final class MyProfileView: BaseView {
 extension MyProfileView {
     func collectionViewLayout() -> UICollectionViewLayout {
         // item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         // Group
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
         let group: NSCollectionLayoutGroup
         if #available(iOS 16.0, *) { // 16버전 이상에서
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             print("iOS 16.0이상")
         } else {
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 3)
             print("iOS 15.0이하")
         }
         group.interItemSpacing = .fixed(4) // item간의 가로 간격

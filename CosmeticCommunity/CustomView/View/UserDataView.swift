@@ -10,6 +10,7 @@ import SnapKit
 import Kingfisher
 
 final class UserDataView: BaseView {
+    let kingfisher = KingfisherManager.shared
     enum ProfileImageSize: CGFloat {
         case profile = 70
         case creator = 40
@@ -20,7 +21,6 @@ final class UserDataView: BaseView {
         print("profileSIze", profileImageSize.rawValue)
         return profileImageSize.rawValue
     }
-    let kingfisher = KingfisherManager.shared
     
     init(profileImageSize: ProfileImageSize) {
         print("init: \(profileImageSize.rawValue)")
@@ -65,9 +65,11 @@ final class UserDataView: BaseView {
     }
     
     func upgradeView(profileImage: String, nick: String) {
+        print(#function, profileImage)
         kingfisher.getImageURL(path: profileImage) { url in
             if let url {
-                profileImageView.kf.setImage(with: url)
+                print("url valid")
+                profileImageView.kf.setImage(with: url, options: [.requestModifier(kingfisher.modifier)])
             } else {
                 profileImageView.image = Constants.Image.defulatProfileImage
             }

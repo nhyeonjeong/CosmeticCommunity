@@ -19,7 +19,6 @@ final class MyProfileViewModel: InputOutput {
     
     struct Output {
         let outputProfileResult: Driver<UserModel?>
-//        let outputFollowResult: Driver<UserModel?>
         let outputPostItems: Driver<[PostModel]?>
     }
     var disposeBag = DisposeBag()
@@ -27,7 +26,6 @@ final class MyProfileViewModel: InputOutput {
     func transform(input: Input) -> Output {
         let outputProfileResult = PublishSubject<UserModel?>()
         let fetchMyPostsSubject = PublishSubject<[String]?>()
-//        let outputFollowResult = PublishSubject<UserModel?>()
         let outputPostItems = PublishSubject<[PostModel]?>()
 
         input.inputFetchProfile
@@ -58,15 +56,15 @@ final class MyProfileViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, data in
+//                print("내 프로필 패치 후 \(data.user_id)")
                 outputProfileResult.onNext(data)
-//                outputFollowResult.onNext(data)
                 fetchMyPostsSubject.onNext(data.posts)
             }
             .disposed(by: disposeBag)
         
         fetchMyPostsSubject
             .flatMap { _ in
-                return self.postManager.checkUserPosts(userId: self.userManager.getAccessToken() ?? "")
+                return self.postManager.checkUserPosts(userId: self.userManager.getUserId() ?? "")
                     .catch { error in
                         print("에러발생")
                         guard let error = error as? APIError else {
@@ -77,7 +75,7 @@ final class MyProfileViewModel: InputOutput {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputFetchProfile.onNext(())
                             } failureHandler: {
-//                                outputPostsResult.onNext(nil)
+                                //
                             } loginAgainHandler: {
                                 print("다시 로그인해야돼용")
                                 self.outputLoginView.accept(())

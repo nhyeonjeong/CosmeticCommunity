@@ -26,18 +26,18 @@ final class NetworkManager {
                 observer.onError(APIError.invalidURLError_444)
                 return Disposables.create()
             }
-        /*
+            /*
             AF.request(urlRequest)
                 .responseString { response in
                     print("responseString : \(response)")
-                }
-*/
+            }
+            */
             
-              AF.request(urlRequest)
+            AF.request(urlRequest)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
-//                        print(success)
+                        //                        print(success)
                         completionHandler(success) // 성공시 실행할 게 있다면 실행하기
                         observer.onNext(success)
                         observer.onCompleted()
@@ -67,9 +67,9 @@ final class NetworkManager {
                         return
                     }
                 }
-             
+            
             return Disposables.create()
- 
+            
         }
     }
 }
@@ -77,23 +77,23 @@ final class NetworkManager {
 extension NetworkManager {
     func dataAPI<T: Decodable>(type: T.Type, router: Router, completionHandler: @escaping ((T) -> Void) = { _ in }) -> Observable<T> {
         return Observable<T>.create { observer in
-/*
-            AF.upload(multipartFormData: { multipartFormData in
-                // 헤더키는 withname에 해당한다 -> files
-                // fileName -
-                guard let datas = router.multipartBody else {
-                    return
-                }
-                for data in datas {
-                    multipartFormData.append(data, withName: ParameterKey.files.rawValue, fileName: "\(Date())-\(Int.random(in: 1...1000))", mimeType: "image/png")
-                }
-
-
-            }, to: router.baseURL+router.path, headers: router.headers).responseString { data in
-                print("responseString", data)
-            }
- */
+            /*
+             AF.upload(multipartFormData: { multipartFormData in
+             // 헤더키는 withname에 해당한다 -> files
+             // fileName -
+             guard let datas = router.multipartBody else {
+             return
+             }
+             for data in datas {
+             multipartFormData.append(data, withName: ParameterKey.files.rawValue, fileName: "\(Date())-\(Int.random(in: 1...1000))", mimeType: "image/png")
+             }
              
+             
+             }, to: router.baseURL+router.path, headers: router.headers).responseString { data in
+             print("responseString", data)
+             }
+             */
+            
             AF.upload(multipartFormData: { multipartFormData in
                 // 헤더키는 withname에 해당한다 -> files
                 // fileName -
@@ -104,13 +104,13 @@ extension NetworkManager {
                     let date = Calendar.current.component(.day, from: Date())
                     multipartFormData.append(data, withName: ParameterKey.files.rawValue, fileName: "\(date)_\(Int.random(in: 1...1000))", mimeType: "image/png")
                 }
-
-
+                
+                
             }, to: router.baseURL+router.path, headers: router.headers) // 어떤 헤더가 들어갈지 명시해줘야
             .responseDecodable(of: T.self) { response in
                 switch response.result {
                 case .success(let success):
-//                    print(success)
+                    //                    print(success)
                     completionHandler(success) // 성공시 실행할 게 있다면 실행하기
                     observer.onNext(success)
                     observer.onCompleted()
@@ -139,7 +139,7 @@ extension NetworkManager {
                     return
                 }
             }
-              
+            
             return Disposables.create()
         }
     }
