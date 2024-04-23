@@ -37,7 +37,7 @@ final class PostDetailViewModel: InputOutput {
         let outputPostData = PublishRelay<PostModel?>()
         let outputLikeButton = PublishRelay<PostModel?>()
         let outputNotValid = PublishRelay<Void>()
-        let accessTokenTrigger = PublishSubject<Void>()
+//        let accessTokenTrigger = PublishSubject<Void>()
         
         let commentObservable = input.inputCommentTextTrigger.orEmpty.map { text in
             return CommentQuery(content: text)

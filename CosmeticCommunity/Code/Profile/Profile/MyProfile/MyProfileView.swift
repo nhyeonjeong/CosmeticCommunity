@@ -35,18 +35,6 @@ final class MyProfileView: BaseView {
         view.label.text = "팔로잉"
         return view
     }()
-    let likePostsButton = {
-        let view = CountButtonView()
-        view.label.text = "하트누른 게시글"
-        let image = Constants.Image.clickedLike
-        let attachment = NSTextAttachment()
-        attachment.image = image
-
-        let attributedString = NSMutableAttributedString(string: "")
-        attributedString.append(NSAttributedString(attachment: attachment))
-        view.countLabel.attributedText = attributedString
-        return view
-    }()
     let buttonStack = {
         let view = UIStackView()
         view.distribution = .fillEqually
@@ -64,7 +52,6 @@ final class MyProfileView: BaseView {
     override func configureHierarchy() {
         followStackView.addArrangedSubview(followersCountButton)
         followStackView.addArrangedSubview(followingCountButton)
-        followStackView.addArrangedSubview(likePostsButton)
         
         buttonStack.addArrangedSubview(EditProfileButton)
         buttonStack.addArrangedSubview(logoutButton)
@@ -89,10 +76,7 @@ final class MyProfileView: BaseView {
             make.leading.verticalEdges.equalToSuperview()
         }
         followingCountButton.snp.makeConstraints { make in
-            make.verticalEdges.equalToSuperview()
-        }
-        likePostsButton.snp.makeConstraints { make in
-            make.verticalEdges.trailing.equalToSuperview()
+            make.verticalEdges.bottom.equalToSuperview()
         }
         buttonStack.snp.makeConstraints { make in
             make.top.equalTo(followStackView.snp.bottom).offset(10)

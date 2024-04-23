@@ -35,7 +35,7 @@ class BaseViewController: UIViewController, RxProtocol {
     }
     
     func configureView() {
-
+        
     }
     
     func bindLoginView() {

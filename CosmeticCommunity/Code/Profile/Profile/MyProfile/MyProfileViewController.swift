@@ -26,8 +26,6 @@ final class MyProfileViewController: BaseViewController {
     }
     override func bind() {
         let input = MyProfileViewModel.Input(inputFetchProfile: inputFetchProfile)
-//        let countCollectionViewItems = PublishSubject<[FollowCounts]>() // 팔로우관련 숫자 리로드
-    //        let postsCollectionViewItems = // 작성한 포스트 다시 리로드
         let output = viewModel.transform(input: input)
         
         output.outputProfileResult

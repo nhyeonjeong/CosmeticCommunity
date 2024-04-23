@@ -25,7 +25,7 @@ enum Router {
     case checkUserPosts(userId: String)
     // Likst
     case likeStatus(query: LikeQuery, postId: String)
-    
+    case myLikedPosts
     // Commmet
     case uploadComment(query: CommentQuery, postId: String)
     
@@ -46,7 +46,7 @@ extension Router: RouterType {
         switch self {
         case .login, .join, .uploadPostImage, .upload, .likeStatus, .uploadComment:
             return .post
-        case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile:
+        case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .myLikedPosts:
             return .get
         }
     }
@@ -69,7 +69,7 @@ extension Router: RouterType {
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.multipartData.rawValue,
                     HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
-        case .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile:
+        case .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .myLikedPosts:
             return [ HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? "",
                      HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
             
@@ -86,16 +86,21 @@ extension Router: RouterType {
             return "v1/users/join"
         case .myProfile:
             return "v1/users/me/profile"
+            
         case .uploadPostImage:
             return "v1/posts/files"
         case .upload, .checkPosts:
             return "v1/posts"
+            
         case .checkSpecificPost(let postId):
             return "v1/posts/\(postId)"
         case .checkUserPosts(let userId):
             return "v1/posts/users/\(userId)/"
+            
         case .likeStatus(_, let postId):
             return "v1/posts/\(postId)/like"
+        case .myLikedPosts:
+            return "v1/posts/likes/me"
         case .uploadComment(_, let postId):
             return "v1/posts/\(postId)/comments"
         }
@@ -115,7 +120,7 @@ extension Router: RouterType {
             return [ParameterKey.like_status.rawValue: query.like_status]
         case .uploadComment(let query, _):
             return [ParameterKey.content.rawValue: query.content]
-        case .join, .myProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost:
+        case .join, .myProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .myLikedPosts:
             return nil
         }
     }
@@ -126,7 +131,7 @@ extension Router: RouterType {
             return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id)]
-        case .login, .join, .myProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .likeStatus, .uploadComment:
+        case .login, .join, .myProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .likeStatus, .myLikedPosts, .uploadComment:
             return nil
         }
     }
@@ -145,14 +150,14 @@ extension Router: RouterType {
             return jsonEncoding(query)
         case .uploadComment(let query, _):
             return jsonEncoding(query)
-        case .myProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts:
+        case .myProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts:
             return nil
         }
     }
     
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .myProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .likeStatus, .uploadComment:
+        case .tokenRefresh, .login, .join, .myProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .likeStatus, .uploadComment, .myLikedPosts:
             return nil
         case .uploadPostImage(let query):
             return query
