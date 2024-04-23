@@ -63,7 +63,8 @@ final class PostDetailsView: BaseView {
     
     func upgradeView(_ item: PostModel) {
         titleLabel.text = item.title
-        if let text = item.content1, let type = PersonalColor(rawValue: text) {
+        let text = item.personalColor.rawValue
+        if let type = PersonalColor(rawValue: text) {
             personalColorLabel.text = "  \(text)  "
             personalColorLabel.textColor = type.textColor
             personalColorLabel.backgroundColor = type.backgroundColor

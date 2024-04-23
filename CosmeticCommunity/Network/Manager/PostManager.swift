@@ -25,4 +25,8 @@ final class PostManager {
     func checkSpecificPost(postId: String) -> Observable<PostModel> {
         return NetworkManager.shared.fetchAPI(type: PostModel.self, router: Router.checkSpecificPost(postId: postId))
     }
+    // 유저별 작성한 포스트
+    func checkUserPosts(userId: String) -> Observable<CheckPostModel> {
+        return NetworkManager.shared.fetchAPI(type: CheckPostModel.self, router: Router.checkUserPosts(userId: userId))
+    }
 }

@@ -10,12 +10,8 @@ import RxSwift
 import RxCocoa
 
 final class MyProfileViewModel: InputOutput {
-    
-    struct FollowCounts {
-        let countLabel: Int
-        let countTitle: String
-    }
     let userManager = UserManager.shared
+    let postManager = PostManager()
     let outputLoginView = PublishRelay<Void>()
     struct Input {
         let inputFetchProfile: PublishSubject<Void>
@@ -24,7 +20,7 @@ final class MyProfileViewModel: InputOutput {
     struct Output {
         let outputProfileResult: Driver<UserModel?>
 //        let outputFollowResult: Driver<UserModel?>
-        let outputPostsResult: Driver<[PostModel]?>
+        let outputPostItems: Driver<[PostModel]?>
     }
     var disposeBag = DisposeBag()
     
@@ -32,7 +28,7 @@ final class MyProfileViewModel: InputOutput {
         let outputProfileResult = PublishSubject<UserModel?>()
         let fetchMyPostsSubject = PublishSubject<[String]?>()
 //        let outputFollowResult = PublishSubject<UserModel?>()
-        let outputPostsResult = PublishSubject<[PostModel]?>()
+        let outputPostItems = PublishSubject<[PostModel]?>()
 
         input.inputFetchProfile
             .flatMap {
@@ -49,9 +45,8 @@ final class MyProfileViewModel: InputOutput {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputFetchProfile.onNext(())
                             } failureHandler: {
-                                outputProfileResult.onNext(nil)
-//                                outputFollowResult.onNext(nil)
-                                fetchMyPostsSubject.onNext(nil)
+//                                outputProfileResult.onNext(nil)
+//                                fetchMyPostsSubject.onNext(nil)
                             } loginAgainHandler: {
                                 print("다시 로그인해야돼용")
                                 self.outputLoginView.accept(())
@@ -69,13 +64,33 @@ final class MyProfileViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-//        fetchMyPostsSubject
-//            .flatMap {
-//                return
-//            }
-//            .bind(with: self) { owner, value in
-//                <#code#>
-//            }
-        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostsResult: outputPostsResult.asDriver(onErrorJustReturn: nil))
+        fetchMyPostsSubject
+            .flatMap { _ in
+                return self.postManager.checkUserPosts(userId: self.userManager.getAccessToken() ?? "")
+                    .catch { error in
+                        print("에러발생")
+                        guard let error = error as? APIError else {
+                            outputPostItems.onNext(nil)
+                            return Observable<CheckPostModel>.never()
+                        }
+                        if error == APIError.accessTokenExpired_419 {
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputFetchProfile.onNext(())
+                            } failureHandler: {
+//                                outputPostsResult.onNext(nil)
+                            } loginAgainHandler: {
+                                print("다시 로그인해야돼용")
+                                self.outputLoginView.accept(())
+                            }
+                        }
+                        outputPostItems.onNext(nil)
+                        return Observable<CheckPostModel>.never()
+                    }
+            }
+            .bind(with: self) { owner, value in
+                outputPostItems.onNext(value.data)
+            }
+            .disposed(by: disposeBag)
+        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil))
     }
 }

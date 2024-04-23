@@ -31,7 +31,7 @@ final class PostImageCollectionViewCell: BaseCollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.image = nil
     }
-    func upgradeCell(_ imagePath: String) {
+    func upgradeCell(_ imagePath: String?) {
         kingfisher.getImageURL(path: imagePath) { url in
             if let url {
                 imageView.kf.setImage(with: url, options: [.requestModifier(kingfisher.modifier)])

@@ -34,13 +34,42 @@ struct PostModel: Decodable {
     let product_id: String // 게시판..
     let title: String // 제목
     let content: String // 내용
-    let content1: String? // 웜쿨
+    let personalColor: PersonalColor // 웜쿨
     let createdAt: String
     let creator: CreatorModel
     let files: [String]
     let likes: [String]
     let hashTags: [String]
     let comments: [CommentModel]
+    enum CodingKeys: CodingKey {
+        case post_id
+        case product_id
+        case title
+        case content
+        case content1
+        case createdAt
+        case creator
+        case files
+        case likes
+        case hashTags
+        case comments
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.post_id = try container.decode(String.self, forKey: .post_id)
+        self.product_id = try container.decode(String.self, forKey: .product_id)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.content = try container.decode(String.self, forKey: .content)
+        let personalColorString = try container.decodeIfPresent(String.self, forKey: .content1) ?? PersonalColor.none.rawValue
+        self.personalColor = PersonalColor(rawValue: personalColorString) ?? PersonalColor.none
+        self.createdAt = try container.decode(String.self, forKey: .createdAt)
+        self.creator = try container.decode(CreatorModel.self, forKey: .creator)
+        self.files = try container.decode([String].self, forKey: .files)
+        self.likes = try container.decode([String].self, forKey: .likes)
+        self.hashTags = try container.decode([String].self, forKey: .hashTags)
+        self.comments = try container.decode([CommentModel].self, forKey: .comments)
+    }
 }
 
 

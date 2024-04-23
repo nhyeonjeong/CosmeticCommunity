@@ -39,11 +39,20 @@ final class MyProfileViewController: BaseViewController {
                 }
             }
             .disposed(by: disposeBag)
-//    
-//        output.outputPostsResult
-//            .drive(mainView.postsCollectionView.rx.items(cellIdentifier: PostImageCollectionViewCell.identifier, cellType: PostImageCollectionViewCell.self)) { (row, element, cell) in
-//                cell.upgradeCell(element.)
-//            }
+    
+        output.outputPostItems
+            .flatMap({ data -> Driver<[PostModel]> in
+                guard let posts = data else {
+                    return Driver.never()
+                }
+                return BehaviorRelay(value: posts).asDriver()
+                
+            })
+            .drive(mainView.postsCollectionView.rx.items(cellIdentifier: PostImageCollectionViewCell.identifier, cellType: PostImageCollectionViewCell.self)) { (row, element, cell) in
+                cell.upgradeCell(element.files.first)
+                print("\(element)")
+            }
+            .disposed(by: disposeBag)
             
     }
     

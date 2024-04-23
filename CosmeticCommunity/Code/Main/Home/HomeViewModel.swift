@@ -36,19 +36,20 @@ final class HomeViewModel: InputOutput {
                 // 포스트 불러오기
                 return self.postManager.checkPosts(data)
                     .catch { error in
-                        
                         guard let error = error as? APIError else {
 //                            outputPostsItems.accept(nil)
                             outputPostItems.accept(nil)
                             return Observable<CheckPostModel>.never()
                         }
-                        TokenManager.shared.accessTokenAPI {
-                            input.inputFetchPostsTrigger.onNext(())
-                        } failureHandler: {
-                            outputPostItems.accept(nil)
-                        } loginAgainHandler: {
-                            print("다시 로그인해야돼용")
-                            self.outputLoginView.accept(())
+                        if error == APIError.accessTokenExpired_419 {
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputFetchPostsTrigger.onNext(())
+                            } failureHandler: {
+                                outputPostItems.accept(nil)
+                            } loginAgainHandler: {
+                                print("다시 로그인해야돼용")
+                                self.outputLoginView.accept(())
+                            }
                         }
                         outputPostItems.accept(nil)
                         return Observable<CheckPostModel>.never()
