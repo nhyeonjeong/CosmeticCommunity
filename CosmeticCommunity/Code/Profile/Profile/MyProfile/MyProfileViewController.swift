@@ -53,7 +53,14 @@ final class MyProfileViewController: BaseViewController {
                 print("\(element)")
             }
             .disposed(by: disposeBag)
-            
+
+        mainView.postsCollectionView.rx.modelSelected(PostModel.self)
+            .bind(with: self) { owner, data in
+                let vc = PostDetailViewController()
+                vc.postId = data.post_id
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
 }
