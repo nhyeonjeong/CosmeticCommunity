@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 
 final class HomeViewModel: InputOutput {
+    let userManager = UserManager.shared
     let postManager = PostManager()
     let outputLoginView = PublishRelay<Void>()
     var disposedBag = DisposeBag()
@@ -19,17 +20,29 @@ final class HomeViewModel: InputOutput {
         BehaviorSubject<CheckPostQuery>(value: CheckPostQuery(next: nextCursor, product_id: "nhj_test"))
     }
     struct Input {
+        let inputProfileImageTrigger: PublishSubject<Void>
         let inputFetchPostsTrigger: PublishSubject<Void>
     }
     
     struct Output {
+        let outputProfileImageTrigger: Driver<String>
         let outputPostItems: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
     }
     var disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
+        let outputProfileImageTrigger = PublishRelay<String>()
         let outputPostItems = PublishRelay<[PostModel]?>()
+        input.inputProfileImageTrigger
+            .subscribe(with: self) { owner, _ in
+                
+                let imagePath = owner.userManager.getProfileImagePath()
+                print("imagePath : \(imagePath)")
+                outputProfileImageTrigger.accept(imagePath)
+            }
+            .disposed(by: disposeBag)
+        
         input.inputFetchPostsTrigger
             .withLatestFrom(checkPostQuery.asObserver())
             .flatMap { data in
@@ -37,7 +50,6 @@ final class HomeViewModel: InputOutput {
                 return self.postManager.checkPosts(data)
                     .catch { error in
                         guard let error = error as? APIError else {
-//                            outputPostsItems.accept(nil)
                             outputPostItems.accept(nil)
                             return Observable<CheckPostModel>.never()
                         }
@@ -62,6 +74,6 @@ final class HomeViewModel: InputOutput {
             }
             .disposed(by: disposedBag)
         
-        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView)
+        return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView)
     }
 }

@@ -11,9 +11,17 @@ import RxCocoa
 import Kingfisher
 
 final class HomeViewController: BaseViewController {
+    // NavigationBarButton커스텀버튼(프로필 이미지 패치)
+    let button = {
+        let view = UIButton()
+        view.layer.cornerRadius = 15
+        view.clipsToBounds = true
+        return view
+    }()
     let mainView = HomeView()
     let viewModel = HomeViewModel()
-    // 데이터 통신 트리거
+    // viewModel에 전달할 트리거
+    let inputProfileImageTrigger = PublishSubject<Void>()
     let inputPostsTrigger = PublishSubject<Void>()
     override func loadView() {
         view = mainView
@@ -24,12 +32,13 @@ final class HomeViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        inputProfileImageTrigger.onNext(())
         inputPostsTrigger.onNext(())
     }
     override func bind() {
         
         bindItemSelected()
-        let input = HomeViewModel.Input(inputFetchPostsTrigger: inputPostsTrigger)
+        let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputFetchPostsTrigger: inputPostsTrigger)
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
@@ -44,6 +53,17 @@ final class HomeViewController: BaseViewController {
             .drive(mainView.collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) {(row, element, cell) in
                 
                 cell.upgradeCell(element)
+            }
+            .disposed(by: disposeBag)
+        // 상단 프로필버튼 이미지 가져오기
+        output.outputProfileImageTrigger
+            .drive(with: self) { owner, path in
+                KingfisherManager.shared.getImageData(path: path) { KFImage in
+                    print("vc에서 업데이트! \(KFImage)")
+                    DispatchQueue.main.async {
+                        owner.button.setImage(KFImage, for: .normal)
+                    }
+                }
             }
             .disposed(by: disposeBag)
 
@@ -84,24 +104,13 @@ extension HomeViewController {
     }
     
     func configureProfileButton() -> UIButton {
-        let kingfisherManager = KingfisherManager.shared
         let view = UIView()
-        let button = {
-            let view = UIButton()
-            view.layer.cornerRadius = 15
-            view.clipsToBounds = true
-            return view
-        }()
         view.addSubview(button)
         button.snp.makeConstraints { make in
             make.edges.equalTo(view)
             make.size.equalTo(30)
         }
-        button.backgroundColor = .red
-        let imagePath = UserManager.shared.getProfileImagePath()
-        kingfisherManager.getImageData(path: imagePath) { KFImage in
-            button.setImage(KFImage, for: .normal)
-        }
+//        button.backgroundColor = .red
         return button
     }
 }
