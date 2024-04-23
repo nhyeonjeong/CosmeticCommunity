@@ -21,14 +21,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let tabBarvc = UITabBarController()
         
         let firstNav = UINavigationController(rootViewController: HomeViewController())
-        let secondNav = UINavigationController(rootViewController: MyProfileViewController())
+        let secondNav = UINavigationController(rootViewController: UploadViewController())
+        let thirdNav = UINavigationController(rootViewController: SaveViewController())
         
         firstNav.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 0)
-        secondNav.tabBarItem = UITabBarItem(title: "내 정보", image: UIImage(systemName: "person.fill"), tag: 1)
+        secondNav.tabBarItem = UITabBarItem(title: "업로드", image: UIImage(systemName: "plus.diamond"), tag: 1)
+        thirdNav.tabBarItem = UITabBarItem(title: "보관함", image: UIImage(systemName: "folder"), tag: 2)
         
         tabBarvc.tabBar.tintColor = Constants.Color.point
-        tabBarvc.tabBar.barTintColor = Constants.Color.point
-        tabBarvc.viewControllers = [firstNav, secondNav]
+        tabBarvc.tabBar.barTintColor = .white
+        tabBarvc.viewControllers = [firstNav, secondNav, thirdNav]
         
         window?.rootViewController = tabBarvc
         window?.makeKeyAndVisible()

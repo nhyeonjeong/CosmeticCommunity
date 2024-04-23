@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 final class HomeViewController: BaseViewController {
     let mainView = HomeView()
@@ -61,8 +62,8 @@ final class HomeViewController: BaseViewController {
     override func configureView() {
         setNavigationBar()
     }
-    @objc func uploadButtonClikced() {
-        navigationController?.pushViewController(UploadViewController(), animated: true)
+    @objc func profileButtonClicked() {
+        navigationController?.pushViewController(MyProfileViewController(), animated: true)
     }
     @objc func searchButtonClicked() {
         navigationController?.pushViewController(SearchViewController(), animated: true)
@@ -72,9 +73,35 @@ final class HomeViewController: BaseViewController {
 extension HomeViewController {
     func setNavigationBar() {
         navigationItem.title = "CoCo"
-        let uploadButton = UIBarButtonItem(title: "글쓰기", style: .plain, target: self, action: #selector(uploadButtonClikced))
+        let customView = configureProfileButton()
+        customView.addTarget(self, action: #selector(profileButtonClicked), for: .touchUpInside)
+        
+        let profileButton = UIBarButtonItem(customView: customView)
+        
         let searchButton = UIBarButtonItem(image: Constants.Image.searchButton                                         , style: .plain, target: self, action: #selector(searchButtonClicked))
         
-        navigationItem.rightBarButtonItems = [uploadButton, searchButton]
+        navigationItem.rightBarButtonItems = [profileButton, searchButton]
+    }
+    
+    func configureProfileButton() -> UIButton {
+        let kingfisherManager = KingfisherManager.shared
+        let view = UIView()
+        let button = {
+            let view = UIButton()
+            view.layer.cornerRadius = 15
+            view.clipsToBounds = true
+            return view
+        }()
+        view.addSubview(button)
+        button.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+            make.size.equalTo(30)
+        }
+        button.backgroundColor = .red
+        let imagePath = UserManager.shared.getProfileImagePath()
+        kingfisherManager.getImageData(path: imagePath) { KFImage in
+            button.setImage(KFImage, for: .normal)
+        }
+        return button
     }
 }

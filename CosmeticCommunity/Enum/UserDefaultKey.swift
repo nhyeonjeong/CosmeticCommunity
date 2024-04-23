@@ -8,9 +8,11 @@
 import Foundation
 
 enum UserDefaultKey {
-    enum Member: String {
+    enum User: String {
         case accessToken
         case refreshToken
         case userId
+        
+        case profileImagePath
     }
 }
