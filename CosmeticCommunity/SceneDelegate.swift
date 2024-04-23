@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let tabBarvc = UITabBarController()
         
         let firstNav = UINavigationController(rootViewController: HomeViewController())
-        let secondNav = UINavigationController(rootViewController: ProfileViewController<MyProfile>())
+        let secondNav = UINavigationController(rootViewController: MyProfileViewController())
         
         firstNav.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 0)
         secondNav.tabBarItem = UITabBarItem(title: "내 정보", image: UIImage(systemName: "person.fill"), tag: 1)

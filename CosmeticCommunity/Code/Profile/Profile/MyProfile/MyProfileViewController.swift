@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class ProfileViewController<T: ProfileProtocol>: BaseViewController {
-    private let mainView = ProfileView<T>()
-    private let viewModel = ProfileViewModel()
+final class MyProfileViewController: BaseViewController {
+    private let mainView = MyProfileView()
+    private let viewModel = MyProfileViewModel()
     private let inputFetchProfile = PublishSubject<Void>()
     override func loadView() {
         view = mainView
@@ -25,20 +25,30 @@ final class ProfileViewController<T: ProfileProtocol>: BaseViewController {
         inputFetchProfile.onNext(())
     }
     override func bind() {
-        let input = ProfileViewModel.Input(inputFetchProfile: inputFetchProfile)
+        let input = MyProfileViewModel.Input(inputFetchProfile: inputFetchProfile)
+//        let countCollectionViewItems = PublishSubject<[FollowCounts]>() // 팔로우관련 숫자 리로드
+    //        let postsCollectionViewItems = // 작성한 포스트 다시 리로드
         let output = viewModel.transform(input: input)
+        
         output.outputProfileResult
             .drive(with: self) { owner, data in
                 if let data {
-                    owner.mainView.upgradeView(data)
+                    owner.mainView.upgradeUserView(data) // 상단 뷰 다시 그리기
                 } else {
                     owner.view.makeToast("통신에 실패했습니다", duration: 1.0, position: .top)
                 }
             }
             .disposed(by: disposeBag)
+//    
+//        output.outputPostsResult
+//            .drive(mainView.postsCollectionView.rx.items(cellIdentifier: PostImageCollectionViewCell.identifier, cellType: PostImageCollectionViewCell.self)) { (row, element, cell) in
+//                cell.upgradeCell(element.)
+//            }
+            
     }
+    
 }
-extension ProfileViewController {
+extension MyProfileViewController {
     func configureNavigationBar() {
         navigationItem.title = "프로필"
     }
