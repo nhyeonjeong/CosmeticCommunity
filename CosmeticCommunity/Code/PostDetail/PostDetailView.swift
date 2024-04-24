@@ -10,6 +10,9 @@ import SnapKit
 
 final class PostDetailView: BaseView {
 //    let scrollView = UIScrollView()
+    
+    let sheetView = CustomSheetView()
+    
     lazy var imageCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: imageCollectionViewLayout())
         view.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
@@ -59,7 +62,7 @@ final class PostDetailView: BaseView {
     }()
     override func configureHierarchy() {
         uploadCommentView.addViews([commentTextView, commentButton])
-        addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView, uploadCommentView])
+        addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView, uploadCommentView, sheetView])
     }
     override func configureConstraints(){
         
@@ -105,8 +108,9 @@ final class PostDetailView: BaseView {
         }
     }
     override func configureView() {
-        detailsView.backgroundColor = .systemGreen
-        commentsTableView.backgroundColor = .separator
+//        detailsView.backgroundColor = .systemGreen
+//        commentsTableView.backgroundColor = .separator
+        sheetView.frame = CGRect(x: 0, y: self.bounds.height, width: self.bounds.width, height: 60)
     }
 }
 extension PostDetailView {

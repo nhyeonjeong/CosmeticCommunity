@@ -108,7 +108,10 @@ final class PostDetailViewController: BaseViewController {
         inputCommentProfileButtonTrigger.onNext(sender.tag) // 클릭한 댓글 프로필 버튼의 tag
     }
     @objc func navigationBarButtonClicked() {
-
+        print("click")
+        let sheet = CustomSheetViewController()
+        sheet.modalPresentationStyle = .overFullScreen
+        present(sheet, animated: false)
     }
 }
 extension PostDetailViewController {

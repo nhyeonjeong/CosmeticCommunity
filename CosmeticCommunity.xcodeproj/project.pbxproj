@@ -42,6 +42,8 @@
 		8B3AFD182BD8EA0C0069773F /* OtherProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD172BD8EA0C0069773F /* OtherProfileView.swift */; };
 		8B3AFD1A2BD8EA140069773F /* OtherProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD192BD8EA140069773F /* OtherProfileViewModel.swift */; };
 		8B3AFD1C2BD8EDC70069773F /* ProfileCustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD1B2BD8EDC70069773F /* ProfileCustomButton.swift */; };
+		8B3AFD1E2BD966E20069773F /* CustomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD1D2BD966E20069773F /* CustomSheetView.swift */; };
+		8B3AFD202BD96BAA0069773F /* CustomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD1F2BD96BAA0069773F /* CustomSheetViewController.swift */; };
 		8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C412BC980C700FD1B69 /* AppDelegate.swift */; };
 		8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C432BC980C700FD1B69 /* SceneDelegate.swift */; };
 		8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C452BC980C700FD1B69 /* ViewController.swift */; };
@@ -133,6 +135,8 @@
 		8B3AFD172BD8EA0C0069773F /* OtherProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileView.swift; sourceTree = "<group>"; };
 		8B3AFD192BD8EA140069773F /* OtherProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileViewModel.swift; sourceTree = "<group>"; };
 		8B3AFD1B2BD8EDC70069773F /* ProfileCustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCustomButton.swift; sourceTree = "<group>"; };
+		8B3AFD1D2BD966E20069773F /* CustomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSheetView.swift; sourceTree = "<group>"; };
+		8B3AFD1F2BD96BAA0069773F /* CustomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSheetViewController.swift; sourceTree = "<group>"; };
 		8B428C3E2BC980C700FD1B69 /* CosmeticCommunity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CosmeticCommunity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B428C412BC980C700FD1B69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B428C432BC980C700FD1B69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -211,6 +215,8 @@
 				8B3AFC9C2BD3FD7F0069773F /* PostDetailView.swift */,
 				8B3AFCAA2BD428B60069773F /* PostImageCollectionViewCell.swift */,
 				8B3AFCB22BD437F30069773F /* CommentTableViewCell.swift */,
+				8B3AFD1D2BD966E20069773F /* CustomSheetView.swift */,
+				8B3AFD1F2BD96BAA0069773F /* CustomSheetViewController.swift */,
 			);
 			path = PostDetail;
 			sourceTree = "<group>";
@@ -662,6 +668,7 @@
 				8B428CF52BCEA73F00FD1B69 /* HomeViewModel.swift in Sources */,
 				8B3AFD1A2BD8EA140069773F /* OtherProfileViewModel.swift in Sources */,
 				8B3AFCE52BD69AD10069773F /* FollowView.swift in Sources */,
+				8B3AFD1E2BD966E20069773F /* CustomSheetView.swift in Sources */,
 				8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */,
 				8B57ABB52BD26B52004BC76E /* HomeCollectionViewCell.swift in Sources */,
 				8B3AFCE02BD6958A0069773F /* SegmentCase.swift in Sources */,
@@ -682,6 +689,7 @@
 				8B3AFCC32BD56B540069773F /* CustomSegmentedControl.swift in Sources */,
 				8B428D032BCF9EB500FD1B69 /* UIViewController+Extension.swift in Sources */,
 				8B428C9A2BCC13D000FD1B69 /* RouterType.swift in Sources */,
+				8B3AFD202BD96BAA0069773F /* CustomSheetViewController.swift in Sources */,
 				8B428CCC2BCD1CED00FD1B69 /* RegisterView.swift in Sources */,
 				8B428C8A2BCACABA00FD1B69 /* Constants.swift in Sources */,
 				8B57ABBE2BD2C395004BC76E /* SearchView.swift in Sources */,
