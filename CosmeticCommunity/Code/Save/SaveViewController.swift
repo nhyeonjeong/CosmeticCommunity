@@ -76,7 +76,7 @@ final class SaveViewController: BaseViewController {
     }
 }
 extension SaveViewController {
-    func configureNavigationBar() {
+    private func configureNavigationBar() {
         
         let customView = configureProfileButton(mainView.navigationProfilebutton)
         customView.addTarget(self, action: #selector(profileButtonClicked), for: .touchUpInside)

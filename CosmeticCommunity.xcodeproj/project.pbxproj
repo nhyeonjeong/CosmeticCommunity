@@ -37,6 +37,7 @@
 		8B3AFD0B2BD81DA50069773F /* SaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD0A2BD81DA50069773F /* SaveView.swift */; };
 		8B3AFD0D2BD81DAD0069773F /* SaveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD0C2BD81DAD0069773F /* SaveViewModel.swift */; };
 		8B3AFD0F2BD833AC0069773F /* SaveCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD0E2BD833AC0069773F /* SaveCollectionViewCell.swift */; };
+		8B3AFD142BD8D8D50069773F /* CustomTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD132BD8D8D50069773F /* CustomTabBarViewController.swift */; };
 		8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C412BC980C700FD1B69 /* AppDelegate.swift */; };
 		8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C432BC980C700FD1B69 /* SceneDelegate.swift */; };
 		8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C452BC980C700FD1B69 /* ViewController.swift */; };
@@ -123,6 +124,7 @@
 		8B3AFD0A2BD81DA50069773F /* SaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveView.swift; sourceTree = "<group>"; };
 		8B3AFD0C2BD81DAD0069773F /* SaveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveViewModel.swift; sourceTree = "<group>"; };
 		8B3AFD0E2BD833AC0069773F /* SaveCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveCollectionViewCell.swift; sourceTree = "<group>"; };
+		8B3AFD132BD8D8D50069773F /* CustomTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarViewController.swift; sourceTree = "<group>"; };
 		8B428C3E2BC980C700FD1B69 /* CosmeticCommunity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CosmeticCommunity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B428C412BC980C700FD1B69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B428C432BC980C700FD1B69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -249,6 +251,14 @@
 				8B3AFD0E2BD833AC0069773F /* SaveCollectionViewCell.swift */,
 			);
 			path = Save;
+			sourceTree = "<group>";
+		};
+		8B3AFD122BD8D8BB0069773F /* Tabbar */ = {
+			isa = PBXGroup;
+			children = (
+				8B3AFD132BD8D8D50069773F /* CustomTabBarViewController.swift */,
+			);
+			path = Tabbar;
 			sourceTree = "<group>";
 		};
 		8B428C352BC980C700FD1B69 = {
@@ -392,6 +402,7 @@
 		8B428C852BCACA4300FD1B69 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
+				8B3AFD122BD8D8BB0069773F /* Tabbar */,
 				8B3AFCC12BD56B420069773F /* SegmentedControl */,
 				8B57ABB62BD26F62004BC76E /* View */,
 				8B428CA92BCCABF800FD1B69 /* Button */,
@@ -603,6 +614,7 @@
 				8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */,
 				8B428CD32BCE000A00FD1B69 /* UploadViewController.swift in Sources */,
 				8B3AFC9D2BD3FD7F0069773F /* PostDetailView.swift in Sources */,
+				8B3AFD142BD8D8D50069773F /* CustomTabBarViewController.swift in Sources */,
 				8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */,
 				8B428CCA2BCD1CE500FD1B69 /* RegisterViewController.swift in Sources */,
 				8B428C8C2BCB708000FD1B69 /* PointButton.swift in Sources */,

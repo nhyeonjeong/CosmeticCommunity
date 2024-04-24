@@ -11,23 +11,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let scene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: scene)
         
-        let tabBarvc = UITabBarController()
+        let tabBarvc = CustomTabBarViewController()
+        var tabBarItems = tabBarvc.tabBar.items ?? []
         
         let firstNav = UINavigationController(rootViewController: HomeViewController())
-        let secondNav = UINavigationController(rootViewController: UploadViewController())
+        let secondNav = UINavigationController(rootViewController: ViewController())
         let thirdNav = UINavigationController(rootViewController: SaveViewController())
         
         firstNav.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 0)
-        secondNav.tabBarItem = UITabBarItem(title: "업로드", image: UIImage(systemName: "plus.diamond"), tag: 1)
-        thirdNav.tabBarItem = UITabBarItem(title: "보관함", image: UIImage(systemName: "folder"), tag: 2)
+        // 두 번째 버튼 숨기기
+        let uploadTabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
+        uploadTabBarItem.isEnabled = false
+        secondNav.tabBarItem = uploadTabBarItem
         
+        thirdNav.tabBarItem = UITabBarItem(title: "보관함", image: UIImage(systemName: "folder"), tag: 2)
         tabBarvc.tabBar.tintColor = Constants.Color.point
         tabBarvc.tabBar.barTintColor = .white
         tabBarvc.viewControllers = [firstNav, secondNav, thirdNav]
@@ -35,6 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = tabBarvc
         window?.makeKeyAndVisible()
     }
+    
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

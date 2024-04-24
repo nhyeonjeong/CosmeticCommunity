@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Toast
-import PhotosUI
+import PhotosUI // 갤러리
 
 final class UploadViewController: BaseViewController {
     
@@ -91,12 +91,18 @@ final class UploadViewController: BaseViewController {
     @objc func rightBarButtonItemClicked() {
         inputUploadButton.onNext(())
     }
+    @objc func popButtonClicked() {
+        navigationController?.dismiss(animated: true)
+    }
 }
 
 extension UploadViewController {
     private func setNavigationBar() {
-        let button = UIBarButtonItem(title: "업로드", style: .plain, target: self, action: #selector(rightBarButtonItemClicked))
-        navigationItem.rightBarButtonItem = button
+        let uploadButton = UIBarButtonItem(title: "업로드", style: .plain, target: self, action: #selector(rightBarButtonItemClicked))
+        
+        let popButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(popButtonClicked))
+        navigationItem.rightBarButtonItem = uploadButton
+        navigationItem.leftBarButtonItem = popButton
     }
     
     private func bindGallery() {
