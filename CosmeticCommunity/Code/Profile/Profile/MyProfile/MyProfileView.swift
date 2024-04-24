@@ -41,8 +41,8 @@ final class MyProfileView: BaseView {
         view.spacing = 10
         return view
     }()
-    lazy var EditProfileButton = configureButton("프로필 수정")
-    lazy var logoutButton = configureButton("로그아웃")
+    lazy var EditProfileButton = ProfileCustomButton("프로필 수정")
+    lazy var logoutButton = ProfileCustomButton("로그아웃")
     
     lazy var postsCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
@@ -127,17 +127,5 @@ extension MyProfileView {
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 0, trailing: 0)
         return UICollectionViewCompositionalLayout(section: section)
     }
-    private func configureButton(_ title: String) -> UIButton {
-        let view = UIButton()
-        view.setTitle(title, for: .normal)
-        view.setTitleColor(Constants.Color.text, for: .normal)
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 10
-        view.layer.shadowColor = UIColor.gray.cgColor
-        view.layer.shadowOpacity = 0.5 // 0이 완전투명
-        view.layer.shadowRadius = 2 // 얼마나 퍼지는지
-        view.layer.shadowOffset = .zero // CGSize(width: 0, height: 0) 와 동일
-        view.layer.masksToBounds = false
-        return view
-    }
+
 }

@@ -38,6 +38,10 @@
 		8B3AFD0D2BD81DAD0069773F /* SaveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD0C2BD81DAD0069773F /* SaveViewModel.swift */; };
 		8B3AFD0F2BD833AC0069773F /* SaveCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD0E2BD833AC0069773F /* SaveCollectionViewCell.swift */; };
 		8B3AFD142BD8D8D50069773F /* CustomTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD132BD8D8D50069773F /* CustomTabBarViewController.swift */; };
+		8B3AFD162BD8EA050069773F /* OtherProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD152BD8EA050069773F /* OtherProfileViewController.swift */; };
+		8B3AFD182BD8EA0C0069773F /* OtherProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD172BD8EA0C0069773F /* OtherProfileView.swift */; };
+		8B3AFD1A2BD8EA140069773F /* OtherProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD192BD8EA140069773F /* OtherProfileViewModel.swift */; };
+		8B3AFD1C2BD8EDC70069773F /* ProfileCustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3AFD1B2BD8EDC70069773F /* ProfileCustomButton.swift */; };
 		8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C412BC980C700FD1B69 /* AppDelegate.swift */; };
 		8B428C442BC980C700FD1B69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C432BC980C700FD1B69 /* SceneDelegate.swift */; };
 		8B428C462BC980C700FD1B69 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428C452BC980C700FD1B69 /* ViewController.swift */; };
@@ -125,6 +129,10 @@
 		8B3AFD0C2BD81DAD0069773F /* SaveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveViewModel.swift; sourceTree = "<group>"; };
 		8B3AFD0E2BD833AC0069773F /* SaveCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B3AFD132BD8D8D50069773F /* CustomTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarViewController.swift; sourceTree = "<group>"; };
+		8B3AFD152BD8EA050069773F /* OtherProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileViewController.swift; sourceTree = "<group>"; };
+		8B3AFD172BD8EA0C0069773F /* OtherProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileView.swift; sourceTree = "<group>"; };
+		8B3AFD192BD8EA140069773F /* OtherProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileViewModel.swift; sourceTree = "<group>"; };
+		8B3AFD1B2BD8EDC70069773F /* ProfileCustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCustomButton.swift; sourceTree = "<group>"; };
 		8B428C3E2BC980C700FD1B69 /* CosmeticCommunity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CosmeticCommunity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B428C412BC980C700FD1B69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B428C432BC980C700FD1B69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -238,6 +246,9 @@
 		8B3AFD012BD7AC4E0069773F /* OtherProfile */ = {
 			isa = PBXGroup;
 			children = (
+				8B3AFD152BD8EA050069773F /* OtherProfileViewController.swift */,
+				8B3AFD192BD8EA140069773F /* OtherProfileViewModel.swift */,
+				8B3AFD172BD8EA0C0069773F /* OtherProfileView.swift */,
 			);
 			path = OtherProfile;
 			sourceTree = "<group>";
@@ -467,6 +478,7 @@
 			isa = PBXGroup;
 			children = (
 				8B428C8B2BCB708000FD1B69 /* PointButton.swift */,
+				8B3AFD1B2BD8EDC70069773F /* ProfileCustomButton.swift */,
 			);
 			path = Button;
 			sourceTree = "<group>";
@@ -620,9 +632,11 @@
 				8B428C8C2BCB708000FD1B69 /* PointButton.swift in Sources */,
 				8B428C5E2BCAB4D900FD1B69 /* BaseViewController.swift in Sources */,
 				8B3AFCA12BD3FD940069773F /* PostDetailViewModel.swift in Sources */,
+				8B3AFD162BD8EA050069773F /* OtherProfileViewController.swift in Sources */,
 				8B3AFD0D2BD81DAD0069773F /* SaveViewModel.swift in Sources */,
 				8B428C622BCAB52B00FD1B69 /* BaseCollectionViewCell.swift in Sources */,
 				8B3AFCB52BD4F3860069773F /* LikeModel.swift in Sources */,
+				8B3AFD1C2BD8EDC70069773F /* ProfileCustomButton.swift in Sources */,
 				8B428C652BCAB58300FD1B69 /* UIView+Extension.swift in Sources */,
 				8B3AFCB32BD437F30069773F /* CommentTableViewCell.swift in Sources */,
 				8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */,
@@ -632,6 +646,7 @@
 				8B3AFCEB2BD6D0EE0069773F /* Profile.swift in Sources */,
 				8B3AFCE72BD69AD70069773F /* FollowViewModel.swift in Sources */,
 				8B428CF72BCEA74800FD1B69 /* HomeView.swift in Sources */,
+				8B3AFD182BD8EA0C0069773F /* OtherProfileView.swift in Sources */,
 				8B3AFD0B2BD81DA50069773F /* SaveView.swift in Sources */,
 				8B3AFCBC2BD523AE0069773F /* CommentModel.swift in Sources */,
 				8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */,
@@ -645,6 +660,7 @@
 				8B428CA82BCCAA3400FD1B69 /* LoginView.swift in Sources */,
 				8B428CF32BCE865C00FD1B69 /* PostModel.swift in Sources */,
 				8B428CF52BCEA73F00FD1B69 /* HomeViewModel.swift in Sources */,
+				8B3AFD1A2BD8EA140069773F /* OtherProfileViewModel.swift in Sources */,
 				8B3AFCE52BD69AD10069773F /* FollowView.swift in Sources */,
 				8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */,
 				8B57ABB52BD26B52004BC76E /* HomeCollectionViewCell.swift in Sources */,
