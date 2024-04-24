@@ -9,6 +9,13 @@ import UIKit
 import SnapKit
 
 final class HomeView: BaseView {
+    // NavigationBarButton커스텀버튼(프로필 이미지 패치)
+    let navigationProfilebutton = {
+        let view = UIButton()
+        view.layer.cornerRadius = 15
+        view.clipsToBounds = true
+        return view
+    }()
     lazy var collectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
         view.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)

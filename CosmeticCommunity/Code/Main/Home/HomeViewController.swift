@@ -11,13 +11,7 @@ import RxCocoa
 import Kingfisher
 
 final class HomeViewController: BaseViewController {
-    // NavigationBarButton커스텀버튼(프로필 이미지 패치)
-    let navigationProfilebutton = {
-        let view = UIButton()
-        view.layer.cornerRadius = 15
-        view.clipsToBounds = true
-        return view
-    }()
+
     let mainView = HomeView()
     let viewModel = HomeViewModel()
     // viewModel에 전달할 트리거
@@ -61,7 +55,7 @@ final class HomeViewController: BaseViewController {
                 KingfisherManager.shared.getImageData(path: path) { KFImage in
                     print("vc에서 업데이트! \(KFImage)")
                     DispatchQueue.main.async {
-                        owner.navigationProfilebutton.setImage(KFImage, for: .normal)
+                        owner.mainView.navigationProfilebutton.setImage(KFImage, for: .normal)
                     }
                 }
             }
@@ -93,7 +87,7 @@ final class HomeViewController: BaseViewController {
 extension HomeViewController {
     func setNavigationBar() {
         navigationItem.title = "CoCo"
-        let customView = configureProfileButton(navigationProfilebutton)
+        let customView = configureProfileButton(mainView.navigationProfilebutton)
         customView.addTarget(self, action: #selector(profileButtonClicked), for: .touchUpInside)
         
         let profileButton = UIBarButtonItem(customView: customView)
