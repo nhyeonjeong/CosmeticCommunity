@@ -29,6 +29,7 @@ final class PostDetailViewModel: InputOutput {
         let outputPostData: Driver<PostModel?> // PostModel정보 VC으로 전달
         let outputLoginView: PublishRelay<Void>
         let outputLikeButton: Driver<PostModel?>
+        let outputAlert: Driver<String>
         let outputNotValid: Driver<Void>
 //        let outputCommentButtonTrigger: Driver<Void>
     }
@@ -36,8 +37,8 @@ final class PostDetailViewModel: InputOutput {
     func transform(input: Input) -> Output {
         let outputPostData = PublishRelay<PostModel?>()
         let outputLikeButton = PublishRelay<PostModel?>()
+        let outputAlert = PublishRelay<String>()
         let outputNotValid = PublishRelay<Void>()
-//        let accessTokenTrigger = PublishSubject<Void>()
         
         let commentObservable = input.inputCommentTextTrigger.orEmpty.map { text in
             return CommentQuery(content: text)
@@ -80,6 +81,11 @@ final class PostDetailViewModel: InputOutput {
             .flatMap { value in
                 guard let value else {
                     outputLikeButton.accept(nil)
+                    return Observable<LikeModel>.never()
+                }
+                // 내가 올린 게시글이라면 UI업데이트 X
+                if value.creator.user_id == UserManager.shared.getUserId() {
+                    outputAlert.accept(("나의 포스트는 찜 할 수 없습니다"))
                     return Observable<LikeModel>.never()
                 }
                 
@@ -150,7 +156,7 @@ final class PostDetailViewModel: InputOutput {
         
         return Output(outputPostData: outputPostData.asDriver(onErrorJustReturn: nil),
                       outputLoginView: outputLoginView,
-                      outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil),
+                      outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"),
                       outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()))
     }
 }

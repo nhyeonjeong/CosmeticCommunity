@@ -72,6 +72,12 @@ final class PostDetailViewController: BaseViewController {
                 owner.view?.makeToast("댓글을 입력해주세요", duration: 1.0, position: .center)
             }
             .disposed(by: disposeBag)
+        
+        output.outputAlert
+            .drive(with: self) { owner, text in
+                owner.view.makeToast(text, duration: 1.0, position: .center)
+            }
+            .disposed(by: disposeBag)
     }
 }
 extension PostDetailViewController {
