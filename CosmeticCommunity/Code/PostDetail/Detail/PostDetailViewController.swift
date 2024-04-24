@@ -110,6 +110,10 @@ final class PostDetailViewController: BaseViewController {
     @objc func navigationBarButtonClicked() {
         print("click")
         let sheet = CustomSheetViewController()
+        sheet.postId = viewModel.postId
+        sheet.popPostDetailView = {
+            self.navigationController?.popViewController(animated: true)
+        }
         sheet.modalPresentationStyle = .overFullScreen
         present(sheet, animated: false)
     }

@@ -29,4 +29,8 @@ final class PostManager {
     func checkUserPosts(userId: String) -> Observable<CheckPostModel> {
         return NetworkManager.shared.fetchAPI(type: CheckPostModel.self, router: Router.checkUserPosts(userId: userId))
     }
+    
+    func deletePost(postId: String) -> Observable<Void> {
+        return NetworkManager.shared.deleteFetchAPI(router: Router.deletePost(postId: postId))
+    }
 }

@@ -24,6 +24,7 @@ enum Router {
     case checkPosts(query: CheckPostQuery)
     case checkSpecificPost(postId: String)
     case checkUserPosts(userId: String)
+    case deletePost(postId: String)
     // Likst
     case likeStatus(query: LikeQuery, postId: String)
     case myLikedPosts
@@ -49,7 +50,7 @@ extension Router: RouterType {
             return .post
         case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile,  .myLikedPosts:
             return .get
-        case .deleteComment:
+        case .deleteComment, .deletePost:
             return .delete
         }
     }
@@ -72,7 +73,7 @@ extension Router: RouterType {
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.multipartData.rawValue,
                     HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
-        case .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile, .myLikedPosts, .deleteComment:
+        case .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .myProfile, .otherProfile, .myLikedPosts, .deleteComment:
             return [ HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? "",
                      HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
             
@@ -101,7 +102,8 @@ extension Router: RouterType {
             return "v1/posts/\(postId)"
         case .checkUserPosts(let userId):
             return "v1/posts/users/\(userId)/"
-            
+        case .deletePost(let postId):
+            return "v1/posts/\(postId)"
         case .likeStatus(_, let postId):
             return "v1/posts/\(postId)/like"
         case .myLikedPosts:
@@ -127,7 +129,7 @@ extension Router: RouterType {
             return [ParameterKey.like_status.rawValue: query.like_status]
         case .uploadComment(let query, _):
             return [ParameterKey.content.rawValue: query.content]
-        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .myLikedPosts, .deleteComment:
+        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .deletePost, .myLikedPosts, .deleteComment:
             return nil
         }
     }
@@ -138,7 +140,7 @@ extension Router: RouterType {
             return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id)]
-        case .login, .join, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment:
+        case .login, .join, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment:
             return nil
         }
     }
@@ -157,14 +159,14 @@ extension Router: RouterType {
             return jsonEncoding(query)
         case .uploadComment(let query, _):
             return jsonEncoding(query)
-        case .myProfile, .otherProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts, .deleteComment:
+        case .myProfile, .otherProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts, .deletePost, .deleteComment:
             return nil
         }
     }
     
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts:
+        case .tokenRefresh, .login, .join, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts:
             return nil
         case .uploadPostImage(let query):
             return query

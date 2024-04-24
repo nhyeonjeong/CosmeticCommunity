@@ -6,15 +6,29 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import Toast
 
 final class CustomSheetViewController: BaseViewController {
-
+    var postId: String?
+    
+    var popPostDetailView: (() -> Void)?
+    
+    let viewModel = CustomSheetViewModel()
+    let inputPostIdTrigger = PublishSubject<String?>()
+    let inputEditButtonTrigger = PublishSubject<Void>()
+    let inputDeleteButtonTrigger = PublishSubject<Void>()
     override func viewDidLoad() {
         super.viewDidLoad()
         // 탭 제스쳐
         let backViewTapped = UITapGestureRecognizer(target: self, action: #selector(backViewTapped))
         backView.addGestureRecognizer(backViewTapped)
         backView.isUserInteractionEnabled = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        inputPostIdTrigger.onNext(postId)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -30,20 +44,49 @@ final class CustomSheetViewController: BaseViewController {
         view.backgroundColor = .white
         return view
     }()
-    let editButton = {
+    lazy var editButton = {
         let view = UIButton()
         view.backgroundColor = .white
         view.setTitle("포스트 수정", for: .normal)
         view.setTitleColor(Constants.Color.point, for: .normal)
+        view.addTarget(self, action: #selector(editButtonClicked), for: .touchUpInside)
         return view
     }()
-    let deleteButton = {
+    lazy var deleteButton = {
         let view = UIButton()
         view.backgroundColor = .white
         view.setTitle("포스트 삭제", for: .normal)
         view.setTitleColor(Constants.Color.point, for: .normal)
+        view.addTarget(self, action: #selector(deleteButtonClicked), for: .touchUpInside)
         return view
     }()
+    
+    override func bind() {
+        let input = CustomSheetViewModel.Input(inputPostId: inputPostIdTrigger, inputEditButtonTrigger: inputEditButtonTrigger, inputDeletebuttonTrigger: inputDeleteButtonTrigger)
+        
+        let output = viewModel.transform(input: input)
+        outputLoginView = output.outputLoginView
+        
+        output.outputDeleteButton
+            .drive(with: self) { owner, value in
+                if let value {
+                    self.dismiss(animated: true)
+                    self.popPostDetailView?()
+                } else {
+                    owner.view.makeToast("삭제에 실패했습니다", duration: 1.0, position: .center)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    @objc func deleteButtonClicked() {
+        alert(message: "포스트를 삭제하시겠습니까?", defaultTitle: "삭제") {
+            self.inputDeleteButtonTrigger.onNext(())
+        }
+    }
+    @objc func editButtonClicked() {
+        inputEditButtonTrigger.onNext(())
+    }
     override func configureHierarchy() {
         buttonView.addViews([editButton, deleteButton])
         view.addSubview(backView)
@@ -74,16 +117,15 @@ final class CustomSheetViewController: BaseViewController {
     }
     
     @objc func backViewTapped() {
-        let safeAreaHeight = view.safeAreaLayoutGuide.layoutFrame.height
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
-                self.backView.alpha = 0.0
-                self.buttonView.frame = CGRect(x: 0, y: self.backView.bounds.height, width: self.backView.bounds.width, height: 120)
-                self.view.layoutIfNeeded()
-            }) { _ in
-                if self.presentingViewController != nil {
-                    self.dismiss(animated: false, completion: nil)
-                }
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
+            self.backView.alpha = 0.0
+            self.buttonView.frame = CGRect(x: 0, y: self.backView.bounds.height, width: self.backView.bounds.width, height: 120)
+            self.view.layoutIfNeeded()
+        }) { _ in
+            if self.presentingViewController != nil {
+                self.dismiss(animated: false, completion: nil)
             }
+        }
     }
     
     func showBottomSheet() {
