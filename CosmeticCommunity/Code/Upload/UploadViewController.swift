@@ -55,7 +55,7 @@ final class UploadViewController: BaseViewController {
             .drive(with: self) { owner, value in
                 // 다 작성했으면
                 if value {
-                    owner.alert(message: "업로드 하시겠습니까?") {
+                    owner.alert(message: "업로드 하시겠습니까?", defaultTitle: "업로드") {
                         inputUploadImageTrigger.onNext(()) // 이미지 먼저 올리기..
                     }
                 } else {

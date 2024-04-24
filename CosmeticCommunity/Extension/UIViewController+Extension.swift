@@ -16,12 +16,12 @@ extension UIViewController {
         sceneDelegate?.window?.makeKeyAndVisible()
     }
     
-    func alert(message: String, yesAction: @escaping () -> Void) {
+    func alert(message: String, defaultTitle: String, yesAction: @escaping () -> Void) {
         let alert = UIAlertController(title: message, message: nil, preferredStyle: .alert)
         
         // 2. 버튼 생성
         let cancel = UIAlertAction(title: "취소", style: .cancel)
-        let yes = UIAlertAction(title: "업로드", style: .default) { action in
+        let yes = UIAlertAction(title: defaultTitle, style: .default) { action in
             yesAction()
         }
         alert.addAction(cancel)

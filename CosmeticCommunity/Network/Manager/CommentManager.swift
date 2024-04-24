@@ -13,4 +13,8 @@ final class CommentManager {
     func uploadComment(_ item: CommentQuery, postId: String) -> Observable<CommentModel> {
         return NetworkManager.shared.fetchAPI(type: CommentModel.self, router: Router.uploadComment(query: item, postId: postId))
     }
+    
+    func deleteComment(postId: String, commentId: String) -> Observable<Void> {
+        return NetworkManager.shared.deleteFetchAPI(router: Router.deleteComment(postId: postId, commentId: commentId))
+    }
 }

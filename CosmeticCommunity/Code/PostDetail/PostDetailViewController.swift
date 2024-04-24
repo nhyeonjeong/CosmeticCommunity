@@ -18,6 +18,7 @@ final class PostDetailViewController: BaseViewController {
     
     private let inputPostIdTrigger = PublishSubject<String>()
     private let inputCommentProfileButtonTrigger = PublishSubject<Int>()
+    private let inputCommentDeleteTrigger = PublishSubject<Int>()
     private let imageItems = PublishSubject<[String]>()
     private let commentItems = PublishSubject<[CommentModel]>()
     override func loadView() {
@@ -35,7 +36,7 @@ final class PostDetailViewController: BaseViewController {
         let input = PostDetailViewModel.Input(inputProfileButtonTrigger: mainView.creatorView.creatorClearButton.rx.tap, inputPostIdTrigger: inputPostIdTrigger,
                                               inputClickLikeButtonTrigger: mainView.likeButton.rx.tap,
                                               inputCommentButtonTrigger: mainView.commentButton.rx.tap,
-                                              inputCommentTextTrigger: mainView.commentTextView.rx.text, inputCommentProfileButtonTrigger: inputCommentProfileButtonTrigger)
+                                              inputCommentTextTrigger: mainView.commentTextView.rx.text, inputCommentProfileButtonTrigger: inputCommentProfileButtonTrigger, inputCommentDeleteTrigger: inputCommentDeleteTrigger)
 
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
@@ -117,11 +118,27 @@ extension PostDetailViewController {
                 // 내가 작성한 댓글일때만 menubutton보이기
                 if element.creator.user_id == UserManager.shared.getUserId() {
                     cell.menuButton.isHidden = false
+                    cell.menuButton.menu = UIMenu(children: self.configureMenuItems(row: row))
                 } else {
                     cell.menuButton.isHidden = true
                 }
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
+    }
+    
+    func configureMenuItems(row: Int) -> [UIMenuElement] {
+        let deleteAction = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
+            print("삭제버튼 클릭")
+            // 삭제를 누르면 테이블뷰 리로드
+            self.alert(message: "댓글을 삭제합니다", defaultTitle: "삭제") {
+                self.inputCommentDeleteTrigger.onNext(row)
+            }
+        }
+        let editAction = UIAction(title: "수정", image: UIImage(systemName: "pencil")) { _ in
+            //
+            
+        }
+        return [deleteAction, editAction]
     }
 }

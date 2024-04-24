@@ -17,3 +17,7 @@ struct CommentModel: Decodable {
     let createdAt: String
     let creator: CreatorModel
 }
+
+struct DeleteResponseModel: Decodable {
+    
+}

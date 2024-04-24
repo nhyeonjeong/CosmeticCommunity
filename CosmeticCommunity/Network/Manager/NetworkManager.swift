@@ -71,7 +71,9 @@ final class NetworkManager {
             return Disposables.create()
             
         }
+             
     }
+             
 }
 
 extension NetworkManager {
@@ -145,3 +147,61 @@ extension NetworkManager {
     }
 }
 
+extension NetworkManager {
+    func deleteFetchAPI(router: Router, completionHandler: @escaping (() -> Void) = {  }) -> Observable<Void> {
+        return Observable<Void>.create { observer in
+            var urlRequest: URLRequest
+            do {
+                urlRequest = try router.asURLRequest()
+//                print("urlRequest: ", urlRequest)
+            } catch {
+                observer.onError(APIError.invalidURLError_444)
+                return Disposables.create()
+            }
+            
+            AF.request(urlRequest)
+                .responseString { response in
+                    print("responseString : \(response)")
+            }
+            
+            
+            AF.request(urlRequest).response { response in
+                    switch response.result {
+                    case .success(let success):
+                        //                        print(success)
+                        completionHandler() // 성공시 실행할 게 있다면 실행하기
+                        observer.onNext(())
+                        observer.onCompleted()
+                        return
+                    case .failure(let failure):
+                        print("failure: \(failure)")
+                        switch response.response?.statusCode {
+                        case 420:
+                            observer.onError(APIError.sesacKeyError_420)
+                        case 400:
+                            observer.onError(APIError.requestError_400)
+                        case 401:
+                            observer.onError(APIError.invalidUserError_401)
+                        case 418:
+                            observer.onError(APIError.refreshTokenExpired_418)
+                        case 419:
+                            
+                            observer.onError(APIError.accessTokenExpired_419)
+                        case .none:
+                            print("error ----------> none Error")
+                            return
+                        case .some(_):
+                            print("error ---------------> some Error")
+                            return
+                        }
+                        print("time out..?")
+                        return
+                    }
+                }
+            
+            return Disposables.create()
+            
+        }
+             
+    }
+}

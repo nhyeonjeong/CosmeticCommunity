@@ -25,12 +25,7 @@ final class CommentTableViewCell: BaseTableViewCell {
     }()
     
     let menuButton = {
-//        let deleteAction = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { <#UIAction#> in
-//            <#code#>
-//        }
-//        let editAction = UIAction(title: "수정", image: UIImage(systemName: "pencil")) { <#UIAction#> in
-//            <#code#>
-//        }
+
 //        let view = UIMenu(image: UIImage(systemName: "ellipsis"))
         let view = UIButton()
         view.setImage(UIImage(systemName: "ellipsis"), for: .normal)

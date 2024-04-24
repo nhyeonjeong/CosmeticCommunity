@@ -29,6 +29,7 @@ final class PostDetailViewModel: InputOutput {
         let inputCommentButtonTrigger: ControlEvent<Void>
         let inputCommentTextTrigger: ControlProperty<String?>
         let inputCommentProfileButtonTrigger: PublishSubject<Int>
+        let inputCommentDeleteTrigger: PublishSubject<Int>
     }
     
     struct Output {
@@ -46,12 +47,15 @@ final class PostDetailViewModel: InputOutput {
         let outputLikeButton = PublishRelay<PostModel?>()
         let outputAlert = PublishRelay<String>()
         let outputNotValid = PublishRelay<Void>()
+        let outputCommentAlert = PublishRelay<String>()
         
         let commentObservable = input.inputCommentTextTrigger.orEmpty.map { text in
             return CommentQuery(content: text)
         }
         // 선택된 셀 태그와 PostData 묶기
         let commentProfileButtonObservable = Observable.zip(input.inputCommentProfileButtonTrigger, outputPostData)
+        let deleteCommentObservable = Observable.zip(input.inputCommentDeleteTrigger, outputPostData)
+        
         // 프로필 버튼을 눌렀을 때
         input.inputProfileButtonTrigger
             .withLatestFrom(outputPostData)
@@ -191,6 +195,39 @@ final class PostDetailViewModel: InputOutput {
             .subscribe(with: self) { owner, vaue in
                 print("댓글 업로드 api통신 성공")
                 input.inputPostIdTrigger.onNext(owner.postId)
+            }
+            .disposed(by: disposeBag)
+        
+        // MARK: - 댓글 삭제, 수정
+        input.inputCommentDeleteTrigger
+            .withLatestFrom(deleteCommentObservable)
+            .flatMap { (row, postData) in
+                guard let postData else {
+                    outputAlert.accept("댓글삭제에 실패했습니다")
+                    return Observable<Void>.never()
+                }
+                return self.commentManager.deleteComment(postId: postData.post_id, commentId: postData.comments[row].comment_id)
+                    .catch { error in
+                        guard let error = error as? APIError else {
+                            outputAlert.accept("댓글삭제에 실패했습니다")
+                            return Observable<Void>.never()
+                        }
+                        if error == APIError.accessTokenExpired_419 {
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputCommentDeleteTrigger.onNext(row)
+                            } failureHandler: {
+                                //
+                            } loginAgainHandler: {
+                                print("다시 로그인해야돼용")
+                                self.outputLoginView.accept(())
+                            }
+                        }
+                        outputAlert.accept("댓글삭제에 실패했습니다")
+                        return Observable<Void>.never()
+                    }
+            }
+            .subscribe(with: self) { owner, _ in
+                input.inputPostIdTrigger.onNext(self.postId)
             }
             .disposed(by: disposeBag)
         
