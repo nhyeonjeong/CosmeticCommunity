@@ -28,6 +28,7 @@ final class PostDetailViewModel: InputOutput {
         let inputClickLikeButtonTrigger: ControlEvent<Void>
         let inputCommentButtonTrigger: ControlEvent<Void>
         let inputCommentTextTrigger: ControlProperty<String?>
+        let inputCommentProfileButtonTrigger: PublishSubject<Int>
     }
     
     struct Output {
@@ -37,7 +38,6 @@ final class PostDetailViewModel: InputOutput {
         let outputLikeButton: Driver<PostModel?>
         let outputAlert: Driver<String>
         let outputNotValid: Driver<Void>
-//        let outputCommentButtonTrigger: Driver<Void>
     }
 
     func transform(input: Input) -> Output {
@@ -50,6 +50,8 @@ final class PostDetailViewModel: InputOutput {
         let commentObservable = input.inputCommentTextTrigger.orEmpty.map { text in
             return CommentQuery(content: text)
         }
+        // 선택된 셀 태그와 PostData 묶기
+        let commentProfileButtonObservable = Observable.zip(input.inputCommentProfileButtonTrigger, outputPostData)
         // 프로필 버튼을 눌렀을 때
         input.inputProfileButtonTrigger
             .withLatestFrom(outputPostData)
@@ -61,6 +63,23 @@ final class PostDetailViewModel: InputOutput {
                     outputProfileButtonTrigger.accept(.my)
                 } else {
                     outputProfileButtonTrigger.accept(.other(userId: value.creator.user_id))
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.inputCommentProfileButtonTrigger
+            .withLatestFrom(commentProfileButtonObservable)
+            .bind(with: self) { owner, value in
+                let tag = value.0
+                let commentCreatorId = value.1?.comments[tag].creator.user_id
+                guard let commentCreatorId else {
+                    return
+                }
+                // 내 프로필이라면
+                if commentCreatorId == UserManager.shared.getUserId() {
+                    outputProfileButtonTrigger.accept(.my)
+                } else {
+                    outputProfileButtonTrigger.accept(.other(userId: commentCreatorId))
                 }
             }
             .disposed(by: disposeBag)

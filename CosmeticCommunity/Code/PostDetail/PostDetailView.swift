@@ -22,12 +22,6 @@ final class PostDetailView: BaseView {
         return view
     }()
     let creatorView = UserDataView(profileImageSize: .creator)
-    let creatorClearButton = {
-        let view = UIButton()
-        view.backgroundColor = .clear
-        return view
-    }()
-    
     let detailsView = PostDetailsView()
     let contentLabel = {
         let view = UILabel()
@@ -64,7 +58,6 @@ final class PostDetailView: BaseView {
         return view
     }()
     override func configureHierarchy() {
-        creatorView.addSubview(creatorClearButton)
         uploadCommentView.addViews([commentTextView, commentButton])
         addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView, uploadCommentView])
     }
@@ -81,9 +74,6 @@ final class PostDetailView: BaseView {
         creatorView.snp.makeConstraints { make in
             make.top.equalTo(imageCollectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-        }
-        creatorClearButton.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
         }
         detailsView.snp.makeConstraints { make in
             make.top.equalTo(creatorView.snp.bottom).offset(4)
@@ -129,16 +119,4 @@ extension PostDetailView {
         layout.scrollDirection = .horizontal // 스크롤 방향도 FlowLayout에 속한다 -> contentMode때문에 Fill로
         return layout
     }
-    /*
-    func commentsCollectionViewLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 120, height: 160) // 없으면 안됨
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        
-        layout.scrollDirection = .horizontal // 스크롤 방향도 FlowLayout에 속한다 -> contentMode때문에 Fill로
-        return layout
-    }
-     */
 }

@@ -17,6 +17,7 @@ final class PostDetailViewController: BaseViewController {
     private let viewModel = PostDetailViewModel()
     
     private let inputPostIdTrigger = PublishSubject<String>()
+    private let inputCommentProfileButtonTrigger = PublishSubject<Int>()
     private let imageItems = PublishSubject<[String]>()
     private let commentItems = PublishSubject<[CommentModel]>()
     override func loadView() {
@@ -31,10 +32,10 @@ final class PostDetailViewController: BaseViewController {
     }
     
     override func bind() {
-        let input = PostDetailViewModel.Input(inputProfileButtonTrigger: mainView.creatorClearButton.rx.tap, inputPostIdTrigger: inputPostIdTrigger,
+        let input = PostDetailViewModel.Input(inputProfileButtonTrigger: mainView.creatorView.creatorClearButton.rx.tap, inputPostIdTrigger: inputPostIdTrigger,
                                               inputClickLikeButtonTrigger: mainView.likeButton.rx.tap,
                                               inputCommentButtonTrigger: mainView.commentButton.rx.tap,
-                                              inputCommentTextTrigger: mainView.commentTextView.rx.text)
+                                              inputCommentTextTrigger: mainView.commentTextView.rx.text, inputCommentProfileButtonTrigger: inputCommentProfileButtonTrigger)
 
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
@@ -93,6 +94,9 @@ final class PostDetailViewController: BaseViewController {
             .disposed(by: disposeBag)
         
     }
+    @objc func commentCreatorClicked(_ sender: UIButton) {
+        inputCommentProfileButtonTrigger.onNext(sender.tag) // 클릭한 댓글 프로필 버튼의 tag
+    }
 }
 extension PostDetailViewController {
     private func bindImageItems() {
@@ -105,6 +109,8 @@ extension PostDetailViewController {
     private func bindCommentItems() {
         commentItems
             .bind(to: mainView.commentsTableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) {(row, element, cell) in
+                cell.commentCreatorView.creatorClearButton.tag = row
+                cell.commentCreatorView.creatorClearButton.addTarget(self, action: #selector(self.commentCreatorClicked), for: .touchUpInside)
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)

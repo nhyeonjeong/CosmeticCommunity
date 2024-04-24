@@ -43,9 +43,14 @@ final class UserDataView: BaseView {
         view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
         return view
     }()
+    let creatorClearButton = {
+        let view = UIButton()
+        view.backgroundColor = .clear
+        return view
+    }()
     
     override func configureHierarchy() {
-        addViews([profileImageView, nickname])
+        addViews([profileImageView, nickname, creatorClearButton])
     }
     override func configureConstraints() {
         profileImageView.snp.makeConstraints { make in
@@ -61,6 +66,9 @@ final class UserDataView: BaseView {
             make.leading.equalTo(profileImageView.snp.trailing).offset(8)
             make.centerY.equalTo(profileImageView.snp.centerY)
             make.trailing.equalToSuperview()
+        }
+        creatorClearButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
     
