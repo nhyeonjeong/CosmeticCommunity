@@ -18,7 +18,7 @@ final class MyProfileViewController: BaseViewController {
     }
             
     deinit {
-        print("ProfileVC Deinit")
+        print("MyProfileVC Deinit")
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -68,6 +68,6 @@ final class MyProfileViewController: BaseViewController {
 }
 extension MyProfileViewController {
     func configureNavigationBar() {
-        navigationItem.title = "프로필"
+        navigationItem.title = "내 프로필"
     }
 }

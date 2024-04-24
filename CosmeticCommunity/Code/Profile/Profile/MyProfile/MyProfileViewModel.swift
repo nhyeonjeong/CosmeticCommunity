@@ -64,7 +64,7 @@ final class MyProfileViewModel: InputOutput {
             .disposed(by: disposeBag)
         
         fetchMyPostsSubject
-            .flatMap { _ in
+            .flatMap { posts in
                 return self.postManager.checkUserPosts(userId: self.userManager.getUserId() ?? "")
                     .catch { error in
                         print("에러발생")
@@ -74,7 +74,7 @@ final class MyProfileViewModel: InputOutput {
                         }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
-                                input.inputFetchProfile.onNext(())
+                                fetchMyPostsSubject.onNext(posts)
                             } failureHandler: {
                                 //
                             } loginAgainHandler: {
