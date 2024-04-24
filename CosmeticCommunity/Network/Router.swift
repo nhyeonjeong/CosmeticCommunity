@@ -17,6 +17,7 @@ enum Router {
     //    case withdraw
     //Profile
     case myProfile
+    case otherProfile(userId: String)
     // Post
     case uploadPostImage(query: [Data]?)
     case upload(query: PostQuery)
@@ -46,7 +47,7 @@ extension Router: RouterType {
         switch self {
         case .login, .join, .uploadPostImage, .upload, .likeStatus, .uploadComment:
             return .post
-        case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .myLikedPosts:
+        case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile,  .myLikedPosts:
             return .get
         }
     }
@@ -69,7 +70,7 @@ extension Router: RouterType {
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.multipartData.rawValue,
                     HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
-        case .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .myLikedPosts:
+        case .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile, .myLikedPosts:
             return [ HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? "",
                      HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
             
@@ -86,7 +87,9 @@ extension Router: RouterType {
             return "v1/users/join"
         case .myProfile:
             return "v1/users/me/profile"
-            
+        case .otherProfile(let userId):
+            print("otherProfile network =---------userid : \(userId)")
+            return "v1/users/\(userId)/profile"
         case .uploadPostImage:
             return "v1/posts/files"
         case .upload, .checkPosts:
@@ -120,7 +123,7 @@ extension Router: RouterType {
             return [ParameterKey.like_status.rawValue: query.like_status]
         case .uploadComment(let query, _):
             return [ParameterKey.content.rawValue: query.content]
-        case .join, .myProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .myLikedPosts:
+        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .myLikedPosts:
             return nil
         }
     }
@@ -131,7 +134,7 @@ extension Router: RouterType {
             return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id)]
-        case .login, .join, .myProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .likeStatus, .myLikedPosts, .uploadComment:
+        case .login, .join, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .likeStatus, .myLikedPosts, .uploadComment:
             return nil
         }
     }
@@ -150,14 +153,14 @@ extension Router: RouterType {
             return jsonEncoding(query)
         case .uploadComment(let query, _):
             return jsonEncoding(query)
-        case .myProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts:
+        case .myProfile, .otherProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts:
             return nil
         }
     }
     
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .myProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .likeStatus, .uploadComment, .myLikedPosts:
+        case .tokenRefresh, .login, .join, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .likeStatus, .uploadComment, .myLikedPosts:
             return nil
         case .uploadPostImage(let query):
             return query

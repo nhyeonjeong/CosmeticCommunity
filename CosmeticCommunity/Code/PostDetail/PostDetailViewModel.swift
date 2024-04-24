@@ -12,7 +12,7 @@ import RxCocoa
 final class PostDetailViewModel: InputOutput {
     enum ProfileType {
         case my
-        case other
+        case other(userId: String)
     }
 
     let outputLoginView = PublishRelay<Void>()
@@ -60,7 +60,7 @@ final class PostDetailViewModel: InputOutput {
                 if value.creator.user_id == UserManager.shared.getUserId() {
                     outputProfileButtonTrigger.accept(.my)
                 } else {
-                    outputProfileButtonTrigger.accept(.other)
+                    outputProfileButtonTrigger.accept(.other(userId: value.creator.user_id))
                 }
             }
             .disposed(by: disposeBag)

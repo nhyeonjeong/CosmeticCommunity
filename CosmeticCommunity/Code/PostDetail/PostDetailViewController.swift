@@ -46,9 +46,12 @@ final class PostDetailViewController: BaseViewController {
                 guard let profileType else {
                     return
                 }
-                let vc = profileType == .my ? MyProfileViewController() : OtherProfileViewController()
-                
-                owner.navigationController?.pushViewController(vc, animated: true)
+                switch profileType {
+                case .my:
+                    owner.navigationController?.pushViewController(MyProfileViewController(), animated: true)
+                case .other(let userId) :
+                    owner.navigationController?.pushViewController(OtherProfileViewController(userId: userId), animated: true)
+                }
             }
             .disposed(by: disposeBag)
         

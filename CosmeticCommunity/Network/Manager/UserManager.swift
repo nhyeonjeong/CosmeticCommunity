@@ -81,4 +81,9 @@ final class UserManager {
         return NetworkManager.shared.fetchAPI(type: UserModel.self, router: Router.myProfile)
     }
     
+    // 상대 프로필 확인
+    func checkOtherProfile(userId: String) -> Observable<UserModel> {
+        return NetworkManager.shared.fetchAPI(type: UserModel.self, router: Router.otherProfile(userId: userId))
+    }
+    
 }

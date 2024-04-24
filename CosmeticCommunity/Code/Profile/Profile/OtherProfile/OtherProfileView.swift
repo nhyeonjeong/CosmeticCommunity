@@ -80,6 +80,17 @@ final class OtherProfileView: BaseView {
         }
     }
     
+    func upgradeUserView(_ data: UserModel) { // 게시글 상단부분 업데이트
+        print(data)
+        profileView.upgradeView(profileImage: data.profileImage, nick: data.nick)
+        personalLabel.textColor = data.personalColor.textColor
+        personalLabel.text = data.personalColor.rawValue
+        personalLabel.backgroundColor = data.personalColor.backgroundColor
+        
+        followersCountButton.countLabel.text = "\(data.followers.count)"
+        followingCountButton.countLabel.text = "\(data.following.count)"
+    }
+    
 }
 
 extension OtherProfileView {
