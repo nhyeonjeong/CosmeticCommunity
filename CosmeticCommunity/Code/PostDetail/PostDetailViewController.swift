@@ -31,7 +31,7 @@ final class PostDetailViewController: BaseViewController {
     }
     
     override func bind() {
-        let input = PostDetailViewModel.Input(inputPostIdTrigger: inputPostIdTrigger,
+        let input = PostDetailViewModel.Input(inputProfileButtonTrigger: mainView.creatorClearButton.rx.tap, inputPostIdTrigger: inputPostIdTrigger,
                                               inputClickLikeButtonTrigger: mainView.likeButton.rx.tap,
                                               inputCommentButtonTrigger: mainView.commentButton.rx.tap,
                                               inputCommentTextTrigger: mainView.commentTextView.rx.text)
@@ -40,12 +40,22 @@ final class PostDetailViewController: BaseViewController {
         outputLoginView = output.outputLoginView
         bindImageItems()
         bindCommentItems()
+        
+        output.outputProfileButtonTrigger
+            .drive(with: self) { owner, profileType in
+                guard let profileType else {
+                    return
+                }
+                let vc = profileType == .my ? MyProfileViewController() : OtherProfileViewController()
+                
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         output.outputPostData
             .drive(with: self) { owner, value in
                 if let value {
                     owner.imageItems.onNext(value.files)
-//                    let likeButtonImage = owner.viewModel.isClickedLikeButton(value) ? Constants.Image.clikcedLike : Constants.Image.unclickedLike
-//                    owner.mainView.likeButton.setImage(likeButtonImage, for: .normal)
                     owner.mainView.creatorView.upgradeView(profileImage: value.creator.profileImage, nick: value.creator.nick)
                     owner.mainView.detailsView.upgradeView(value)
                     owner.mainView.contentLabel.text = value.content
@@ -78,6 +88,7 @@ final class PostDetailViewController: BaseViewController {
                 owner.view.makeToast(text, duration: 1.0, position: .center)
             }
             .disposed(by: disposeBag)
+        
     }
 }
 extension PostDetailViewController {

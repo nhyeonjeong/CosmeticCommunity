@@ -10,6 +10,10 @@ import RxSwift
 import RxCocoa
 
 final class PostDetailViewModel: InputOutput {
+    enum ProfileType {
+        case my
+        case other
+    }
 
     let outputLoginView = PublishRelay<Void>()
     let postManager = PostManager()
@@ -19,6 +23,7 @@ final class PostDetailViewModel: InputOutput {
     var disposeBag = DisposeBag()
     var postId = ""
     struct Input {
+        let inputProfileButtonTrigger: ControlEvent<Void>
         let inputPostIdTrigger: PublishSubject<String>
         let inputClickLikeButtonTrigger: ControlEvent<Void>
         let inputCommentButtonTrigger: ControlEvent<Void>
@@ -26,6 +31,7 @@ final class PostDetailViewModel: InputOutput {
     }
     
     struct Output {
+        let outputProfileButtonTrigger: Driver<ProfileType?>
         let outputPostData: Driver<PostModel?> // PostModel정보 VC으로 전달
         let outputLoginView: PublishRelay<Void>
         let outputLikeButton: Driver<PostModel?>
@@ -35,6 +41,7 @@ final class PostDetailViewModel: InputOutput {
     }
 
     func transform(input: Input) -> Output {
+        let outputProfileButtonTrigger = PublishRelay<ProfileType?>()
         let outputPostData = PublishRelay<PostModel?>()
         let outputLikeButton = PublishRelay<PostModel?>()
         let outputAlert = PublishRelay<String>()
@@ -43,6 +50,20 @@ final class PostDetailViewModel: InputOutput {
         let commentObservable = input.inputCommentTextTrigger.orEmpty.map { text in
             return CommentQuery(content: text)
         }
+        // 프로필 버튼을 눌렀을 때
+        input.inputProfileButtonTrigger
+            .withLatestFrom(outputPostData)
+            .bind(with: self) { owner, value in
+                guard let value else {
+                    return
+                }
+                if value.creator.user_id == UserManager.shared.getUserId() {
+                    outputProfileButtonTrigger.accept(.my)
+                } else {
+                    outputProfileButtonTrigger.accept(.other)
+                }
+            }
+            .disposed(by: disposeBag)
         
         input.inputPostIdTrigger
             .flatMap { id in
@@ -154,7 +175,7 @@ final class PostDetailViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputPostData: outputPostData.asDriver(onErrorJustReturn: nil),
+        return Output(outputProfileButtonTrigger: outputProfileButtonTrigger.asDriver(onErrorJustReturn: nil), outputPostData: outputPostData.asDriver(onErrorJustReturn: nil),
                       outputLoginView: outputLoginView,
                       outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"),
                       outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()))

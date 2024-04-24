@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class PostDetailView: BaseView {
-    let scrollView = UIScrollView()
+//    let scrollView = UIScrollView()
     lazy var imageCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: imageCollectionViewLayout())
         view.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
@@ -22,6 +22,12 @@ final class PostDetailView: BaseView {
         return view
     }()
     let creatorView = UserDataView(profileImageSize: .creator)
+    let creatorClearButton = {
+        let view = UIButton()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     let detailsView = PostDetailsView()
     let contentLabel = {
         let view = UILabel()
@@ -58,6 +64,7 @@ final class PostDetailView: BaseView {
         return view
     }()
     override func configureHierarchy() {
+        creatorView.addSubview(creatorClearButton)
         uploadCommentView.addViews([commentTextView, commentButton])
         addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView, uploadCommentView])
     }
@@ -74,6 +81,9 @@ final class PostDetailView: BaseView {
         creatorView.snp.makeConstraints { make in
             make.top.equalTo(imageCollectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
+        }
+        creatorClearButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         detailsView.snp.makeConstraints { make in
             make.top.equalTo(creatorView.snp.bottom).offset(4)
