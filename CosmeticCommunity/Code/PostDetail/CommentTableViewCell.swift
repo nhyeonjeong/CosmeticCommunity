@@ -9,8 +9,6 @@ import UIKit
 import SnapKit
 
 final class CommentTableViewCell: BaseTableViewCell {
-
-    
     let commentCreatorView = UserDataView(profileImageSize: .commentCreator)
     let createdTimeLabel = {
         let view = UILabel()
@@ -26,21 +24,28 @@ final class CommentTableViewCell: BaseTableViewCell {
         return view
     }()
     
-//    let menuButton = {
-//        let view = UIMenu()
-//        let delete = UIMenuItem(title: "삭제", action: <#T##Selector#>)
-//        view.children
-//        view.
-//    }
+    let menuButton = {
+//        let deleteAction = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { <#UIAction#> in
+//            <#code#>
+//        }
+//        let editAction = UIAction(title: "수정", image: UIImage(systemName: "pencil")) { <#UIAction#> in
+//            <#code#>
+//        }
+//        let view = UIMenu(image: UIImage(systemName: "ellipsis"))
+        let view = UIButton()
+        view.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        view.tintColor = Constants.Color.point
+        return view
+    }()
     override func configureHierarchy() {
-        contentView.addViews([commentCreatorView, createdTimeLabel, contentLabel])
+        contentView.addViews([commentCreatorView, createdTimeLabel, contentLabel, menuButton])
     }
     override func configureConstraints() {
         commentCreatorView.snp.makeConstraints { make in
             make.top.leading.equalTo(contentView).inset(4)
         }
         createdTimeLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(contentView).inset(10)
+//            make.trailing.equalTo(contentView).inset(4)
             make.centerY.equalTo(commentCreatorView.snp.centerY)
             make.height.equalTo(20)
         }
@@ -48,13 +53,19 @@ final class CommentTableViewCell: BaseTableViewCell {
             make.top.equalTo(commentCreatorView.snp.bottom)
             make.leading.equalTo(18+UserDataView.ProfileImageSize.commentCreator.rawValue)
             make.bottom.equalTo(contentView).inset(4)
-            make.trailing.equalTo(contentView).inset(10)
+            make.trailing.equalTo(contentView).inset(4)
+        }
+        menuButton.snp.makeConstraints { make in
+            make.centerY.equalTo(commentCreatorView)
+            make.trailing.equalTo(contentView).inset(4)
+            make.leading.equalTo(createdTimeLabel.snp.trailing).offset(2)
         }
     }
-//    override func configureView() {
-//        commentCreatorView.layer.borderColor = UIColor.red.cgColor
-//        commentCreatorView.layer.borderWidth = 1
-//    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // 평소에는 menubutton숨기기
+        menuButton.isHidden = true
+    }
     func upgradeCell(_ item: CommentModel) {
         commentCreatorView.upgradeView(profileImage: item.creator.profileImage, nick: item.creator.nick)
         createdTimeLabel.text = item.createdAt

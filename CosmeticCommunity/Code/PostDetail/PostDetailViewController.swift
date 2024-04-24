@@ -99,6 +99,7 @@ final class PostDetailViewController: BaseViewController {
     }
 }
 extension PostDetailViewController {
+    // 상단 이미지 그리기
     private func bindImageItems() {
         imageItems
             .bind(to: mainView.imageCollectionView.rx.items(cellIdentifier: PostImageCollectionViewCell.identifier, cellType: PostImageCollectionViewCell.self)) {(row, element, cell) in
@@ -106,11 +107,19 @@ extension PostDetailViewController {
             }
             .disposed(by: disposeBag)
     }
+    // 댓글 테이블뷰 그리기
     private func bindCommentItems() {
         commentItems
             .bind(to: mainView.commentsTableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) {(row, element, cell) in
                 cell.commentCreatorView.creatorClearButton.tag = row
+                // 프로필로 이동하기
                 cell.commentCreatorView.creatorClearButton.addTarget(self, action: #selector(self.commentCreatorClicked), for: .touchUpInside)
+                // 내가 작성한 댓글일때만 menubutton보이기
+                if element.creator.user_id == UserManager.shared.getUserId() {
+                    cell.menuButton.isHidden = false
+                } else {
+                    cell.menuButton.isHidden = true
+                }
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
