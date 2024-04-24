@@ -53,8 +53,8 @@ final class PostDetailViewModel: InputOutput {
             return CommentQuery(content: text)
         }
         // 선택된 셀 태그와 PostData 묶기
-        let commentProfileButtonObservable = Observable.zip(input.inputCommentProfileButtonTrigger, outputPostData)
-        let deleteCommentObservable = Observable.zip(input.inputCommentDeleteTrigger, outputPostData)
+        let commentProfileButtonObservable = Observable.combineLatest(input.inputCommentProfileButtonTrigger, outputPostData)
+        let deleteCommentObservable = Observable.combineLatest(input.inputCommentDeleteTrigger, outputPostData)
         
         // 프로필 버튼을 눌렀을 때
         input.inputProfileButtonTrigger
@@ -113,7 +113,7 @@ final class PostDetailViewModel: InputOutput {
                         return Observable<PostModel>.never()
                     }
             }
-            .subscribe(with: self) { owner, value in
+            .subscribe(with: self) { owner, value in                print("댓글갯수!!!! : \(value.comments.count)")
                 outputLikeButton.accept(value) // 버튼관련뷰에 이벤트 전달
                 outputPostData.accept(value) // 버튼제외 부분에 이벤트 전달
             }
@@ -162,7 +162,7 @@ final class PostDetailViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
 
-        
+        // MARK: - 댓글 추가, 삭제, 수정
         input.inputCommentButtonTrigger
             .withLatestFrom(commentObservable)
             .flatMap { query in
@@ -192,13 +192,12 @@ final class PostDetailViewModel: InputOutput {
                         return Observable<CommentModel>.never()
                     }
             }
-            .subscribe(with: self) { owner, vaue in
+            .subscribe(with: self) { owner, value in
                 print("댓글 업로드 api통신 성공")
-                input.inputPostIdTrigger.onNext(owner.postId)
+                input.inputPostIdTrigger.onNext(self.postId)
             }
             .disposed(by: disposeBag)
         
-        // MARK: - 댓글 삭제, 수정
         input.inputCommentDeleteTrigger
             .withLatestFrom(deleteCommentObservable)
             .flatMap { (row, postData) in
@@ -206,6 +205,8 @@ final class PostDetailViewModel: InputOutput {
                     outputAlert.accept("댓글삭제에 실패했습니다")
                     return Observable<Void>.never()
                 }
+                print("bug---------comment의 갯수: \(postData.comments.count)")
+                print("bug---------삭제하려는 행의 ROW : \(row)")
                 return self.commentManager.deleteComment(postId: postData.post_id, commentId: postData.comments[row].comment_id)
                     .catch { error in
                         guard let error = error as? APIError else {
