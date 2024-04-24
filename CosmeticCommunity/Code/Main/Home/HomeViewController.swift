@@ -74,7 +74,7 @@ final class HomeViewController: BaseViewController {
     }
     
     override func configureView() {
-        setNavigationBar()
+        configureNavigationBar()
     }
     @objc func profileButtonClicked() {
         navigationController?.pushViewController(MyProfileViewController(), animated: true)
@@ -85,7 +85,7 @@ final class HomeViewController: BaseViewController {
 }
 
 extension HomeViewController {
-    func setNavigationBar() {
+    func configureNavigationBar() {
         navigationItem.title = "CoCo"
         let customView = configureProfileButton(mainView.navigationProfilebutton)
         customView.addTarget(self, action: #selector(profileButtonClicked), for: .touchUpInside)

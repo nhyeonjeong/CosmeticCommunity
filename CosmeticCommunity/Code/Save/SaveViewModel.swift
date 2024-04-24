@@ -10,23 +10,36 @@ import RxSwift
 import RxCocoa
 
 final class SaveViewModel: InputOutput{
+    let userManager = UserManager.shared
     let likeManager = LikeManager()
+    
     var outputLoginView = PublishRelay<Void>()
     var disposeBag = DisposeBag()
     struct Input {
+        let inputProfileImageTrigger: PublishSubject<Void>
         let inputFetchLikedPosts: PublishSubject<Void>
         let inputRecentPosts: PublishSubject<Void>
         
     }
     struct Output {
+        let outputProfileImageTrigger: Driver<String>
         let outputFetchLikedPosts: Driver<[PostModel]?>
         let outputRecentPosts: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
     }
     
     func transform(input: Input) -> Output {
+        let outputProfileImageTrigger = PublishRelay<String>()
         let outputFetchLikedPosts = PublishRelay<[PostModel]?>()
         let outputRecentPosts = PublishRelay<[PostModel]?>()
+        
+        input.inputProfileImageTrigger
+            .subscribe(with: self) { owner, _ in
+                let imagePath = owner.userManager.getProfileImagePath()
+                print("imagePath : \(imagePath)")
+                outputProfileImageTrigger.accept(imagePath)
+            }
+            .disposed(by: disposeBag)
         input.inputFetchLikedPosts
             .flatMap {
                 return self.likeManager.getMyLikedPosts()
@@ -54,7 +67,7 @@ final class SaveViewModel: InputOutput{
             }
             .disposed(by: disposeBag)
         
-        return Output(outputFetchLikedPosts: outputFetchLikedPosts.asDriver(onErrorJustReturn: nil), outputRecentPosts: outputRecentPosts.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView)
+        return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputFetchLikedPosts: outputFetchLikedPosts.asDriver(onErrorJustReturn: nil), outputRecentPosts: outputRecentPosts.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView)
     
     }
 }

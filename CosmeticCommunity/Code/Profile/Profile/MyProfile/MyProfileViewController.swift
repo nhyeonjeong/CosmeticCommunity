@@ -61,6 +61,10 @@ final class MyProfileViewController: BaseViewController {
             .disposed(by: disposeBag)
     }
     
+    override func configureView() {
+        configureNavigationBar()
+    }
+    
 }
 extension MyProfileViewController {
     func configureNavigationBar() {

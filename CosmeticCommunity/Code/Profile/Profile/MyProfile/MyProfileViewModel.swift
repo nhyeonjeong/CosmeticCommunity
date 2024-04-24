@@ -28,6 +28,7 @@ final class MyProfileViewModel: InputOutput {
         let outputProfileResult = PublishSubject<UserModel?>()
         let fetchMyPostsSubject = PublishSubject<[String]?>()
         let outputPostItems = PublishSubject<[PostModel]?>()
+        
         input.inputFetchProfile
             .flatMap {
                 return self.userManager.checkMyProfile()

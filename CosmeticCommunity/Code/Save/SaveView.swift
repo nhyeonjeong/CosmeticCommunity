@@ -9,7 +9,13 @@ import UIKit
 import SnapKit
 
 final class SaveView: BaseView {
-
+    // NavigationBarButton커스텀버튼(프로필 이미지 패치)
+    let navigationProfilebutton = {
+        let view = UIButton()
+        view.layer.cornerRadius = 15
+        view.clipsToBounds = true
+        return view
+    }()
     let title = {
         let view = UILabel()
         view.text = "추천했던 포스트"
