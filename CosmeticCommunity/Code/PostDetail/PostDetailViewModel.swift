@@ -21,7 +21,9 @@ final class PostDetailViewModel: InputOutput {
     let commentManager = CommentManager()
     
     var disposeBag = DisposeBag()
+    var onceDisposeBag = DisposeBag()
     var postId = ""
+    var creatorUserId = ""
     struct Input {
         let inputProfileButtonTrigger: ControlEvent<Void>
         let inputPostIdTrigger: PublishSubject<String>
@@ -39,6 +41,8 @@ final class PostDetailViewModel: InputOutput {
         let outputLikeButton: Driver<PostModel?>
         let outputAlert: Driver<String>
         let outputNotValid: Driver<Void>
+        // 작성자의 Id를 전달하면 뷰컨쪽에서 확인
+        let postCreatorId: Driver<String>
     }
 
     func transform(input: Input) -> Output {
@@ -47,7 +51,7 @@ final class PostDetailViewModel: InputOutput {
         let outputLikeButton = PublishRelay<PostModel?>()
         let outputAlert = PublishRelay<String>()
         let outputNotValid = PublishRelay<Void>()
-        let outputCommentAlert = PublishRelay<String>()
+        let postCreatorId = PublishRelay<String>()
         
         let commentObservable = input.inputCommentTextTrigger.orEmpty.map { text in
             return CommentQuery(content: text)
@@ -113,9 +117,13 @@ final class PostDetailViewModel: InputOutput {
                         return Observable<PostModel>.never()
                     }
             }
-            .subscribe(with: self) { owner, value in                print("댓글갯수!!!! : \(value.comments.count)")
+            .subscribe(with: self) { owner, value in
+                print("postCretorId에 이벤트 전달")
+                postCreatorId.accept(value.creator.user_id)
                 outputLikeButton.accept(value) // 버튼관련뷰에 이벤트 전달
                 outputPostData.accept(value) // 버튼제외 부분에 이벤트 전달
+                
+                self.onceDisposeBag = DisposeBag()
             }
             .disposed(by: disposeBag)
         
@@ -235,7 +243,7 @@ final class PostDetailViewModel: InputOutput {
         return Output(outputProfileButtonTrigger: outputProfileButtonTrigger.asDriver(onErrorJustReturn: nil), outputPostData: outputPostData.asDriver(onErrorJustReturn: nil),
                       outputLoginView: outputLoginView,
                       outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"),
-                      outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()))
+                      outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()), postCreatorId: postCreatorId.asDriver(onErrorJustReturn: ""))
     }
 }
 

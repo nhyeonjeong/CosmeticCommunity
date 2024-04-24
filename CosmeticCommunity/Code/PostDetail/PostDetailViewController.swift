@@ -94,9 +94,21 @@ final class PostDetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        output.postCreatorId
+            .drive(with: self) { owner, creatorId in
+                print("내가 쓴 포스트인지 확인!!")
+                if creatorId == UserManager.shared.getUserId() {
+                    self.configureNavigationBar()
+                }
+            }
+            .disposed(by: viewModel.onceDisposeBag)
     }
+
     @objc func commentCreatorClicked(_ sender: UIButton) {
         inputCommentProfileButtonTrigger.onNext(sender.tag) // 클릭한 댓글 프로필 버튼의 tag
+    }
+    @objc func navigationBarButtonClicked() {
+
     }
 }
 extension PostDetailViewController {
@@ -129,7 +141,6 @@ extension PostDetailViewController {
     
     func configureMenuItems(row: Int) -> [UIMenuElement] {
         let deleteAction = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
-            print("삭제버튼 클릭")
             // 삭제를 누르면 테이블뷰 리로드
             self.alert(message: "댓글을 삭제합니다", defaultTitle: "삭제") {
                 self.inputCommentDeleteTrigger.onNext(row)
@@ -140,5 +151,10 @@ extension PostDetailViewController {
             
         }
         return [deleteAction, editAction]
+    }
+    func configureNavigationBar() {
+        let button = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(navigationBarButtonClicked))
+        button.tintColor = Constants.Color.point
+        navigationItem.rightBarButtonItem = button
     }
 }
