@@ -30,3 +30,16 @@ extension UIViewController {
 //        return alert
     }
 }
+
+extension UIViewController {
+    // 네비게이션에 이미지버튼 만들기
+    func configureProfileButton(_ button: UIButton) -> UIButton {
+        let view = UIView()
+        view.addSubview(button)
+        button.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+            make.size.equalTo(30)
+        }
+        return button
+    }
+}

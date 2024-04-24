@@ -12,7 +12,7 @@ import Kingfisher
 
 final class HomeViewController: BaseViewController {
     // NavigationBarButton커스텀버튼(프로필 이미지 패치)
-    let button = {
+    let navigationProfilebutton = {
         let view = UIButton()
         view.layer.cornerRadius = 15
         view.clipsToBounds = true
@@ -61,7 +61,7 @@ final class HomeViewController: BaseViewController {
                 KingfisherManager.shared.getImageData(path: path) { KFImage in
                     print("vc에서 업데이트! \(KFImage)")
                     DispatchQueue.main.async {
-                        owner.button.setImage(KFImage, for: .normal)
+                        owner.navigationProfilebutton.setImage(KFImage, for: .normal)
                     }
                 }
             }
@@ -93,7 +93,7 @@ final class HomeViewController: BaseViewController {
 extension HomeViewController {
     func setNavigationBar() {
         navigationItem.title = "CoCo"
-        let customView = configureProfileButton()
+        let customView = configureProfileButton(navigationProfilebutton)
         customView.addTarget(self, action: #selector(profileButtonClicked), for: .touchUpInside)
         
         let profileButton = UIBarButtonItem(customView: customView)
@@ -101,16 +101,5 @@ extension HomeViewController {
         let searchButton = UIBarButtonItem(image: Constants.Image.searchButton                                         , style: .plain, target: self, action: #selector(searchButtonClicked))
         
         navigationItem.rightBarButtonItems = [profileButton, searchButton]
-    }
-    
-    func configureProfileButton() -> UIButton {
-        let view = UIView()
-        view.addSubview(button)
-        button.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-            make.size.equalTo(30)
-        }
-//        button.backgroundColor = .red
-        return button
     }
 }
