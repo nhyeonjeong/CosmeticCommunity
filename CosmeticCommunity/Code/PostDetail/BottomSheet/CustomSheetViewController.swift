@@ -70,7 +70,7 @@ final class CustomSheetViewController: BaseViewController {
         output.outputDeleteButton
             .drive(with: self) { owner, value in
                 if let value {
-                    self.dismiss(animated: true)
+                    self.dismiss(animated: false)
                     self.popPostDetailView?()
                 } else {
                     owner.view.makeToast("삭제에 실패했습니다", duration: 1.0, position: .center)
