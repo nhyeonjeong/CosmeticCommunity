@@ -33,4 +33,17 @@ final class PostManager {
     func deletePost(postId: String) -> Observable<Void> {
         return NetworkManager.shared.deleteFetchAPI(router: Router.deletePost(postId: postId))
     }
+    
+    // 최근 본 포스트 유저디폴트에 저장
+    func saveRecentPostsUserDeaults(postId: String) {
+        let recentPosts = UserDefaults.standard.value(forKey: UserDefaultKey.Post.recentPosts.rawValue)
+        if let posts = recentPosts as? [String] {
+            var newArray = posts
+            if posts.count > 20 {
+                newArray.remove(at: posts.count-1) // 마지막 삭제
+            }
+            newArray.append(postId)
+            UserDefaults.standard.setValue(newArray, forKey: UserDefaultKey.Post.recentPosts.rawValue)
+        }
+    }
 }

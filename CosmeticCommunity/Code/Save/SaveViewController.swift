@@ -44,7 +44,7 @@ final class SaveViewController: BaseViewController {
                 }
                 return BehaviorRelay(value: posts).asDriver()
             }
-            .drive(mainView.collectionVeiw.rx.items(cellIdentifier: SaveCollectionViewCell.identifier, cellType: SaveCollectionViewCell.self)) {(row, element, cell) in
+            .drive(mainView.likedPostsCollection.collectionView.rx.items(cellIdentifier: SaveCollectionViewCell.identifier, cellType: SaveCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
@@ -62,7 +62,7 @@ final class SaveViewController: BaseViewController {
     }
     
     private func bindCollectionView() {
-        mainView.collectionVeiw.rx.modelSelected(PostModel.self)
+        mainView.likedPostsCollection.collectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, value in
                 let vc = PostDetailViewController()
                 vc.postId = value.post_id

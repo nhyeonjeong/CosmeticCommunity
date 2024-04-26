@@ -118,7 +118,8 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
-                print("postCretorId에 이벤트 전달")
+                // 최근 본 포스트 저장
+                owner.postManager.saveRecentPostsUserDeaults(postId: owner.postId)
                 postCreatorId.accept(value.creator.user_id)
                 outputLikeButton.accept(value) // 버튼관련뷰에 이벤트 전달
                 outputPostData.accept(value) // 버튼제외 부분에 이벤트 전달

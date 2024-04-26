@@ -15,4 +15,8 @@ enum UserDefaultKey {
         
         case profileImagePath
     }
+    
+    enum Post: String {
+        case recentPosts
+    }
 }
