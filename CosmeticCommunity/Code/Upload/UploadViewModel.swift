@@ -12,6 +12,8 @@ import RxCocoa
 final class UploadViewModel: InputOutput {
     let postManager = PostManager()
     var disposeBag = DisposeBag()
+    
+    let personalColors = PersonalColor.allCases
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
     var photoString = BehaviorSubject<[String]>(value: [])
     let outputLoginView = PublishRelay<Void>()
@@ -155,3 +157,4 @@ final class UploadViewModel: InputOutput {
         photos.append(item)
     }
 }
+

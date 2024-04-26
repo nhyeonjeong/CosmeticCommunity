@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum PersonalColor: String {
+enum PersonalColor: String, CaseIterable {
     case spring = "봄웜"
     case summer = "여름쿨"
     case fall = "가을웜"

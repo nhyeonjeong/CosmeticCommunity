@@ -44,8 +44,8 @@ final class UploadViewController: BaseViewController {
         bindGallery() // 사진첩 열기 rx 연결
         let inputUploadImageTrigger = PublishSubject<Void>()
         let inputUploadTrigger = PublishSubject<Void>()
-        let input = UploadViewModel.Input(inputTitleString: mainView.title.rx.text,
-                                          inputContentString: mainView.content.rx.text,
+        let input = UploadViewModel.Input(inputTitleString: mainView.titleTextField.rx.text,
+                                          inputContentString: mainView.contentTextView.rx.text,
                                           inputUploadButton: inputUploadButton, inputUploadImagesTrigger: inputUploadImageTrigger,
                                           inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems)
         
@@ -86,6 +86,7 @@ final class UploadViewController: BaseViewController {
 
     override func configureView() {
         setNavigationBar()
+        configurePickerView()
     }
     // 업로드 버튼
     @objc func rightBarButtonItemClicked() {
@@ -150,5 +151,35 @@ extension UploadViewController: PHPickerViewControllerDelegate {
 //            print("3")
             self.inputSelectPhotoItems.onNext(())
         }
+    }
+}
+
+extension UploadViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 4
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return viewModel.personalColors[row].rawValue
+    }
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 40
+    }
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let title = viewModel.personalColors[row]
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: title.backgroundColor,
+            .font: UIFont.systemFont(ofSize: 2)
+            
+        ]
+        return NSAttributedString(string: title.rawValue, attributes: attributes)
+    }
+    
+    func configurePickerView() {
+        mainView.personalColorPicker.delegate = self
+        mainView.personalColorPicker.dataSource = self
     }
 }
