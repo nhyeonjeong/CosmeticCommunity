@@ -52,6 +52,10 @@ final class SaveCollectionViewCell: BaseCollectionViewCell {
         }
         
     }
+    
+    override func prepareForReuse() {
+        postImageView.image = nil
+    }
     func upgradeCell(_ item: PostModel) {
         kingfisherManager.getImageURL(path: item.files.first) { url in
             if let url {

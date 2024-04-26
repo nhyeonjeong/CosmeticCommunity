@@ -26,6 +26,7 @@ final class SaveViewController: BaseViewController {
         super.viewWillAppear(true)
         inputProfileImageTrigger.onNext(())
         inputFetchLikedPosts.onNext(())
+        inputRecentPosts.onNext(())
     }
     override func configureView() {
         configureNavigationBar()
@@ -48,11 +49,24 @@ final class SaveViewController: BaseViewController {
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
+        
+        output.outputRecentPosts
+            .flatMap({ data -> Driver<[PostModel]> in
+                guard let posts = data else {
+                    return Driver.never()
+                }
+                return BehaviorRelay(value: posts).asDriver()
+            })
+            .drive(mainView.recentPostsCollection.collectionView.rx.items(cellIdentifier: SaveCollectionViewCell.identifier, cellType: SaveCollectionViewCell.self)) {(row, element, cell) in
+                cell.upgradeCell(element)
+            }
+            .disposed(by: disposeBag)
+            
         // 상단 프로필버튼 이미지 가져오기
         output.outputProfileImageTrigger
             .drive(with: self) { owner, path in
                 KingfisherManager.shared.getImageData(path: path) { KFImage in
-                    print("vc에서 업데이트! \(KFImage)")
+//                    print("vc에서 업데이트! \(KFImage)")
                     DispatchQueue.main.async {
                         owner.mainView.navigationProfilebutton.setImage(KFImage, for: .normal)
                     }

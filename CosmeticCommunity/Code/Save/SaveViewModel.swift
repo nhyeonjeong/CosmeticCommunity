@@ -11,9 +11,12 @@ import RxCocoa
 
 final class SaveViewModel: InputOutput{
     let userManager = UserManager.shared
+    let postManager = PostManager()
     let likeManager = LikeManager()
     
     var outputLoginView = PublishRelay<Void>()
+    
+    let recentPosts: [PostModel] = []
     var disposeBag = DisposeBag()
     struct Input {
         let inputProfileImageTrigger: PublishSubject<Void>
@@ -36,7 +39,7 @@ final class SaveViewModel: InputOutput{
         input.inputProfileImageTrigger
             .subscribe(with: self) { owner, _ in
                 let imagePath = owner.userManager.getProfileImagePath()
-                print("imagePath : \(imagePath)")
+//                print("imagePath : \(imagePath)")
                 outputProfileImageTrigger.accept(imagePath)
             }
             .disposed(by: disposeBag)
@@ -63,7 +66,57 @@ final class SaveViewModel: InputOutput{
                     }
             }
             .bind(with: self) { owner, value in
+                print("😇 \(value)")
                 outputFetchLikedPosts.accept(value.data)
+            }
+            .disposed(by: disposeBag)
+        
+        input.inputRecentPosts
+            .flatMap {
+                guard let postIds = self.postManager.getRecentPostsUserDefaults() else {
+                    return Observable<[String]>.never()
+                }
+                print("input.iputRecentPosts: \(postIds)")
+                return BehaviorSubject(value: postIds).asObservable()
+            }
+            .flatMap { postIds in
+                var postModelArray: [Observable<PostModel>] = []
+                for id in postIds {
+//                    let dispatchGroup = DispatchGroup()
+//                    dispatchGroup.enter()
+//                    print("🥳start")
+                    let postObservable = self.postManager.checkSpecificPost(postId: id).catch { error in
+                        guard let error = error as? APIError else {
+                            outputRecentPosts.accept(nil)
+                            return Observable<PostModel>.never()
+                        }
+                        if error == APIError.accessTokenExpired_419 {
+                            TokenManager.shared.accessTokenAPI {
+                                input.inputRecentPosts.onNext(())
+                            } failureHandler: {
+//                                outputUploadTrigger.onNext(nil)
+                            } loginAgainHandler: {
+                                self.outputLoginView.accept(())
+                            }
+                        }
+//                        print("🥳end")
+                        outputRecentPosts.accept(nil)
+                        return Observable<PostModel>.never()
+                    }
+//                    dispatchGroup.leave()
+//                    dispatchGroup.notify(queue: .main) {
+//                        postModelArray.append(postObservable) // Observable<PostModel> 배열 추가
+//                    }
+                    print("🥳end")
+                    postModelArray.append(postObservable) // Observable<PostModel> 배열 추가
+                }
+                let singleObservable: Observable<PostModel> = Observable.from(postModelArray).merge()
+                let wholeSequence: Single <[PostModel]> = singleObservable.toArray()
+                return wholeSequence
+            }
+            .subscribe(with: self) { owner, data in
+//                print("input.iputRecentPosts: ------------\(data)")
+                outputRecentPosts.accept(data)
             }
             .disposed(by: disposeBag)
         

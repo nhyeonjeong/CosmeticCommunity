@@ -17,63 +17,77 @@ final class NetworkManager {
     private init() { }
     
     func fetchAPI<T: Decodable>(type: T.Type, router: Router, completionHandler: @escaping ((T) -> Void) = { _ in }) -> Observable<T> {
+//        print("😎 ----- 1-1 \(router.path)")
+        let group = DispatchGroup()
+        group.enter()
         return Observable<T>.create { observer in
             var urlRequest: URLRequest
             do {
                 urlRequest = try router.asURLRequest()
-//                print("urlRequest: ", urlRequest)
+                //                print("urlRequest: ", urlRequest)
             } catch {
                 observer.onError(APIError.invalidURLError_444)
                 return Disposables.create()
             }
             /*
-            AF.request(urlRequest)
-                .responseString { response in
-                    print("responseString : \(response)")
-            }
-            */
-            
+             AF.request(urlRequest)
+             .responseString { response in
+             print("responseString : \(response)")
+             }
+             */
+            group.enter()
+//            print("😎2 \(router.path)")
             AF.request(urlRequest)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
                         //                        print(success)
-                        completionHandler(success) // 성공시 실행할 게 있다면 실행하기
-                        observer.onNext(success)
-                        observer.onCompleted()
+                        group.leave()
+//                        print("😎3 \(router.path)")
+                        group.notify(queue: .main) {
+                            completionHandler(success) // 성공시 실행할 게 있다면 실행하기
+                            observer.onNext(success)
+                            observer.onCompleted()
+                        }
+                        
                         return
                     case .failure(let failure):
-                        print("failure: \(failure)")
-                        switch response.response?.statusCode {
-                        case 420:
-                            observer.onError(APIError.sesacKeyError_420)
-                        case 400:
-                            observer.onError(APIError.requestError_400)
-                        case 401:
-                            observer.onError(APIError.invalidUserError_401)
-                        case 418:
-                            observer.onError(APIError.refreshTokenExpired_418)
-                        case 419:
-                            
-                            observer.onError(APIError.accessTokenExpired_419)
-                        case .none:
-                            print("error ----------> none Error")
-                            return
-                        case .some(_):
-                            print("error ---------------> some Error")
+//                        print("😎3 \(router.path)")
+                        group.leave()
+                        group.notify(queue: .main) {
+                            print("failure: \(failure)")
+                            switch response.response?.statusCode {
+                            case 420:
+                                observer.onError(APIError.sesacKeyError_420)
+                            case 400:
+                                observer.onError(APIError.requestError_400)
+                            case 401:
+                                observer.onError(APIError.invalidUserError_401)
+                            case 418:
+                                observer.onError(APIError.refreshTokenExpired_418)
+                            case 419:
+                                
+                                observer.onError(APIError.accessTokenExpired_419)
+                            case .none:
+                                print("error ----------> none Error")
+                                return
+                            case .some(_):
+                                print("error ---------------> some Error")
+                                return
+                            }
+                            print("time out..?")
                             return
                         }
-                        print("time out..?")
-                        return
+                        
                     }
                 }
-            
+            group.leave()
+            group.notify(queue: .main) {
+//                print("😎4 \(router.path)")
+            }
             return Disposables.create()
-            
         }
-             
     }
-             
 }
 
 extension NetworkManager {
