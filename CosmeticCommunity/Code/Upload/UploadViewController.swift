@@ -20,7 +20,8 @@ final class UploadViewController: BaseViewController {
     private let inputUploadButton = PublishSubject<Void>()
     // 사진 선택 시
     private let inputSelectPhotoItems = PublishSubject<Void>()
-    
+    // x버튼
+    private let inputXbuttonTrigger = PublishSubject<Int>()
     override func loadView() {
         view = mainView
     }
@@ -47,7 +48,8 @@ final class UploadViewController: BaseViewController {
         let input = UploadViewModel.Input(inputTitleString: mainView.titleTextField.rx.text,
                                           inputContentString: mainView.contentTextView.rx.text,
                                           inputUploadButton: inputUploadButton, inputUploadImagesTrigger: inputUploadImageTrigger,
-                                          inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems)
+                                          inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems,
+                                          inputXbuttonTrigger: inputXbuttonTrigger)
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
@@ -59,7 +61,7 @@ final class UploadViewController: BaseViewController {
                         inputUploadImageTrigger.onNext(()) // 이미지 먼저 올리기..
                     }
                 } else {
-                    owner.view.makeToast("제목과 내용을 입력해주세요", duration: 1.0, position: .top)
+                    owner.view.makeToast("제목과 내용을 입력해주세요", duration: 1.0, position: .center)
                 }
             }
             .disposed(by: disposeBag)
@@ -78,15 +80,18 @@ final class UploadViewController: BaseViewController {
         // 선택한 이미지 컬렉션뷰 그리기
         output.outputPhotoItems
             .drive(mainView.photoCollectionView.rx.items(cellIdentifier: UploadPhotosCollectionViewCell.identifier, cellType: UploadPhotosCollectionViewCell.self)) {(row, element, cell) in
-                
+                cell.xButton.tag = row
+                cell.xButton.addTarget(self, action: #selector(self.xButtonClicked), for: .touchUpInside)
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
     }
-
     override func configureView() {
         setNavigationBar()
         configurePickerView()
+    }
+    @objc func xButtonClicked(_ sender: UIButton) {
+        inputXbuttonTrigger.onNext(sender.tag)
     }
     // 업로드 버튼
     @objc func rightBarButtonItemClicked() {
@@ -160,7 +165,7 @@ extension UploadViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 4
+        return viewModel.personalColors.count
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return viewModel.personalColors[row].rawValue

@@ -27,6 +27,9 @@ final class UploadViewModel: InputOutput {
         let inputUploadImagesTrigger: PublishSubject<Void>
         let inputUploadTrigger: PublishSubject<Void>
         let inputSelectPhotos: PublishSubject<Void>
+        
+        // 사진의 X버튼
+        let inputXbuttonTrigger: PublishSubject<Int>
     }
     
     struct Output {
@@ -138,9 +141,17 @@ final class UploadViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
+        // 갤러리에서 사진 선택 시 다시 그리기
         input.inputSelectPhotos
             .bind(with: self) { owner, _ in
                 outputPhotoItems.accept(owner.photos)
+            }
+            .disposed(by: disposeBag)
+        
+        input.inputXbuttonTrigger
+            .bind(with: self) { owner, tag in
+                owner.photos.remove(at: tag)
+                input.inputSelectPhotos.onNext(())
             }
             .disposed(by: disposeBag)
         
