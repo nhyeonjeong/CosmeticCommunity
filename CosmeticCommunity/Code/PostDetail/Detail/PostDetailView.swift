@@ -9,7 +9,17 @@ import UIKit
 import SnapKit
 
 final class PostDetailView: BaseView {
-//    let scrollView = UIScrollView()
+    let scrollView = {
+        let view = UIScrollView()
+//        view.showsVerticalScrollIndicator = false
+        return view
+    }()
+    let contentView = {
+        let view = UIView()
+        view.backgroundColor = .yellow
+        return view
+    }()
+    
     lazy var imageCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: imageCollectionViewLayout())
         view.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
@@ -36,8 +46,11 @@ final class PostDetailView: BaseView {
         let view = UITableView()
         view.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
         view.rowHeight = UITableView.automaticDimension
+        view.backgroundColor = .lightGray
+        view.isScrollEnabled = false
         return view
     }()
+    let bottomHiddenView = UIView()
     let uploadCommentView = {
         let view = UIView()
         view.backgroundColor = Constants.Color.point.withAlphaComponent(0.3)
@@ -59,12 +72,21 @@ final class PostDetailView: BaseView {
     }()
     override func configureHierarchy() {
         uploadCommentView.addViews([commentTextView, commentButton])
-        addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView, uploadCommentView])
+        contentView.addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView, bottomHiddenView])
+        scrollView.addSubview(contentView)
+        addViews([scrollView, uploadCommentView])
     }
     override func configureConstraints(){
-        
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        contentView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview()
+            make.width.equalTo(scrollView.snp.width)
+//            make.horizontalEdges.equalTo(scrollView)
+        }
         imageCollectionView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.horizontalEdges.equalToSuperview()
             make.height.equalTo(300)
         }
         likeButton.snp.makeConstraints { make in
@@ -86,11 +108,18 @@ final class PostDetailView: BaseView {
         }
         commentsTableView.snp.makeConstraints { make in
             make.top.equalTo(contentLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(10)
-            make.bottom.equalTo(safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(contentView).inset(10)
+//            make.bottom.greaterThanOrEqualTo(contentView.snp.bottom).inset(50)
+            make.height.equalTo(1)
+        }
+        bottomHiddenView.snp.makeConstraints { make in
+            make.top.equalTo(commentsTableView.snp.bottom)
+            make.horizontalEdges.bottom.equalTo(contentView)
+            make.height.equalTo(50)
         }
         uploadCommentView.snp.makeConstraints { make in
-            make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide)
+            make.bottom.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(50)
         }
         commentTextView.snp.makeConstraints { make in

@@ -8,11 +8,13 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SnapKit
 import Toast
+import IQKeyboardManagerSwift
 
 final class PostDetailViewController: BaseViewController {
     var postId: String? // 받아온 post정보
-    
+    var tableViewHeight: NSLayoutConstraint?
     private let mainView = PostDetailView()
     private let viewModel = PostDetailViewModel()
     
@@ -30,8 +32,10 @@ final class PostDetailViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         inputPostIdTrigger.onNext(postId ?? "")
+        mainView.uploadCommentView.isUserInteractionEnabled = true
+        mainView.uploadCommentView.becomeFirstResponder()
     }
-    
+
     override func bind() {
         let input = PostDetailViewModel.Input(inputProfileButtonTrigger: mainView.creatorView.creatorClearButton.rx.tap, inputPostIdTrigger: inputPostIdTrigger,
                                               inputClickLikeButtonTrigger: mainView.likeButton.rx.tap,
@@ -65,7 +69,6 @@ final class PostDetailViewController: BaseViewController {
                     owner.mainView.detailsView.upgradeView(value)
                     owner.mainView.contentLabel.text = value.content
                     owner.commentItems.onNext(value.comments)
-                    
                 } else {
                     owner.view.makeToast("정보불러오기에 실패했습니다", duration: 1.0, position: .top)
                 }
@@ -142,6 +145,10 @@ extension PostDetailViewController {
                     cell.menuButton.isHidden = true
                 }
                 cell.upgradeCell(element)
+                let newHeight: CGFloat = max(1, self.mainView.commentsTableView.contentSize.height)
+                self.mainView.commentsTableView.snp.updateConstraints { make in
+                    make.height.equalTo(newHeight)
+                }
             }
             .disposed(by: disposeBag)
     }
