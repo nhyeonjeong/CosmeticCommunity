@@ -49,11 +49,27 @@ final class SearchViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-//        mainView.categoryCollectionView.rx.modelSelected(PersonalColor.self)
-//            .bind(with: self) { owner, _ in
-//                <#code#>
-//            }
-//            .disposed(by: disposeBag)
+        mainView.categoryCollectionView.rx.modelSelected(PersonalColor.self)
+            .bind(with: self) { owner, personal in
+                print("🤬눌렀다")
+                owner.inputCategorySelected.onNext(personal)
+            }
+            .disposed(by: disposeBag)
+        
+        mainView.resultCollectionView.rx.modelSelected(PostModel.self)
+            .bind(with: self) { owner, postData in
+                let vc = PostDetailViewController()
+                vc.postId = postData.post_id
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.outputNoResult
+            .drive(with: self) { owner, value in
+                print("😊\(value)")
+                owner.mainView.noResultLabel.isHidden = value
+            }
+            .disposed(by: disposeBag)
     }
 }
 

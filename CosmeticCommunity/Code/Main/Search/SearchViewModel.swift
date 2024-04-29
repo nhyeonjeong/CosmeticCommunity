@@ -25,22 +25,25 @@ final class SearchViewModel: InputOutput {
     struct Output {
         let outputPostItems: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
+        let outputNoResult: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
         let outputPostItems = PublishRelay<[PostModel]?>()
         let searchTrigger = PublishSubject<(String, PersonalColor)>()
+        let outputNoResult = PublishRelay<Bool>()
         
-        let observableText = input.inputSearchText.orEmpty.asObservable()
-        let observableSearch = Observable.zip(input.inputSearchEnterTrigger, input.inputCategorySelected.asObservable())
+        Observable.combineLatest(input.inputSearchEnterTrigger, input.inputCategorySelected.asObserver())
             .map{_, category in
                 self.category = category
             }
             .debug()
             .withLatestFrom(input.inputSearchText.orEmpty)
             .bind(with: self) { owner, value in
+                print("😇")
                 searchTrigger.onNext((value, owner.category)) // 하나라도 반응하면 네트워크 통신
             }
+            .disposed(by: disposeBag)
         
         searchTrigger
             .flatMap { hashTag, category in
@@ -66,10 +69,20 @@ final class SearchViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
-                outputPostItems.accept(value.data)
+                if owner.category == .none {
+                    outputPostItems.accept(value.data)
+                } else {
+                    let data = value.data.filter{$0.personalColor == owner.category}
+                    outputPostItems.accept(data)
+                }
+                if value.data.count == 0 {
+                    outputNoResult.accept(false)
+                } else {
+                    outputNoResult.accept(true)
+                }
                 owner.nextCursor = value.next_cursor
             }
             .disposed(by: disposeBag)
-        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView)
+        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false))
     }
 }

@@ -8,6 +8,16 @@
 import UIKit
 
 final class SearchView: BaseView {
+    let noResultLabel = {
+        let view = UILabel()
+        view.text = "검색 결과가 없습니다\n다시 검색해주세요"
+        view.numberOfLines = 2
+        view.isHidden = true
+        view.textAlignment = .center
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.large)
+        return view
+    }()
+    
     let textfield = {
         let view = UITextField()
         view.placeholder = "검색어를 입력해주세요"
@@ -28,21 +38,23 @@ final class SearchView: BaseView {
     lazy var categoryCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.categoryCollectionViewLayout())
         view.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
-//        view.backgroundColor = .yellow
         view.showsVerticalScrollIndicator = false
         return view
     }()
     lazy var resultCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.resultCollectionViewLayout())
         view.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
-        view.backgroundColor = .red
         return  view
     }()
     override func configureHierarchy() {
         textfield.addSubview(xButton)
+        resultCollectionView.addSubview(noResultLabel)
         addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView])
     }
     override func configureConstraints() {
+        noResultLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         categoryTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(10)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)
