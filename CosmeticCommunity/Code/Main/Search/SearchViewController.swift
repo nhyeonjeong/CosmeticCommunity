@@ -27,7 +27,7 @@ final class SearchViewController: BaseViewController {
         setNavigationBar()
     }
     override func bind() {
-        let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputCategorySelected: inputCategorySelected)
+        let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputSearchEnterTrigger: mainView.textfield.rx.controlEvent(.editingDidEndOnExit), inputCategorySelected: inputCategorySelected)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
 
@@ -43,13 +43,18 @@ final class SearchViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        viewModel.category
+        viewModel.categoryCases
             .bind(to: mainView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
+        
+//        mainView.categoryCollectionView.rx.modelSelected(PersonalColor.self)
+//            .bind(with: self) { owner, _ in
+//                <#code#>
+//            }
+//            .disposed(by: disposeBag)
     }
-
 }
 
 extension SearchViewController {

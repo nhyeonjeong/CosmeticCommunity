@@ -13,6 +13,13 @@ struct CheckPostQuery {
     let product_id: String?
 }
 
+struct HashtagQuery {
+    let next: String?
+    let limit: String = "20"
+    let product_id: String?
+    let hashTag: String
+}
+
 struct PostQuery: Encodable {
     let product_id: String // 게시판..
     let title: String // 제목

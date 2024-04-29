@@ -34,7 +34,7 @@ enum Router {
     // Follow
     
     // Hashtag
-    
+    case hashtag(query: HashtagQuery)
     // Image
     //    case getImage(query: [String])
 }
@@ -48,7 +48,7 @@ extension Router: RouterType {
         switch self {
         case .login, .join, .uploadPostImage, .upload, .likeStatus, .uploadComment:
             return .post
-        case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile,  .myLikedPosts:
+        case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile,  .myLikedPosts, .hashtag:
             return .get
         case .deleteComment, .deletePost:
             return .delete
@@ -65,7 +65,7 @@ extension Router: RouterType {
         case .login, .join:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
-        case  .upload, .likeStatus, .uploadComment:
+        case  .upload, .likeStatus, .uploadComment, .hashtag:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
@@ -112,6 +112,9 @@ extension Router: RouterType {
             return "v1/posts/\(postId)/comments"
         case .deleteComment(let postId, let commentId):
             return "v1/posts/\(postId)/comments/\(commentId)"
+            
+        case .hashtag:
+            return "v1/posts/hashtags"
         }
     }
     var parameters: Parameters? {
@@ -129,7 +132,7 @@ extension Router: RouterType {
             return [ParameterKey.like_status.rawValue: query.like_status]
         case .uploadComment(let query, _):
             return [ParameterKey.content.rawValue: query.content]
-        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .deletePost, .myLikedPosts, .deleteComment:
+        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .deletePost, .myLikedPosts, .deleteComment, .hashtag:
             return nil
         }
     }
@@ -140,6 +143,12 @@ extension Router: RouterType {
             return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id)]
+        case .hashtag(let query):
+            return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
+                    URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
+                    URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id),
+                    URLQueryItem(name: QueryKey.hashTag.rawValue, value: query.hashTag)]
+            
         case .login, .join, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment:
             return nil
         }
@@ -159,14 +168,14 @@ extension Router: RouterType {
             return jsonEncoding(query)
         case .uploadComment(let query, _):
             return jsonEncoding(query)
-        case .myProfile, .otherProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts, .deletePost, .deleteComment:
+        case .myProfile, .otherProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts, .deletePost, .deleteComment, .hashtag:
             return nil
         }
     }
     
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts:
+        case .tokenRefresh, .login, .join, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag:
             return nil
         case .uploadPostImage(let query):
             return query

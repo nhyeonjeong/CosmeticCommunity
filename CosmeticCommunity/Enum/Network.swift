@@ -30,6 +30,7 @@ enum QueryKey: String {
     case next
     case limit
     case product_id
+    case hashTag
 }
 enum APIError: Error {
     case sesacKeyError_420

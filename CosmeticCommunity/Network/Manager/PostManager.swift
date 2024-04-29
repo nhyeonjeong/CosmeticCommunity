@@ -28,6 +28,9 @@ final class PostManager {
         return NetworkManager.shared.fetchAPI(type: PostModel.self, router: Router.checkSpecificPost(postId: postId))
 
     }
+    func checkWithHashTag(query: HashtagQuery) -> Observable<CheckPostModel> {
+        return NetworkManager.shared.fetchAPI(type: CheckPostModel.self, router: Router.hashtag(query: query))
+    }
     // 유저별 작성한 포스트
     func checkUserPosts(userId: String) -> Observable<CheckPostModel> {
         return NetworkManager.shared.fetchAPI(type: CheckPostModel.self, router: Router.checkUserPosts(userId: userId))
