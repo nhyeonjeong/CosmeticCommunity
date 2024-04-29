@@ -8,12 +8,18 @@
 import UIKit
 
 enum PersonalColor: String, CaseIterable {
+    case none = "" // 회원가입시 입력하지 않았거나 잘못가져왔을 때
     case spring = "봄웜"
     case summer = "여름쿨"
     case fall = "가을웜"
     case winter = "겨울쿨"
-    case none = "" // 회원가입시 입력하지 않았거나 잘못가져왔을 때
 
+    
+    static var personalCases: [PersonalColor] {
+        var cases = PersonalColor.allCases
+        cases.removeLast()
+        return cases
+    }
     var backgroundColor: UIColor {
         switch self {
         case .spring:

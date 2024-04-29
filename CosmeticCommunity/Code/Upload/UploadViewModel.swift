@@ -13,7 +13,8 @@ final class UploadViewModel: InputOutput {
     let postManager = PostManager()
     var disposeBag = DisposeBag()
     
-    let personalColors = PersonalColor.allCases
+    let personalColors = PersonalColor.personalCases
+    
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
     var photoString = BehaviorSubject<[String]>(value: [])
     let outputLoginView = PublishRelay<Void>()
@@ -22,11 +23,13 @@ final class UploadViewModel: InputOutput {
     }
     struct Input {
         let inputTitleString: ControlProperty<String?>
+        let inputPersonalPicker: ControlEvent<(row: Int, component: Int)>
         let inputContentString: ControlProperty<String?>
         let inputUploadButton: PublishSubject<Void>
         let inputUploadImagesTrigger: PublishSubject<Void>
         let inputUploadTrigger: PublishSubject<Void>
         let inputSelectPhotos: PublishSubject<Void>
+        let inputHashTags: ControlProperty<String?>
         
         // 사진의 X버튼
         let inputXbuttonTrigger: PublishSubject<Int>
@@ -45,23 +48,23 @@ final class UploadViewModel: InputOutput {
         let outputUploadTrigger = PublishSubject<PostModel?>()
         let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
 
-        let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputContentString.orEmpty, photoString.asObserver())
-            .map { title, content, images in
-                print(title, content)
-                return PostQuery(product_id: "nhj_test", title: title, content: content, content1: "", files: images)
+        let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputPersonalPicker, input.inputContentString.orEmpty, input.inputHashTags.orEmpty, photoString.asObserver())
+            .map { title, row, content, hashtags, images in
+                print(title, content, self.personalColors[row.0].rawValue)
+                return PostQuery(product_id: "nhj_test", title: title, content: "\(content) \n\n\(hashtags)", content1: self.personalColors[row.0].rawValue, files: images)
             }
         
         input.inputUploadButton
             .flatMap {
                 // combineLastest대신 zip
-                Observable.zip(input.inputTitleString.orEmpty, input.inputContentString.orEmpty)
+                Observable.zip(input.inputTitleString.orEmpty, input.inputContentString.orEmpty, input.inputHashTags.orEmpty)
             }
             .debug()
             .subscribe(with: self) { owner, value in
                 let title = value.0.trimmingCharacters(in: .whitespaces)
                 let content = value.1.trimmingCharacters(in: .whitespaces)
-                
-                if title == "" || content == ""  {
+                let hashtag = value.2.trimmingCharacters(in: .whitespaces)
+                if title == "" || content == "" || hashtag == ""  {
                     outputValid.accept(false)
                 } else {
                     outputValid.accept(true)

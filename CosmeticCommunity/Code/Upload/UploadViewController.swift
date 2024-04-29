@@ -41,14 +41,20 @@ final class UploadViewController: BaseViewController {
         }
     }
     override func bind() {
-        
+        Observable.just(viewModel.personalColors)
+            .bind(to: mainView.personalColorPicker.rx.itemTitles) { row, item in
+
+                return item.rawValue
+            }
+            .disposed(by: disposeBag)
         bindGallery() // 사진첩 열기 rx 연결
         let inputUploadImageTrigger = PublishSubject<Void>()
         let inputUploadTrigger = PublishSubject<Void>()
         let input = UploadViewModel.Input(inputTitleString: mainView.titleTextField.rx.text,
+                                          inputPersonalPicker: mainView.personalColorPicker.rx.itemSelected,
                                           inputContentString: mainView.contentTextView.rx.text,
                                           inputUploadButton: inputUploadButton, inputUploadImagesTrigger: inputUploadImageTrigger,
-                                          inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems,
+                                          inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems, inputHashTags: mainView.hashtagTextField.rx.text,
                                           inputXbuttonTrigger: inputXbuttonTrigger)
         
         let output = viewModel.transform(input: input)
@@ -69,9 +75,10 @@ final class UploadViewController: BaseViewController {
         output.outputUploadTrigger
             .bind(with: self) { owner, value in
                 // 업로드가 성공했다면
-                if let _ = value {
+                if let value {
                     print("업로드 성공")
-                    owner.navigationController?.popViewController(animated: true)
+                    print(value)
+                    owner.navigationController?.dismiss(animated: true)
                 } else {
                     owner.view.makeToast("업로드에 실패했습니다", duration: 1.0, position: .top)
                 }
@@ -88,7 +95,7 @@ final class UploadViewController: BaseViewController {
     }
     override func configureView() {
         setNavigationBar()
-        configurePickerView()
+//        configurePickerView()
     }
     @objc func xButtonClicked(_ sender: UIButton) {
         inputXbuttonTrigger.onNext(sender.tag)
@@ -159,32 +166,32 @@ extension UploadViewController: PHPickerViewControllerDelegate {
     }
 }
 
-extension UploadViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return viewModel.personalColors.count
-    }
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return viewModel.personalColors[row].rawValue
-    }
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 40
-    }
-    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        let title = viewModel.personalColors[row]
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: title.backgroundColor,
-            .font: UIFont.systemFont(ofSize: 2)
-            
-        ]
-        return NSAttributedString(string: title.rawValue, attributes: attributes)
-    }
-    
-    func configurePickerView() {
-        mainView.personalColorPicker.delegate = self
-        mainView.personalColorPicker.dataSource = self
-    }
-}
+//extension UploadViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+//    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+//        return 1
+//    }
+//    
+//    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+//        return viewModel.personalColors.count
+//    }
+//    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+//        return viewModel.personalColors[row].rawValue
+//    }
+//    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+//        return 40
+//    }
+//    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+//        let title = viewModel.personalColors[row]
+//        let attributes: [NSAttributedString.Key: Any] = [
+//            .foregroundColor: title.backgroundColor,
+//            .font: UIFont.systemFont(ofSize: 2)
+//            
+//        ]
+//        return NSAttributedString(string: title.rawValue, attributes: attributes)
+//    }
+//    
+//    func configurePickerView() {
+//        mainView.personalColorPicker.delegate = self
+//        mainView.personalColorPicker.dataSource = self
+//    }
+//}

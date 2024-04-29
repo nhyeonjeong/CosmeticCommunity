@@ -39,7 +39,7 @@ final class UploadView: BaseView {
     }()
     let personalColorPicker = {
         let view = UIPickerView()
-//        view.selectedRow(inComponent: 0)
+        view.selectedRow(inComponent: 0)
         return view
     }()
     let hashtagTextField = {

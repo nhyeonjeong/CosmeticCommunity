@@ -2,14 +2,14 @@
 //  SearchViewModel.swift
 //  CosmeticCommunity
 //
-//  Created by 남현정 on 2024/04/16.
+//  Created by 남현정 on 2024/04/28.
 //
 
 import Foundation
 import RxSwift
 import RxCocoa
 
-final class HomeViewModel: InputOutput {
+final class SearchHomeViewModel: InputOutput {
     let userManager = UserManager.shared
     let postManager = PostManager()
     let outputLoginView = PublishRelay<Void>()
@@ -19,28 +19,17 @@ final class HomeViewModel: InputOutput {
         BehaviorSubject<CheckPostQuery>(value: CheckPostQuery(next: nextCursor, product_id: "nhj_test"))
     }
     struct Input {
-        let inputProfileImageTrigger: PublishSubject<Void>
         let inputFetchPostsTrigger: PublishSubject<Void>
     }
     
     struct Output {
-        let outputProfileImageTrigger: Driver<String>
         let outputPostItems: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
     }
     var disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
-        let outputProfileImageTrigger = PublishRelay<String>()
         let outputPostItems = PublishRelay<[PostModel]?>()
-        input.inputProfileImageTrigger
-            .subscribe(with: self) { owner, _ in
-                
-                let imagePath = owner.userManager.getProfileImagePath()
-                print("imagePath : \(imagePath)")
-                outputProfileImageTrigger.accept(imagePath)
-            }
-            .disposed(by: disposeBag)
         
         input.inputFetchPostsTrigger
             .withLatestFrom(checkPostQuery.asObserver())
@@ -73,6 +62,6 @@ final class HomeViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView)
+        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView)
     }
 }

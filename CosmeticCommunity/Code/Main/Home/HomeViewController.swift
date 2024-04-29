@@ -80,7 +80,7 @@ final class HomeViewController: BaseViewController {
         navigationController?.pushViewController(MyProfileViewController(), animated: true)
     }
     @objc func searchButtonClicked() {
-        navigationController?.pushViewController(SearchViewController(), animated: true)
+        navigationController?.pushViewController(SearchHomeViewController(), animated: true)
     }
 }
 
@@ -92,7 +92,7 @@ extension HomeViewController {
         
         let profileButton = UIBarButtonItem(customView: customView)
         
-        let searchButton = UIBarButtonItem(image: Constants.Image.searchButton                                         , style: .plain, target: self, action: #selector(searchButtonClicked))
+        let searchButton = UIBarButtonItem(image: Constants.Image.category                                         , style: .plain, target: self, action: #selector(searchButtonClicked))
         
         navigationItem.rightBarButtonItems = [profileButton, searchButton]
     }

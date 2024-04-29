@@ -12,7 +12,7 @@ import RxCocoa
 class BaseViewController: UIViewController, RxProtocol {
     var outputLoginView = PublishRelay<Void>()
     
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
