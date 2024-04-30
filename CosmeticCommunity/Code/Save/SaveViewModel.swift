@@ -39,7 +39,6 @@ final class SaveViewModel: InputOutput{
         input.inputProfileImageTrigger
             .subscribe(with: self) { owner, _ in
                 let imagePath = owner.userManager.getProfileImagePath()
-//                print("imagePath : \(imagePath)")
                 outputProfileImageTrigger.accept(imagePath)
             }
             .disposed(by: disposeBag)
@@ -82,9 +81,7 @@ final class SaveViewModel: InputOutput{
             .flatMap { postIds in
                 var postModelArray: [Observable<PostModel>] = []
                 for id in postIds {
-//                    let dispatchGroup = DispatchGroup()
-//                    dispatchGroup.enter()
-//                    print("🥳start")
+
                     let postObservable = self.postManager.checkSpecificPost(postId: id).catch { error in
                         guard let error = error as? APIError else {
                             outputRecentPosts.accept(nil)
@@ -99,14 +96,9 @@ final class SaveViewModel: InputOutput{
                                 self.outputLoginView.accept(())
                             }
                         }
-//                        print("🥳end")
                         outputRecentPosts.accept(nil)
                         return Observable<PostModel>.never()
                     }
-//                    dispatchGroup.leave()
-//                    dispatchGroup.notify(queue: .main) {
-//                        postModelArray.append(postObservable) // Observable<PostModel> 배열 추가
-//                    }
                     print("🥳end")
                     postModelArray.append(postObservable) // Observable<PostModel> 배열 추가
                 }
@@ -116,7 +108,6 @@ final class SaveViewModel: InputOutput{
                 return wholeSequence
             }
             .subscribe(with: self) { owner, data in
-//                print("input.iputRecentPosts: ------------\(data)")
                 // 정렬은 userdefault배열대로 다시 정렬
                 var getData: [PostModel] = []
                 getData = data

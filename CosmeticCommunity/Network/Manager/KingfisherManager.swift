@@ -31,8 +31,10 @@ extension KingfisherManager {
             retrieveImage(with: url) { response in
                 switch response {
                 case .success(let value):
+                    print(value)
                     completionHandler(value.image)
-                case .failure(_):
+                case .failure(let failure):
+                    print(failure)
                     completionHandler(Constants.Image.defulatProfileImage)
                 }
             }

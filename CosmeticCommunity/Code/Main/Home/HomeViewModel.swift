@@ -37,7 +37,6 @@ final class HomeViewModel: InputOutput {
             .subscribe(with: self) { owner, _ in
                 
                 let imagePath = owner.userManager.getProfileImagePath()
-                print("imagePath : \(imagePath)")
                 outputProfileImageTrigger.accept(imagePath)
             }
             .disposed(by: disposeBag)
