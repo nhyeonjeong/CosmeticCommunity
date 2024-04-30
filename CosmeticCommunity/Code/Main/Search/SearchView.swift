@@ -62,9 +62,9 @@ final class SearchView: BaseView {
         noResultLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-//        recentSearchTableView.snp.makeConstraints { make in
-//            make.edges.equalTo(safeAreaLayoutGuide)
-//        }
+        recentSearchTableView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
         categoryTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(10)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)

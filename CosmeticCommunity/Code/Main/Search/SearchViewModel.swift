@@ -28,26 +28,30 @@ final class SearchViewModel: InputOutput {
         let outputNoResult: Driver<Bool>
         
         let outputHideRecentSearch: Driver<Bool>
+        let outputMessage: Driver<String>
     }
     
     func transform(input: Input) -> Output {
         let outputPostItems = PublishRelay<[PostModel]?>()
         let searchTrigger = PublishSubject<(String, PersonalColor)>()
         let outputNoResult = PublishRelay<Bool>()
-        let outputHideRecentSearch = PublishRelay<Bool>()
+        let outputHideRecentSearch = BehaviorRelay<Bool>(value: false)
+        let outputMessage = PublishRelay<String>()
         
-        Observable.combineLatest(input.inputSearchEnterTrigger, input.inputCategorySelected.asObserver())
+        Observable.combineLatest(input.inputSearchEnterTrigger, input.inputCategorySelected)
             .map{_, category in
                 self.category = category
             }
             .debug()
             .withLatestFrom(input.inputSearchText.orEmpty)
             .bind(with: self) { owner, value in
-                print("😇")
                 searchTrigger.onNext((value, owner.category)) // 하나라도 반응하면 네트워크 통신
-                
-                // 최근검색어 사라지게
-                outputHideRecentSearch.accept(true)
+                if value.trimmingCharacters(in: .whitespaces) != "" {
+                    // enter누르면 최근검색어 사라지게
+                    outputHideRecentSearch.accept(true)
+                } else {
+                    outputMessage.accept("검색어를 입력해주세요")
+                }
             }
             .disposed(by: disposeBag)
         
@@ -89,6 +93,6 @@ final class SearchViewModel: InputOutput {
                 owner.nextCursor = value.next_cursor
             }
             .disposed(by: disposeBag)
-        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false))
+        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false), outputMessage: outputMessage.asDriver(onErrorJustReturn: ""))
     }
 }
