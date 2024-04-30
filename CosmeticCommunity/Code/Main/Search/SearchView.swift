@@ -18,6 +18,13 @@ final class SearchView: BaseView {
         return view
     }()
     
+    let recentSearchTableView = {
+        let view = UITableView()
+        view.register(RecentSearchTableViewCell.self, forCellReuseIdentifier: RecentSearchTableViewCell.identifier)
+        view.rowHeight = 50
+        return view
+    }()
+    
     let textfield = {
         let view = UITextField()
         view.placeholder = "검색어를 입력해주세요"
@@ -49,12 +56,15 @@ final class SearchView: BaseView {
     override func configureHierarchy() {
         textfield.addSubview(xButton)
         resultCollectionView.addSubview(noResultLabel)
-        addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView])
+        addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView, recentSearchTableView])
     }
     override func configureConstraints() {
         noResultLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
+//        recentSearchTableView.snp.makeConstraints { make in
+//            make.edges.equalTo(safeAreaLayoutGuide)
+//        }
         categoryTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(10)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)
