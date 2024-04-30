@@ -22,6 +22,7 @@ final class UploadViewController: BaseViewController {
     private let inputSelectPhotoItems = PublishSubject<Void>()
     // x버튼
     private let inputXbuttonTrigger = PublishSubject<Int>()
+    private let inputPersonalColor = BehaviorSubject<PersonalColor>(value: .none)
     override func loadView() {
         view = mainView
     }
@@ -41,17 +42,10 @@ final class UploadViewController: BaseViewController {
         }
     }
     override func bind() {
-        Observable.just(viewModel.personalColors)
-            .bind(to: mainView.personalColorPicker.rx.itemTitles) { row, item in
-
-                return item.rawValue
-            }
-            .disposed(by: disposeBag)
         bindGallery() // 사진첩 열기 rx 연결
         let inputUploadImageTrigger = PublishSubject<Void>()
         let inputUploadTrigger = PublishSubject<Void>()
-        let input = UploadViewModel.Input(inputTitleString: mainView.titleTextField.rx.text,
-                                          inputPersonalPicker: mainView.personalColorPicker.rx.itemSelected,
+        let input = UploadViewModel.Input(inputTitleString: mainView.titleTextField.rx.text, inputPersonalColor: inputPersonalColor,
                                           inputContentString: mainView.contentTextView.rx.text,
                                           inputUploadButton: inputUploadButton, inputUploadImagesTrigger: inputUploadImageTrigger,
                                           inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems, inputHashTags: mainView.hashtagTextField.rx.text,
@@ -67,7 +61,7 @@ final class UploadViewController: BaseViewController {
                         inputUploadImageTrigger.onNext(()) // 이미지 먼저 올리기..
                     }
                 } else {
-                    owner.view.makeToast("제목과 내용을 입력해주세요", duration: 1.0, position: .center)
+                    owner.view.makeToast("제목,내용,해시태그,퍼스널컬러를 입력해주세요", duration: 1.0, position: .center)
                 }
             }
             .disposed(by: disposeBag)
@@ -92,10 +86,44 @@ final class UploadViewController: BaseViewController {
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
+        
+        mainView.personalSelectButton.rx.tap
+            .subscribe(with: self) { owner, _ in
+                let alertController = UIAlertController(title: "Title", message: "Message", preferredStyle: .actionSheet)
+                
+                // 네 개의 문자열로 구성된 팝업 버튼 추가
+                let strings: [String] = ["Button 1", "Button 2", "Button 3", "Button 4"]
+                for string in strings {
+                    alertController.addAction(UIAlertAction(title: string, style: .default, handler: { action in
+                        // 각 버튼 클릭 시 수행할 동작
+                        print("\(string) tapped")
+                    }))
+                }
+                
+            }
+            .disposed(by: disposeBag)
     }
     override func configureView() {
         setNavigationBar()
-//        configurePickerView()
+        mainView.personalSelectButton.menu = UIMenu(title: "퍼스널 컬러", children: [
+            UIAction(title: "봄웜", handler: { _ in
+                self.inputPersonalColor.onNext(.spring)
+                self.mainView.personalSelectButton.setTitle("봄웜", for: .normal)
+            }),
+            UIAction(title: "여름쿨", handler: { _ in
+                self.inputPersonalColor.onNext(.summer)
+                self.mainView.personalSelectButton.setTitle("여름쿨", for: .normal)
+            }),
+            UIAction(title: "가을웜", handler: { _ in
+                self.inputPersonalColor.onNext(.fall)
+                self.mainView.personalSelectButton.setTitle("가을웜", for: .normal)
+            }),
+            UIAction(title: "겨울쿨", handler: { _ in
+                self.inputPersonalColor.onNext(.winter)
+                self.mainView.personalSelectButton.setTitle("겨울쿨", for: .normal)
+            })])
+        
+        mainView.personalSelectButton.showsMenuAsPrimaryAction = true
     }
     @objc func xButtonClicked(_ sender: UIButton) {
         inputXbuttonTrigger.onNext(sender.tag)

@@ -37,11 +37,18 @@ final class UploadView: BaseView {
         
         return view
     }()
-    let personalColorPicker = {
-        let view = UIPickerView()
-        view.selectedRow(inComponent: 0)
+//    let personalColorPicker = {
+//        let view = UIPickerView()
+//        view.selectedRow(inComponent: 0)
+//        return view
+//    }()
+    let personalSelectButton = {
+        let view = UIButton()
+        view.setTitle("퍼스널컬러 선택", for: .normal)
+        view.setTitleColor(Constants.Color.text, for: .normal)
         return view
     }()
+    
     let hashtagTextField = {
         let view = UITextField()
         view.placeholder = "해시태그를 입력해주세요. 검색에 활용됩니다."
@@ -49,7 +56,7 @@ final class UploadView: BaseView {
     }()
     
     override func configureHierarchy() {
-        addViews([addPhotoButton, photoCollectionView, titleTextField, contentTextView, hashtagTextField, personalColorPicker])
+        addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentTextView, hashtagTextField])
     }
     
     override func configureConstraints() {
@@ -70,15 +77,13 @@ final class UploadView: BaseView {
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
             make.centerX.equalToSuperview()
         }
-        personalColorPicker.snp.makeConstraints { make in
+        personalSelectButton.snp.makeConstraints { make in
             make.top.equalTo(titleTextField.snp.bottom).offset(4)
             make.height.equalTo(70)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)
-            make.width.equalTo(100)
         }
-
         contentTextView.snp.makeConstraints { make in
-            make.top.equalTo(personalColorPicker.snp.bottom)
+            make.top.equalTo(personalSelectButton.snp.bottom)
             make.height.equalTo(200)
             make.horizontalEdges.equalToSuperview().inset(10)
 //            make.centerX.equalToSuperview()
@@ -88,6 +93,7 @@ final class UploadView: BaseView {
             make.horizontalEdges.equalToSuperview().inset(10)
         }
     }
+
 }
 
 extension UploadView {

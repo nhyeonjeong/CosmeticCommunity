@@ -17,7 +17,7 @@ enum PersonalColor: String, CaseIterable {
     
     static var personalCases: [PersonalColor] {
         var cases = PersonalColor.allCases
-        cases.removeLast()
+        cases.removeFirst()
         return cases
     }
     var backgroundColor: UIColor {
