@@ -43,7 +43,7 @@ final class PostManager {
     // 최근 본 포스트 유저디폴트에 저장
     func saveRecentPostsUserDefaults(postId: String) {
         let recentPosts = getRecentPostsUserDefaults()
-        guard let posts = recentPosts else { // 하나도 저장되어있지 않았다면?
+        guard let posts = recentPosts else { // 하나도 저장되어있지 않았다면? 하나 저장
             do {
                 let data = try JSONEncoder().encode([postId])
                 UserDefaults.standard.setValue(data, forKey: UserDefaultKey.Post.recentPosts.rawValue)
@@ -55,21 +55,22 @@ final class PostManager {
         // posts는 유저디폴트에서 가져온 배열
         // 이미 본 포스트인지 확인
         var newArray = posts
-        if newArray.contains(postId) { // 이미 봤다면
+        if newArray.contains(postId) { // 이미 봤다면 다시 앞으로 끌고오기
             let index = newArray.firstIndex { id in
                 id == postId
             }
             newArray.remove(at: index ?? newArray.count - 1)
-            newArray.append(postId) // 최신순으로 올리기
-            return
+            newArray.insert(postId, at: 0) // 최신순으로 올리기
+        
         } else {
             if posts.count > 20 {
                 newArray.remove(at: posts.count-1) // 마지막 삭제
             }
-            newArray.append(postId)
+            newArray.insert(postId, at: 0)
         }
+//        print("📆 : \(newArray)")
         do {
-            print(#function," : \(newArray)")
+            
             let data = try JSONEncoder().encode(newArray)
             UserDefaults.standard.setValue(data, forKey: UserDefaultKey.Post.recentPosts.rawValue)
         } catch {
@@ -88,11 +89,5 @@ final class PostManager {
             }
         }
         return nil
-        
-//        
-//        guard let recentPosts = UserDefaults.standard.value(forKey: UserDefaultKey.Post.recentPosts.rawValue) as? [String] else {
-//            return []
-//        }
-//        return recentPosts
     }
 }

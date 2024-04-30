@@ -49,6 +49,7 @@ final class CommentTableViewCell: BaseTableViewCell {
             make.leading.equalTo(18+UserDataView.ProfileImageSize.commentCreator.rawValue)
             make.bottom.equalTo(contentView).inset(4)
             make.trailing.equalTo(contentView).inset(4)
+//            make.height.equalTo(1)
         }
         menuButton.snp.makeConstraints { make in
             make.centerY.equalTo(commentCreatorView)
@@ -62,8 +63,13 @@ final class CommentTableViewCell: BaseTableViewCell {
         menuButton.isHidden = true
     }
     func upgradeCell(_ item: CommentModel) {
+//        print(#function)
         commentCreatorView.upgradeView(profileImage: item.creator.profileImage, nick: item.creator.nick)
         createdTimeLabel.text = item.createdAt
         contentLabel.text = item.content
+//        print("높이", contentLabel.frame.height)
+      //  contentLabel.snp.updateConstraints { make in
+        //            make.height.equalTo(contentLabel.frame.height)
+        //        }
     }
 }

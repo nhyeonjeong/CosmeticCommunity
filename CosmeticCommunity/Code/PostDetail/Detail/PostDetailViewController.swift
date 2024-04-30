@@ -31,6 +31,7 @@ final class PostDetailViewController: BaseViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        print("😍\(postId)")
         inputPostIdTrigger.onNext(postId ?? "")
         // userdefault에 최근 본 포스트 저장
         mainView.uploadCommentView.isUserInteractionEnabled = true
@@ -100,7 +101,7 @@ final class PostDetailViewController: BaseViewController {
         
         output.postCreatorId
             .drive(with: self) { owner, creatorId in
-                print("내가 쓴 포스트인지 확인!!")
+//                print("내가 쓴 포스트인지 확인!!")
                 if creatorId == UserManager.shared.getUserId() {
                     self.configureNavigationBar()
                 }
@@ -112,7 +113,7 @@ final class PostDetailViewController: BaseViewController {
         inputCommentProfileButtonTrigger.onNext(sender.tag) // 클릭한 댓글 프로필 버튼의 tag
     }
     @objc func navigationBarButtonClicked() {
-        print("click")
+//        print("click")
         let sheet = CustomSheetViewController()
         sheet.postId = viewModel.postId
         sheet.popPostDetailView = {

@@ -94,7 +94,7 @@ final class PostDetailViewModel: InputOutput {
         
         input.inputPostIdTrigger
             .flatMap { id in
-                print("포스트 조회하기")
+//                print("포스트 조회하기")
                 self.postId = id // 받아온 id 저장
                 return self.postManager.checkSpecificPost(postId: id)
                     .catch { error in
@@ -166,7 +166,7 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .bind(with: self) { owner, _ in
-                print("버튼클릭했다")
+//                print("버튼클릭했다")
                 input.inputPostIdTrigger.onNext(owner.postId)
             }
             .disposed(by: disposeBag)
@@ -177,7 +177,7 @@ final class PostDetailViewModel: InputOutput {
             .flatMap { query in
                 if query.content.trimmingCharacters(in: .whitespaces) == "" {
                     // 비어있으면 댓글 입력하지 말기
-                    print("비어있음")
+//                    print("비어있음")
                     outputNotValid.accept(())
                     return Observable<CommentModel>.never()
                 }
@@ -202,7 +202,7 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
-                print("댓글 업로드 api통신 성공")
+//                print("댓글 업로드 api통신 성공")
                 input.inputPostIdTrigger.onNext(self.postId)
             }
             .disposed(by: disposeBag)
@@ -214,8 +214,8 @@ final class PostDetailViewModel: InputOutput {
                     outputAlert.accept("댓글삭제에 실패했습니다")
                     return Observable<Void>.never()
                 }
-                print("bug---------comment의 갯수: \(postData.comments.count)")
-                print("bug---------삭제하려는 행의 ROW : \(row)")
+//                print("bug---------comment의 갯수: \(postData.comments.count)")
+//                print("bug---------삭제하려는 행의 ROW : \(row)")
                 return self.commentManager.deleteComment(postId: postData.post_id, commentId: postData.comments[row].comment_id)
                     .catch { error in
                         guard let error = error as? APIError else {
