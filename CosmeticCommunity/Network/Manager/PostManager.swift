@@ -42,7 +42,7 @@ final class PostManager {
     
     // 최근 본 포스트 유저디폴트에 저장
     func saveRecentPostsUserDefaults(postId: String) {
-        var recentPosts = getRecentPostsUserDefaults()
+        let recentPosts = getRecentPostsUserDefaults()
         guard let posts = recentPosts else { // 하나도 저장되어있지 않았다면?
             do {
                 let data = try JSONEncoder().encode([postId])

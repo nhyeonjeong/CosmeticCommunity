@@ -70,7 +70,7 @@ final class SaveViewModel: InputOutput{
                 outputFetchLikedPosts.accept(value.data)
             }
             .disposed(by: disposeBag)
-        
+        // 최근 본 포스트
         input.inputRecentPosts
             .flatMap {
                 guard let postIds = self.postManager.getRecentPostsUserDefaults() else {
@@ -110,17 +110,42 @@ final class SaveViewModel: InputOutput{
                     print("🥳end")
                     postModelArray.append(postObservable) // Observable<PostModel> 배열 추가
                 }
+                // <PostModel>을 <[PostModel]>로 바꿔줌
                 let singleObservable: Observable<PostModel> = Observable.from(postModelArray).merge()
                 let wholeSequence: Single <[PostModel]> = singleObservable.toArray()
                 return wholeSequence
             }
             .subscribe(with: self) { owner, data in
 //                print("input.iputRecentPosts: ------------\(data)")
-                outputRecentPosts.accept(data)
+                // 정렬은 userdefault배열대로 다시 정렬
+                var getData: [PostModel] = []
+                getData = data
+                outputRecentPosts.accept(owner.sortRecentPosts(data: getData))
             }
             .disposed(by: disposeBag)
         
         return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputFetchLikedPosts: outputFetchLikedPosts.asDriver(onErrorJustReturn: nil), outputRecentPosts: outputRecentPosts.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView)
     
     }
+    func sortRecentPosts(data: [PostModel]) -> [PostModel] {
+        guard let postIds = postManager.getRecentPostsUserDefaults() else {
+            return []
+        }
+        var numberToIndexMap: [String: Int] = [:]
+        for (index, element) in postIds.enumerated() {
+            numberToIndexMap[element] = index
+        }
+
+        // numberToIndexMap을 사용하여 PostModel 배열을 정렬
+        let sortedPostModels = data.sorted(by: {
+            guard let index1 = numberToIndexMap[$0.post_id], let index2 = numberToIndexMap[$1.post_id] else {
+                return false // numberToIndexMap에 해당하는 number가 없을 경우 false 반환
+            }
+            return index1 < index2
+        })
+        
+        return sortedPostModels
+    }
 }
+
+
