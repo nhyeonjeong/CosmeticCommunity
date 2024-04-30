@@ -33,7 +33,6 @@ final class PostDetailViewController: BaseViewController {
         super.viewWillAppear(true)
         inputPostIdTrigger.onNext(postId ?? "")
         // userdefault에 최근 본 포스트 저장
-        
         mainView.uploadCommentView.isUserInteractionEnabled = true
         mainView.uploadCommentView.becomeFirstResponder()
     }

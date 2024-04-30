@@ -12,6 +12,7 @@ final class PostDetailView: BaseView {
     let scrollView = {
         let view = UIScrollView()
 //        view.showsVerticalScrollIndicator = false
+        view.keyboardDismissMode = .onDrag
         return view
     }()
     let contentView = {
@@ -41,7 +42,6 @@ final class PostDetailView: BaseView {
         return view
     }()
     
-//    lazy var commentsCollectoinView = UICollectionView(frame: .zero, collectionViewLayout: commentsCollectionViewLayout())
     let commentsTableView = {
         let view = UITableView()
         view.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
@@ -119,7 +119,7 @@ final class PostDetailView: BaseView {
         }
         uploadCommentView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(self.safeAreaLayoutGuide)
-            make.bottom.equalTo(self.safeAreaLayoutGuide)
+            make.bottom.equalTo(self.keyboardLayoutGuide.snp.top)
             make.height.equalTo(50)
         }
         commentTextView.snp.makeConstraints { make in
