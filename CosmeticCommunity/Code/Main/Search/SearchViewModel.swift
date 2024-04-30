@@ -15,7 +15,7 @@ final class SearchViewModel: InputOutput {
     var disposeBag = DisposeBag()
     var nextCursor: String = ""
     var category: PersonalColor = .none
-    let categoryCases = BehaviorSubject(value: PersonalColor.allCases)
+    let categoryCases = BehaviorSubject(value: PersonalColor.personalCases)
     struct Input {
         let inputSearchText: ControlProperty<String?>
         let inputSearchEnterTrigger: ControlEvent<Void>
@@ -26,12 +26,15 @@ final class SearchViewModel: InputOutput {
         let outputPostItems: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
         let outputNoResult: Driver<Bool>
+        
+        let outputHideRecentSearch: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
         let outputPostItems = PublishRelay<[PostModel]?>()
         let searchTrigger = PublishSubject<(String, PersonalColor)>()
         let outputNoResult = PublishRelay<Bool>()
+        let outputHideRecentSearch = PublishRelay<Bool>()
         
         Observable.combineLatest(input.inputSearchEnterTrigger, input.inputCategorySelected.asObserver())
             .map{_, category in
@@ -42,12 +45,15 @@ final class SearchViewModel: InputOutput {
             .bind(with: self) { owner, value in
                 print("😇")
                 searchTrigger.onNext((value, owner.category)) // 하나라도 반응하면 네트워크 통신
+                
+                // 최근검색어 사라지게
+                outputHideRecentSearch.accept(true)
             }
             .disposed(by: disposeBag)
         
         searchTrigger
             .flatMap { hashTag, category in
-                let query = HashtagQuery(next: self.nextCursor, product_id: "nhj_test", hashTag: hashTag)
+                let query = HashtagQuery(next: self.nextCursor, product_id: "\(ProductId.baseProductId)\(category.rawValue)", hashTag: hashTag)
                 return self.postManager.checkWithHashTag(query: query)
                     .catch { error in
                         guard let error = error as? APIError else {
@@ -83,6 +89,6 @@ final class SearchViewModel: InputOutput {
                 owner.nextCursor = value.next_cursor
             }
             .disposed(by: disposeBag)
-        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false))
+        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false))
     }
 }

@@ -23,8 +23,6 @@ final class PostManager {
     }
     // 특정 포스트 조회
     func checkSpecificPost(postId: String) -> Observable<PostModel> {
-        let group = DispatchGroup()
-        print("😎1")
         return NetworkManager.shared.fetchAPI(type: PostModel.self, router: Router.checkSpecificPost(postId: postId))
 
     }
@@ -82,7 +80,7 @@ final class PostManager {
         if let postIds = UserDefaults.standard.data(forKey: UserDefaultKey.Post.recentPosts.rawValue) {
             do {
                 let array = try JSONDecoder().decode([String].self, from: postIds)
-                print("🤔 \(array)")
+//                print("🤔 \(array)")
                 return array
             } catch {
                 return nil

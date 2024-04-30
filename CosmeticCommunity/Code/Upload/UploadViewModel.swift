@@ -13,8 +13,6 @@ final class UploadViewModel: InputOutput {
     let postManager = PostManager()
     var disposeBag = DisposeBag()
     
-//    let personalColors = PersonalColor.personalCases
-    
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
     var photoString = BehaviorSubject<[String]>(value: [])
     let outputLoginView = PublishRelay<Void>()
@@ -51,7 +49,7 @@ final class UploadViewModel: InputOutput {
         let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputPersonalColor.asObservable(), input.inputContentString.orEmpty, input.inputHashTags.orEmpty, photoString.asObserver())
             .map { title, personalColor, content, hashtags, images in
                 print(title, content, personalColor.rawValue, hashtags, self.photoString)
-                return PostQuery(product_id: "nhj_test", title: title, content: "\(content) \n\n\(hashtags)", content1: personalColor.rawValue, files: images)
+                return PostQuery(product_id: "\(ProductId.baseProductId)\(personalColor.rawValue)", title: title, content: "\(content) \n\n\(hashtags)", content1: personalColor.rawValue, files: images)
             }
         
         input.inputUploadButton
