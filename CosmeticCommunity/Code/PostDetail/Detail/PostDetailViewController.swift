@@ -147,10 +147,15 @@ extension PostDetailViewController {
                     cell.menuButton.isHidden = true
                 }
                 cell.upgradeCell(element)
-                let newHeight: CGFloat = max(1, self.mainView.commentsTableView.contentSize.height)
-                self.mainView.commentsTableView.snp.updateConstraints { make in
-                    make.height.equalTo(newHeight)
+                
+                DispatchQueue.main.async {
+                    let newHeight: CGFloat = max(1, self.mainView.commentsTableView.contentSize.height)
+                    
+                    self.mainView.commentsTableView.snp.updateConstraints { make in
+                        make.height.equalTo(newHeight)
+                    }
                 }
+                
             }
             .disposed(by: disposeBag)
     }
