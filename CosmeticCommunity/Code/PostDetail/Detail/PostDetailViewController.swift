@@ -114,14 +114,19 @@ final class PostDetailViewController: BaseViewController {
         inputCommentProfileButtonTrigger.onNext(sender.tag) // 클릭한 댓글 프로필 버튼의 tag
     }
     @objc func navigationBarButtonClicked() {
-//        print("click")
         let sheet = CustomSheetViewController()
-        sheet.postId = viewModel.postId
+        sheet.postData = viewModel.postData
+        
         sheet.popPostDetailView = {
             self.navigationController?.popViewController(animated: true)
         }
         sheet.modalPresentationStyle = .overFullScreen
         present(sheet, animated: false)
+    }
+    func configureNavigationBar() {
+        let button = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(navigationBarButtonClicked))
+        button.tintColor = Constants.Color.point
+        navigationItem.rightBarButtonItem = button
     }
 }
 extension PostDetailViewController {
@@ -169,15 +174,8 @@ extension PostDetailViewController {
             }
         }
         let editAction = UIAction(title: "수정", image: UIImage(systemName: "pencil")) { _ in
-            let vc = EditUploadViewController()
-            vc.postData = self.viewModel.postData
-            self.navigationController?.pushViewController(vc, animated: true)
+            //
         }
         return [deleteAction, editAction]
-    }
-    func configureNavigationBar() {
-        let button = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(navigationBarButtonClicked))
-        button.tintColor = Constants.Color.point
-        navigationItem.rightBarButtonItem = button
     }
 }

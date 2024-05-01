@@ -11,7 +11,7 @@ import RxCocoa
 import Toast
 
 final class CustomSheetViewController: BaseViewController {
-    var postId: String?
+    var postData: PostModel?
     
     var popPostDetailView: (() -> Void)?
     
@@ -28,7 +28,7 @@ final class CustomSheetViewController: BaseViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        inputPostIdTrigger.onNext(postId)
+        inputPostIdTrigger.onNext(postData?.post_id)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -85,7 +85,9 @@ final class CustomSheetViewController: BaseViewController {
         }
     }
     @objc func editButtonClicked() {
-        inputEditButtonTrigger.onNext(())
+        let vc = EditUploadViewController()
+        vc.postData = postData
+        self.present(UINavigationController(rootViewController: vc), animated: true)
     }
     override func configureHierarchy() {
         buttonView.addViews([editButton, deleteButton])
