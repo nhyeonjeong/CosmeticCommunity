@@ -15,7 +15,7 @@ final class SearchHomeView: BaseView {
     }()
     lazy var resultCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
-        view.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
+        view.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
 //        view.backgroundColor = .red
         return  view
     }()

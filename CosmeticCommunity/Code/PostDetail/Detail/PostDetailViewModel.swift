@@ -24,6 +24,8 @@ final class PostDetailViewModel: InputOutput {
     var onceDisposeBag = DisposeBag()
     var postId = ""
     var creatorUserId = ""
+    var postData: PostModel?
+    
     struct Input {
         let inputProfileButtonTrigger: ControlEvent<Void>
         let inputPostIdTrigger: PublishSubject<String>

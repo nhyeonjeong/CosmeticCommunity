@@ -14,7 +14,7 @@ import IQKeyboardManagerSwift
 
 final class PostDetailViewController: BaseViewController {
     var postId: String? // 받아온 post정보
-    var tableViewHeight: NSLayoutConstraint?
+
     private let mainView = PostDetailView()
     private let viewModel = PostDetailViewModel()
     
@@ -66,6 +66,7 @@ final class PostDetailViewController: BaseViewController {
         output.outputPostData
             .drive(with: self) { owner, value in
                 if let value {
+                    owner.viewModel.postData = value // 가져온 post데이터 저장
                     owner.imageItems.onNext(value.files)
                     owner.mainView.creatorView.upgradeView(profileImage: value.creator.profileImage, nick: value.creator.nick)
                     owner.mainView.detailsView.upgradeView(value)
@@ -168,8 +169,9 @@ extension PostDetailViewController {
             }
         }
         let editAction = UIAction(title: "수정", image: UIImage(systemName: "pencil")) { _ in
-            //
-            
+            let vc = EditUploadViewController()
+            vc.postData = self.viewModel.postData
+            self.navigationController?.pushViewController(vc, animated: true)
         }
         return [deleteAction, editAction]
     }

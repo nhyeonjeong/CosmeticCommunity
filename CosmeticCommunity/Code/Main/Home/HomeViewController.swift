@@ -16,7 +16,8 @@ final class HomeViewController: BaseViewController {
     let viewModel = HomeViewModel()
     // viewModel에 전달할 트리거
     let inputProfileImageTrigger = PublishSubject<Void>()
-    let inputPostsTrigger = PublishSubject<Void>()
+    let inputMostLikedPostsTrigger = PublishSubject<Void>()
+    let inputTagSelectedTrigger = PublishSubject<String>()
     override func loadView() {
         view = mainView
     }
@@ -27,10 +28,11 @@ final class HomeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         inputProfileImageTrigger.onNext(())
-        inputPostsTrigger.onNext(())
+        inputMostLikedPostsTrigger.onNext(())
+        
     }
     override func bind() {
-        let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger)
+        let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputMostLikedPostsTrigger: inputMostLikedPostsTrigger, inputTagSelectedTrigger: inputTagSelectedTrigger)
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView // 로그인화면으로 넘기는 로직연결
@@ -46,7 +48,38 @@ final class HomeViewController: BaseViewController {
                 }
             }
             .disposed(by: disposeBag)
-
+        
+        output.outputMostLikedPostsItem
+//            .drive(with: self) { owner, value in
+//                print("🥳")
+//                dump(value)
+//            }
+//            .disposed(by: disposeBag)
+            .drive(mainView.mostLikedCollectionView.rx.items(cellIdentifier: HomePostCollectionViewCell.identifier, cellType: HomePostCollectionViewCell.self)) {(row, element, cell) in
+//                print("🥳", element)
+                cell.upgradeCell(element)
+            }
+            .disposed(by: disposeBag)
+        
+        output.outputTagItems
+            .drive(mainView.tagCollectionView.rx.items(cellIdentifier: HomeTagCollectionViewCell.identifier, cellType: HomeTagCollectionViewCell.self)) {(row, element, cell) in
+//                print("🥳", element)
+                cell.upgradeCell(element)
+            }
+            .disposed(by: disposeBag)
+        
+        mainView.tagCollectionView.rx.modelSelected(String.self)
+            .bind(with: self) { owner, tag in
+                print("🥲") // 왜 클릭이 안되지...?ㅜㅜㅜㅜㅜ
+                owner.inputTagSelectedTrigger.onNext(tag)
+            }
+            .disposed(by: disposeBag)
+        
+        output.outputTagPostsItem
+            .drive(mainView.tagPostCollectionView.rx.items(cellIdentifier: TagPostCollectionViewCell.identifier, cellType: TagPostCollectionViewCell.self)) {(row, element, cell) in
+                cell.upgradeCell(element)
+            }
+            .disposed(by: disposeBag)
     }
     override func configureView() {
         configureNavigationBar()

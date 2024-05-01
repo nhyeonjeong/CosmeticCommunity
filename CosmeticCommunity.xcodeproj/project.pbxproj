@@ -100,11 +100,15 @@
 		8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D042BCFA1B600FD1B69 /* PostManager.swift */; };
 		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
 		8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */; };
-		8B57ABB52BD26B52004BC76E /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* HomeCollectionViewCell.swift */; };
+		8B57ABB52BD26B52004BC76E /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */; };
 		8B57ABB82BD26F6E004BC76E /* PostDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB72BD26F6E004BC76E /* PostDetailsView.swift */; };
 		8B57ABBC2BD2C302004BC76E /* SearchHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABBB2BD2C302004BC76E /* SearchHomeViewController.swift */; };
 		8B57ABBE2BD2C395004BC76E /* SearchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABBD2BD2C395004BC76E /* SearchHomeView.swift */; };
 		8B62899F2BE1BFB0005D2DAB /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B62899E2BE1BFB0005D2DAB /* UserDefaultManager.swift */; };
+		8BB570852BE283A5006DF25A /* HomePostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB570842BE283A5006DF25A /* HomePostCollectionViewCell.swift */; };
+		8BB570872BE2A79F006DF25A /* HomeTagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB570862BE2A79F006DF25A /* HomeTagCollectionViewCell.swift */; };
+		8BB570892BE2B8F7006DF25A /* TagPostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB570882BE2B8F7006DF25A /* TagPostCollectionViewCell.swift */; };
+		8BB5708D2BE2C211006DF25A /* EditUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB5708C2BE2C211006DF25A /* EditUploadViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -196,11 +200,15 @@
 		8B428D042BCFA1B600FD1B69 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProviderReading+Extension.swift"; sourceTree = "<group>"; };
-		8B57ABB42BD26B52004BC76E /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
+		8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB72BD26F6E004BC76E /* PostDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsView.swift; sourceTree = "<group>"; };
 		8B57ABBB2BD2C302004BC76E /* SearchHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHomeViewController.swift; sourceTree = "<group>"; };
 		8B57ABBD2BD2C395004BC76E /* SearchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHomeView.swift; sourceTree = "<group>"; };
 		8B62899E2BE1BFB0005D2DAB /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
+		8BB570842BE283A5006DF25A /* HomePostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostCollectionViewCell.swift; sourceTree = "<group>"; };
+		8BB570862BE2A79F006DF25A /* HomeTagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTagCollectionViewCell.swift; sourceTree = "<group>"; };
+		8BB570882BE2B8F7006DF25A /* TagPostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPostCollectionViewCell.swift; sourceTree = "<group>"; };
+		8BB5708C2BE2C211006DF25A /* EditUploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUploadViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +322,7 @@
 				8B3AFD302BDE6BE70069773F /* SearchViewController.swift */,
 				8B3AFD2E2BDE6BDF0069773F /* SearchViewModel.swift */,
 				8B3AFD322BDE6BEF0069773F /* SearchView.swift */,
+				8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */,
 				8B3AFD9B2BDF8C570069773F /* CategoryCollectionViewCell.swift */,
 				8B3AFD9E2BE089050069773F /* RecentSearchTableViewCell.swift */,
 			);
@@ -546,10 +555,8 @@
 		8B428CD12BCDFFEE00FD1B69 /* Upload */ = {
 			isa = PBXGroup;
 			children = (
-				8B428CD22BCE000A00FD1B69 /* UploadViewController.swift */,
-				8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */,
-				8B428CD42BCE001400FD1B69 /* UploadView.swift */,
-				8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */,
+				8BB5708B2BE2C1F5006DF25A /* EditUpload */,
+				8BB5708A2BE2C1E4006DF25A /* NewUpload */,
 			);
 			path = Upload;
 			sourceTree = "<group>";
@@ -569,7 +576,9 @@
 				8B428CF82BCEA74E00FD1B69 /* HomeViewController.swift */,
 				8B428CF42BCEA73E00FD1B69 /* HomeViewModel.swift */,
 				8B428CF62BCEA74800FD1B69 /* HomeView.swift */,
-				8B57ABB42BD26B52004BC76E /* HomeCollectionViewCell.swift */,
+				8BB570862BE2A79F006DF25A /* HomeTagCollectionViewCell.swift */,
+				8BB570882BE2B8F7006DF25A /* TagPostCollectionViewCell.swift */,
+				8BB570842BE283A5006DF25A /* HomePostCollectionViewCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -582,6 +591,25 @@
 				8B57ABBD2BD2C395004BC76E /* SearchHomeView.swift */,
 			);
 			path = SearchHome;
+			sourceTree = "<group>";
+		};
+		8BB5708A2BE2C1E4006DF25A /* NewUpload */ = {
+			isa = PBXGroup;
+			children = (
+				8B428CD22BCE000A00FD1B69 /* UploadViewController.swift */,
+				8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */,
+				8B428CD42BCE001400FD1B69 /* UploadView.swift */,
+				8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */,
+			);
+			path = NewUpload;
+			sourceTree = "<group>";
+		};
+		8BB5708B2BE2C1F5006DF25A /* EditUpload */ = {
+			isa = PBXGroup;
+			children = (
+				8BB5708C2BE2C211006DF25A /* EditUploadViewController.swift */,
+			);
+			path = EditUpload;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -673,6 +701,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BB570852BE283A5006DF25A /* HomePostCollectionViewCell.swift in Sources */,
 				8B62899F2BE1BFB0005D2DAB /* UserDefaultManager.swift in Sources */,
 				8B428CCE2BCD1CF400FD1B69 /* ReigsterViewModel.swift in Sources */,
 				8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */,
@@ -717,7 +746,7 @@
 				8B3AFD1A2BD8EA140069773F /* OtherProfileViewModel.swift in Sources */,
 				8B3AFCE52BD69AD10069773F /* FollowView.swift in Sources */,
 				8B428C422BC980C700FD1B69 /* AppDelegate.swift in Sources */,
-				8B57ABB52BD26B52004BC76E /* HomeCollectionViewCell.swift in Sources */,
+				8B57ABB52BD26B52004BC76E /* PostCollectionViewCell.swift in Sources */,
 				8B3AFD9F2BE089050069773F /* RecentSearchTableViewCell.swift in Sources */,
 				8B3AFCE02BD6958A0069773F /* SegmentCase.swift in Sources */,
 				8B428C602BCAB4FF00FD1B69 /* BaseView.swift in Sources */,
@@ -726,8 +755,11 @@
 				8B428C592BC981D100FD1B69 /* APIKey.swift in Sources */,
 				8B3AFC982BD3E5D20069773F /* PersonalColor.swift in Sources */,
 				8B3AFCB12BD4343B0069773F /* BaseTableViewCell.swift in Sources */,
+				8BB570872BE2A79F006DF25A /* HomeTagCollectionViewCell.swift in Sources */,
 				8B3AFD092BD81D9F0069773F /* SaveViewController.swift in Sources */,
 				8B3AFD332BDE6BEF0069773F /* SearchView.swift in Sources */,
+				8BB5708D2BE2C211006DF25A /* EditUploadViewController.swift in Sources */,
+				8BB570892BE2B8F7006DF25A /* TagPostCollectionViewCell.swift in Sources */,
 				8B3AFD2F2BDE6BDF0069773F /* SearchViewModel.swift in Sources */,
 				8B57ABB82BD26F6E004BC76E /* PostDetailsView.swift in Sources */,
 				8B3AFCC02BD566210069773F /* TokenModel.swift in Sources */,

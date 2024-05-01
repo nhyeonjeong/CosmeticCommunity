@@ -40,7 +40,7 @@ final class SearchHomeViewController: BaseViewController {
                 return BehaviorRelay(value: posts).asDriver()
                 
             }
-            .drive(mainView.resultCollectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) {(row, element, cell) in
+            .drive(mainView.resultCollectionView.rx.items(cellIdentifier: PostCollectionViewCell.identifier, cellType: PostCollectionViewCell.self)) {(row, element, cell) in
                 
                 cell.upgradeCell(element)
             }
