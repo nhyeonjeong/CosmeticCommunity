@@ -22,6 +22,7 @@ final class SearchViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         inputRecentSearchTable.onNext(UserDefaultManager.shared.getRecentSearch())
+        inputCategorySelected.onNext(viewModel.category)
     }
     
     override func configureView() {
