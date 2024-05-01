@@ -20,6 +20,7 @@ final class SearchHomeViewModel: InputOutput {
     }
     struct Input {
         let inputFetchPostsTrigger: PublishSubject<Void>
+        let inputPrefetchTrigger: PublishSubject<[IndexPath]>
     }
     
     struct Output {

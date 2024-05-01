@@ -14,6 +14,7 @@ final class SearchHomeViewController: BaseViewController {
     let mainView = SearchHomeView()
     let viewModel = SearchHomeViewModel()
     let inputPostsTrigger = PublishSubject<Void>()
+    let inputPrefetchTrigger = PublishSubject<[IndexPath]>()
     override func loadView() {
         view = mainView
     }
@@ -27,7 +28,7 @@ final class SearchHomeViewController: BaseViewController {
     override func bind() {
         
         bindItemSelected()
-        let input = SearchHomeViewModel.Input(inputFetchPostsTrigger: inputPostsTrigger)
+        let input = SearchHomeViewModel.Input(inputFetchPostsTrigger: inputPostsTrigger, inputPrefetchTrigger: inputPrefetchTrigger)
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView // 로그인화면으로 넘기는 로직연결
@@ -42,6 +43,13 @@ final class SearchHomeViewController: BaseViewController {
             .drive(mainView.resultCollectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) {(row, element, cell) in
                 
                 cell.upgradeCell(element)
+            }
+            .disposed(by: disposeBag)
+        // prefetch
+        mainView.resultCollectionView.rx.prefetchItems
+            .bind(with: self) { owner, indexPaths in
+                owner.inputPrefetchTrigger.onNext(indexPaths)
+                print("🥲\(indexPaths)")
             }
             .disposed(by: disposeBag)
 
