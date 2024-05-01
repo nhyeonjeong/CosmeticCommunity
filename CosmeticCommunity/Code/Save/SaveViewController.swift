@@ -83,6 +83,15 @@ final class SaveViewController: BaseViewController {
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        mainView.recentPostsCollection.collectionView.rx
+            .modelSelected(PostModel.self)
+            .bind(with: self) { owner, value in
+                let vc = PostDetailViewController()
+                vc.postId = value.post_id
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
     
     @objc func profileButtonClicked() {
