@@ -19,4 +19,8 @@ enum UserDefaultKey {
     enum Post: String {
         case recentPosts
     }
+    
+    enum Search: String {
+        case recentSearchText
+    }
 }

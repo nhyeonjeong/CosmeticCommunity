@@ -15,19 +15,20 @@ final class SearchViewController: BaseViewController {
     let viewModel = SearchViewModel()
     
     let inputCategorySelected = BehaviorSubject<PersonalColor>(value: .spring)
+    let inputRecentSearchTable = BehaviorSubject<[String]?>(value: UserDefaultManager.shared.getRecentSearch())
     override func loadView() {
         view = mainView
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-
+        inputRecentSearchTable.onNext(UserDefaultManager.shared.getRecentSearch())
     }
     
     override func configureView() {
         setNavigationBar()
     }
     override func bind() {
-        let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputSearchEnterTrigger: mainView.textfield.rx.controlEvent(.editingDidEndOnExit), inputCategorySelected: inputCategorySelected)
+        let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputSearchEnterTrigger: mainView.textfield.rx.controlEvent(.editingDidEndOnExit), inputCategorySelected: inputCategorySelected, inputRecentSearchTable: inputRecentSearchTable)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
 
@@ -55,6 +56,12 @@ final class SearchViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        output.outputRecentSearchTable
+            .drive(mainView.recentSearchTableView.rx.items(cellIdentifier: RecentSearchTableViewCell.identifier, cellType: RecentSearchTableViewCell.self)) {(row, element, cell) in
+                cell.upgradeCell(element)
+            }
+            .disposed(by: disposeBag)
+        
         viewModel.categoryCases
             .bind(to: mainView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
@@ -71,8 +78,11 @@ final class SearchViewController: BaseViewController {
         mainView.textfield.rx.controlEvent(.editingDidBegin)
             .bind(with: self) { owner, _ in
                 owner.mainView.recentSearchTableView.isHidden = false
+                // 다시 최근검색어 가져와서 보여주기
+                owner.inputRecentSearchTable.onNext(UserDefaultManager.shared.getRecentSearch())
             }
             .disposed(by: disposeBag)
+        
         mainView.resultCollectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, postData in
                 let vc = PostDetailViewController()

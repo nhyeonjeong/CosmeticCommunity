@@ -20,6 +20,7 @@ final class SearchViewModel: InputOutput {
         let inputSearchText: ControlProperty<String?>
         let inputSearchEnterTrigger: ControlEvent<Void>
         let inputCategorySelected: BehaviorSubject<PersonalColor>
+        let inputRecentSearchTable: BehaviorSubject<[String]?>
     }
     
     struct Output {
@@ -28,6 +29,7 @@ final class SearchViewModel: InputOutput {
         let outputNoResult: Driver<Bool>
         
         let outputHideRecentSearch: Driver<Bool>
+        let outputRecentSearchTable: Driver<[String]>
         let outputMessage: Driver<String>
     }
     
@@ -36,6 +38,7 @@ final class SearchViewModel: InputOutput {
         let searchTrigger = PublishSubject<(String, PersonalColor)>()
         let outputNoResult = PublishRelay<Bool>()
         let outputHideRecentSearch = BehaviorRelay<Bool>(value: false)
+        let outputRecentSearchTable = PublishRelay<[String]>()
         let outputMessage = PublishRelay<String>()
         
         Observable.combineLatest(input.inputSearchEnterTrigger, input.inputCategorySelected)
@@ -49,8 +52,20 @@ final class SearchViewModel: InputOutput {
                 if value.trimmingCharacters(in: .whitespaces) != "" {
                     // enter누르면 최근검색어 사라지게
                     outputHideRecentSearch.accept(true)
+                    // userDefault에 저장...
+                    UserDefaultManager.shared.saveRecentSearch(value)
                 } else {
                     outputMessage.accept("검색어를 입력해주세요")
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.inputRecentSearchTable
+            .bind(with: self) { owner, list in
+                if let list {
+                    outputRecentSearchTable.accept(list)
+                } else {
+                    outputRecentSearchTable.accept([])
                 }
             }
             .disposed(by: disposeBag)
@@ -93,6 +108,6 @@ final class SearchViewModel: InputOutput {
                 owner.nextCursor = value.next_cursor
             }
             .disposed(by: disposeBag)
-        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false), outputMessage: outputMessage.asDriver(onErrorJustReturn: ""))
+        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false), outputRecentSearchTable: outputRecentSearchTable.asDriver(onErrorJustReturn: []), outputMessage: outputMessage.asDriver(onErrorJustReturn: ""))
     }
 }

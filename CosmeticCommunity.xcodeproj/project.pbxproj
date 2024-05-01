@@ -104,6 +104,7 @@
 		8B57ABB82BD26F6E004BC76E /* PostDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB72BD26F6E004BC76E /* PostDetailsView.swift */; };
 		8B57ABBC2BD2C302004BC76E /* SearchHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABBB2BD2C302004BC76E /* SearchHomeViewController.swift */; };
 		8B57ABBE2BD2C395004BC76E /* SearchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABBD2BD2C395004BC76E /* SearchHomeView.swift */; };
+		8B62899F2BE1BFB0005D2DAB /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B62899E2BE1BFB0005D2DAB /* UserDefaultManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -199,6 +200,7 @@
 		8B57ABB72BD26F6E004BC76E /* PostDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailsView.swift; sourceTree = "<group>"; };
 		8B57ABBB2BD2C302004BC76E /* SearchHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHomeViewController.swift; sourceTree = "<group>"; };
 		8B57ABBD2BD2C395004BC76E /* SearchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHomeView.swift; sourceTree = "<group>"; };
+		8B62899E2BE1BFB0005D2DAB /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -424,6 +426,7 @@
 				8B3AFCB92BD522CE0069773F /* LikeManager.swift */,
 				8B3AFCA42BD4195B0069773F /* CommentManager.swift */,
 				8B3AFC952BD3DCF50069773F /* KingfisherManager.swift */,
+				8B62899E2BE1BFB0005D2DAB /* UserDefaultManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -670,6 +673,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B62899F2BE1BFB0005D2DAB /* UserDefaultManager.swift in Sources */,
 				8B428CCE2BCD1CF400FD1B69 /* ReigsterViewModel.swift in Sources */,
 				8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */,
 				8B428CD32BCE000A00FD1B69 /* UploadViewController.swift in Sources */,
