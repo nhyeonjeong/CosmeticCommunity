@@ -13,15 +13,21 @@ final class SearchViewModel: InputOutput {
     let postManager = PostManager()
     var outputLoginView: RxRelay.PublishRelay<Void> = PublishRelay<Void>()
     var disposeBag = DisposeBag()
+    
+    var postData: [PostModel] = []
     var nextCursor: String = ""
-    var category: PersonalColor = .none
+    var category: PersonalColor = .spring
+    var limit = "20" // 디폴트
+    
     let categoryCases = BehaviorSubject(value: PersonalColor.personalCases)
+    
     struct Input {
         let inputSearchText: ControlProperty<String?>
         let inputSearchEnterTrigger: ControlEvent<Void>
         let inputRemoveRecent: ControlEvent<Void>
         let inputCategorySelected: BehaviorSubject<PersonalColor>
         let inputRecentSearchTable: BehaviorSubject<[String]?>
+        let inputPrepatchTrigger: PublishSubject<[IndexPath]>
     }
     
     struct Output {
@@ -35,7 +41,7 @@ final class SearchViewModel: InputOutput {
     }
     
     func transform(input: Input) -> Output {
-        let outputPostItems = PublishRelay<[PostModel]?>()
+        let outputPostItems = BehaviorRelay<[PostModel]?>(value: postData)
         let searchTrigger = PublishSubject<(String, PersonalColor)>()
         let outputNoResult = PublishRelay<Bool>()
         let outputHideRecentSearch = BehaviorRelay<Bool>(value: false)
@@ -44,6 +50,9 @@ final class SearchViewModel: InputOutput {
         
         Observable.combineLatest(input.inputSearchEnterTrigger, input.inputCategorySelected)
             .map{_, category in
+                // 다시 초기화
+                self.nextCursor = ""
+                self.postData = []
                 self.category = category
             }
             .debug()
@@ -78,9 +87,29 @@ final class SearchViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
+        input.inputPrepatchTrigger
+            .flatMap { indexPaths in
+                let row = indexPaths.first?.row
+                if row == self.postData.count - 4 || row == self.postData.count - 5 {
+                    return Observable.just(())
+                } else {
+                    return Observable.empty()
+                }
+            }
+            .debug()
+            .withLatestFrom(input.inputSearchText.orEmpty)
+            .bind(with: self, onNext: { owner, text in
+                searchTrigger.onNext((text, owner.category)) // 하나라도 반응하면 네트워크 통신
+            })
+            .disposed(by: disposeBag)
+        // 네트워크 통신
         searchTrigger
             .flatMap { hashTag, category in
-                let query = HashtagQuery(next: self.nextCursor, product_id: "\(ProductId.baseProductId)\(category.rawValue)", hashTag: hashTag)
+                if self.nextCursor == "0" {
+                    return Observable<CheckPostModel>.empty()
+                }
+//                print("🚨\(self.nextCursor), \(category.rawValue), \(hashTag)")
+                let query = HashtagQuery(next: self.nextCursor, limit: self.limit, product_id: "\(ProductId.baseProductId)\(category.rawValue)", hashTag: hashTag)
                 return self.postManager.checkWithHashTag(query: query)
                     .catch { error in
                         guard let error = error as? APIError else {
@@ -102,20 +131,20 @@ final class SearchViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
-                if owner.category == .none {
-                    outputPostItems.accept(value.data)
-                } else {
-                    let data = value.data.filter{$0.personalColor == owner.category}
-                    outputPostItems.accept(data)
-                }
+                owner.postData.append(contentsOf: value.data)
+                outputPostItems.accept(owner.postData)
+
                 if value.data.count == 0 {
                     outputNoResult.accept(false)
                 } else {
                     outputNoResult.accept(true)
                 }
                 owner.nextCursor = value.next_cursor
+                owner.limit = "20" // limit 다시 돌리기
             }
             .disposed(by: disposeBag)
+        
+        
         return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false), outputRecentSearchTable: outputRecentSearchTable, outputMessage: outputMessage.asDriver(onErrorJustReturn: ""))
     }
 }

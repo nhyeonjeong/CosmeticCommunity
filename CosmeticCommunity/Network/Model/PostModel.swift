@@ -6,16 +6,16 @@
 //
 
 import Foundation
-
+// 포스트 조회
 struct CheckPostQuery {
     let next: String?
-    let limit: String = "20"
+    let limit: String = "16"
     let product_id: String?
 }
-
+// 해시태그 검색
 struct HashtagQuery {
     let next: String?
-    let limit: String = "20"
+    let limit: String
     let product_id: String?
     let hashTag: String
 }

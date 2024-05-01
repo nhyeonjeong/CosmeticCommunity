@@ -16,12 +16,15 @@ final class SearchViewController: BaseViewController {
     
     let inputCategorySelected = BehaviorSubject<PersonalColor>(value: .spring)
     let inputRecentSearchTable = BehaviorSubject<[String]?>(value: UserDefaultManager.shared.getRecentSearch())
+    let inputPrepatchTrigger = PublishSubject<[IndexPath]>()
     override func loadView() {
         view = mainView
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         inputRecentSearchTable.onNext(UserDefaultManager.shared.getRecentSearch())
+        // 포스트로 갔다가 뒤로 돌아올 때 이전에 패치했던 부분까지 다시 패치
+        viewModel.limit = "\(max(viewModel.postData.count, 20))"
         inputCategorySelected.onNext(viewModel.category)
     }
     
@@ -29,7 +32,7 @@ final class SearchViewController: BaseViewController {
         setNavigationBar()
     }
     override func bind() {
-        let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputSearchEnterTrigger: mainView.textfield.rx.controlEvent(.editingDidEndOnExit), inputRemoveRecent: mainView.removeAllButton.rx.tap, inputCategorySelected: inputCategorySelected, inputRecentSearchTable: inputRecentSearchTable)
+        let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputSearchEnterTrigger: mainView.textfield.rx.controlEvent(.editingDidEndOnExit), inputRemoveRecent: mainView.removeAllButton.rx.tap, inputCategorySelected: inputCategorySelected, inputRecentSearchTable: inputRecentSearchTable, inputPrepatchTrigger: inputPrepatchTrigger)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
 
@@ -117,7 +120,7 @@ final class SearchViewController: BaseViewController {
         mainView.resultCollectionView.rx.prefetchItems
             .bind(with: self) { owner, indexPaths in
                 print(indexPaths)
-                
+                owner.inputPrepatchTrigger.onNext(indexPaths)
             }
             .disposed(by: disposeBag)
     }
