@@ -83,6 +83,12 @@ final class SearchViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        mainView.xButton.rx.tap
+            .bind(with: self) { owner, _ in
+                print("👀click")
+                owner.mainView.textfield.text = ""
+            }
+            .disposed(by: disposeBag)
         mainView.resultCollectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, postData in
                 let vc = PostDetailViewController()
@@ -110,13 +116,9 @@ final class SearchViewController: BaseViewController {
 
 extension SearchViewController {
     func setNavigationBar() {
-        navigationItem.titleView = mainView.textfield
-        mainView.textfield.snp.makeConstraints { make in
+        navigationItem.titleView = mainView.textFieldView
+        navigationItem.titleView?.snp.makeConstraints({ make in
             make.width.equalTo(300)
-        }
-        mainView.xButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(2)
-        }
+        })
     }
 }

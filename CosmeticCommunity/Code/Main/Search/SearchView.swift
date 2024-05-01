@@ -24,7 +24,7 @@ final class SearchView: BaseView {
         view.rowHeight = 50
         return view
     }()
-    
+    let textFieldView = UIView()
     let textfield = {
         let view = UITextField()
         view.placeholder = "검색어를 입력해주세요"
@@ -54,11 +54,20 @@ final class SearchView: BaseView {
         return  view
     }()
     override func configureHierarchy() {
-        textfield.addSubview(xButton)
+        textFieldView.addViews([textfield, xButton])
         resultCollectionView.addSubview(noResultLabel)
         addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView, recentSearchTableView])
     }
     override func configureConstraints() {
+        textfield.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalToSuperview().inset(10)
+//            make.width.equalTo(300)
+        }
+        xButton.snp.makeConstraints { make in
+            make.verticalEdges.trailing.equalToSuperview()
+            make.leading.equalTo(textfield.snp.trailing).offset(8)
+        }
         noResultLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
