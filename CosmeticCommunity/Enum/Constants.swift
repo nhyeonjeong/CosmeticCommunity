@@ -22,6 +22,7 @@ enum Constants {
         static let unclickedLike = UIImage(systemName: "heart")
         static let clickedLike = UIImage(systemName: "heart.fill")
         static let searchButton = UIImage(systemName: "magnifyingglass")
+        static let recentSearchButton = UIImage(systemName: "arrow.up.left")
         static let category = UIImage(systemName: "line.horizontal.3")
     }
     enum Font {

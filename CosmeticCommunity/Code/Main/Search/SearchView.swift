@@ -17,7 +17,20 @@ final class SearchView: BaseView {
         view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.large)
         return view
     }()
-    
+    let recentView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    let removeAllButton = {
+        let view = UIButton()
+        view.setTitle("모두 삭제", for: .normal)
+        view.setTitleColor(Constants.Color.text, for: .normal)
+        view.layer.cornerRadius = 10
+        view.layer.borderWidth = 1
+        view.layer.borderColor = Constants.Color.point.cgColor
+        return view
+    }()
     let recentSearchTableView = {
         let view = UITableView()
         view.register(RecentSearchTableViewCell.self, forCellReuseIdentifier: RecentSearchTableViewCell.identifier)
@@ -56,7 +69,8 @@ final class SearchView: BaseView {
     override func configureHierarchy() {
         textFieldView.addViews([textfield, xButton])
         resultCollectionView.addSubview(noResultLabel)
-        addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView, recentSearchTableView])
+        recentView.addViews([removeAllButton, recentSearchTableView])
+        addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView, recentView])
     }
     override func configureConstraints() {
         textfield.snp.makeConstraints { make in
@@ -71,8 +85,15 @@ final class SearchView: BaseView {
         noResultLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-        recentSearchTableView.snp.makeConstraints { make in
+        recentView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        removeAllButton.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(10)
+        }
+        recentSearchTableView.snp.makeConstraints { make in
+            make.top.equalTo(removeAllButton.snp.bottom).offset(10)
+            make.horizontalEdges.bottom.equalToSuperview()
         }
         categoryTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(10)

@@ -28,7 +28,7 @@ final class SearchViewController: BaseViewController {
         setNavigationBar()
     }
     override func bind() {
-        let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputSearchEnterTrigger: mainView.textfield.rx.controlEvent(.editingDidEndOnExit), inputCategorySelected: inputCategorySelected, inputRecentSearchTable: inputRecentSearchTable)
+        let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputSearchEnterTrigger: mainView.textfield.rx.controlEvent(.editingDidEndOnExit), inputRemoveRecent: mainView.removeAllButton.rx.tap, inputCategorySelected: inputCategorySelected, inputRecentSearchTable: inputRecentSearchTable)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
 
@@ -46,7 +46,7 @@ final class SearchViewController: BaseViewController {
         
         output.outputHideRecentSearch
             .drive(with: self) { owner, value in
-                owner.mainView.recentSearchTableView.isHidden = value
+                owner.mainView.recentView.isHidden = value
             }
             .disposed(by: disposeBag)
         
@@ -57,8 +57,18 @@ final class SearchViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         output.outputRecentSearchTable
+            .asDriver(onErrorJustReturn: [])
             .drive(mainView.recentSearchTableView.rx.items(cellIdentifier: RecentSearchTableViewCell.identifier, cellType: RecentSearchTableViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
+                cell.arrowButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.mainView.textfield.text = element
+                        UserDefaultManager.shared.saveRecentSearch(element)
+                        let list = UserDefaultManager.shared.getRecentSearch() ?? []
+                        print(list)
+                        output.outputRecentSearchTable.accept(list)
+                    }
+                    .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
         
@@ -77,7 +87,7 @@ final class SearchViewController: BaseViewController {
         // textfield를 선택하면 최근검색어 다시 나오도록
         mainView.textfield.rx.controlEvent(.editingDidBegin)
             .bind(with: self) { owner, _ in
-                owner.mainView.recentSearchTableView.isHidden = false
+                owner.mainView.recentView.isHidden = false
                 // 다시 최근검색어 가져와서 보여주기
                 owner.inputRecentSearchTable.onNext(UserDefaultManager.shared.getRecentSearch())
             }
@@ -85,7 +95,6 @@ final class SearchViewController: BaseViewController {
         
         mainView.xButton.rx.tap
             .bind(with: self) { owner, _ in
-                print("👀click")
                 owner.mainView.textfield.text = ""
             }
             .disposed(by: disposeBag)
@@ -99,7 +108,6 @@ final class SearchViewController: BaseViewController {
         
         output.outputNoResult
             .drive(with: self) { owner, value in
-                print("😊\(value)")
                 owner.mainView.noResultLabel.isHidden = value
             }
             .disposed(by: disposeBag)

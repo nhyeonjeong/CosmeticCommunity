@@ -19,6 +19,7 @@ final class SearchViewModel: InputOutput {
     struct Input {
         let inputSearchText: ControlProperty<String?>
         let inputSearchEnterTrigger: ControlEvent<Void>
+        let inputRemoveRecent: ControlEvent<Void>
         let inputCategorySelected: BehaviorSubject<PersonalColor>
         let inputRecentSearchTable: BehaviorSubject<[String]?>
     }
@@ -29,7 +30,7 @@ final class SearchViewModel: InputOutput {
         let outputNoResult: Driver<Bool>
         
         let outputHideRecentSearch: Driver<Bool>
-        let outputRecentSearchTable: Driver<[String]>
+        let outputRecentSearchTable: PublishRelay<[String]>
         let outputMessage: Driver<String>
     }
     
@@ -67,6 +68,13 @@ final class SearchViewModel: InputOutput {
                 } else {
                     outputRecentSearchTable.accept([])
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        input.inputRemoveRecent
+            .bind(with: self) { owner, _ in
+                UserDefaultManager.shared.removeAllRecent()
+                outputRecentSearchTable.accept([])
             }
             .disposed(by: disposeBag)
         
@@ -108,6 +116,6 @@ final class SearchViewModel: InputOutput {
                 owner.nextCursor = value.next_cursor
             }
             .disposed(by: disposeBag)
-        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false), outputRecentSearchTable: outputRecentSearchTable.asDriver(onErrorJustReturn: []), outputMessage: outputMessage.asDriver(onErrorJustReturn: ""))
+        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false), outputRecentSearchTable: outputRecentSearchTable, outputMessage: outputMessage.asDriver(onErrorJustReturn: ""))
     }
 }

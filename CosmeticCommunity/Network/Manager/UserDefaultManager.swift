@@ -14,9 +14,7 @@ final class UserDefaultManager {
         let list = getRecentSearch()
         if var newList = list {
             // 이미 검색했던 거라면
-            if let index = newList.firstIndex(where: { list in
-                list.contains(text)
-            }) {
+            if let index = newList.firstIndex(where: { $0 == text }) {
                 newList.remove(at: index)
             }
             if newList.count > 20 { // 20개까지만 저장
@@ -28,12 +26,14 @@ final class UserDefaultManager {
             UserDefaults.standard.setValue([text], forKey: UserDefaultKey.Search.recentSearchText.rawValue)
         }
     }
-    
     func getRecentSearch() -> [String]? {
         let list = UserDefaults.standard.value(forKey: UserDefaultKey.Search.recentSearchText.rawValue)
         guard let list = list as? [String] else {
             return nil
         }
         return list
+    }
+    func removeAllRecent() {
+        UserDefaults.standard.removeObject(forKey: UserDefaultKey.Search.recentSearchText.rawValue)
     }
 }
