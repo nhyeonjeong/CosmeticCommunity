@@ -30,25 +30,11 @@ final class HomeViewController: BaseViewController {
         inputPostsTrigger.onNext(())
     }
     override func bind() {
-        
-        bindItemSelected()
-        let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputFetchPostsTrigger: inputPostsTrigger)
+        let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger)
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView // 로그인화면으로 넘기는 로직연결
-        output.outputPostItems
-            .flatMap { data -> Driver<[PostModel]> in
-                guard let posts = data else {
-                    return Driver.never()
-                }
-                return BehaviorRelay(value: posts).asDriver()
-                
-            }
-            .drive(mainView.collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) {(row, element, cell) in
-                
-                cell.upgradeCell(element)
-            }
-            .disposed(by: disposeBag)
+
         // 상단 프로필버튼 이미지 가져오기
         output.outputProfileImageTrigger
             .drive(with: self) { owner, path in
@@ -62,17 +48,6 @@ final class HomeViewController: BaseViewController {
             .disposed(by: disposeBag)
 
     }
-    
-    private func bindItemSelected() {
-        mainView.collectionView.rx.modelSelected(PostModel.self)
-            .bind(with: self) { owner, postData in
-                let vc = PostDetailViewController()
-                vc.postId = postData.post_id
-                owner.navigationController?.pushViewController(vc, animated: true)
-            }
-            .disposed(by: disposeBag)
-    }
-    
     override func configureView() {
         configureNavigationBar()
     }
