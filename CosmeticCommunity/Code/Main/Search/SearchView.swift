@@ -63,7 +63,7 @@ final class SearchView: BaseView {
     }()
     lazy var resultCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.resultCollectionViewLayout())
-        view.register(HomePostCollectionViewCell.self, forCellWithReuseIdentifier: HomePostCollectionViewCell.identifier)
+        view.register(PostCollectionViewCell.self, forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
         return  view
     }()
     override func configureHierarchy() {
