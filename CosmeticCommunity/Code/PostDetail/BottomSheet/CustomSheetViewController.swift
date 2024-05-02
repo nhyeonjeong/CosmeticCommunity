@@ -14,7 +14,7 @@ final class CustomSheetViewController: BaseViewController {
     var postData: PostModel?
     
     var popPostDetailView: (() -> Void)?
-    
+    var popAfterEditPost: (() -> Void)?
     let viewModel = CustomSheetViewModel()
     let inputPostIdTrigger = PublishSubject<String?>()
     let inputEditButtonTrigger = PublishSubject<Void>()
@@ -87,6 +87,10 @@ final class CustomSheetViewController: BaseViewController {
     @objc func editButtonClicked() {
         let vc = EditUploadViewController()
         vc.postData = postData
+        vc.popAfterEditPost = {
+            self.popAfterEditPost?()
+            self.dismiss(animated: false) // pop한 뒤 dismiss까지 추가
+        }
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         self.present(nav, animated: true)

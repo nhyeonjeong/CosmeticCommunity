@@ -30,6 +30,7 @@ final class PostDetailViewController: BaseViewController {
         print("PostDetailVC Deinit")
     }
     override func viewWillAppear(_ animated: Bool) {
+        print(#function, "🐰")
         super.viewWillAppear(true)
         print("😍\(postId)")
         inputPostIdTrigger.onNext(postId ?? "")
@@ -115,7 +116,9 @@ final class PostDetailViewController: BaseViewController {
     @objc func navigationBarButtonClicked() {
         let sheet = CustomSheetViewController()
         sheet.postData = viewModel.postData
-        
+        sheet.popAfterEditPost = {
+            self.inputPostIdTrigger.onNext(self.postId ?? "") // 수정후에는 다시 패치
+        }
         sheet.popPostDetailView = {
             self.navigationController?.popViewController(animated: true)
         }

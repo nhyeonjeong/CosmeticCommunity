@@ -43,6 +43,7 @@ class UploadViewController: BaseViewController {
         
     }
     override func bind() {
+        print("Upload")
         bindGallery() // 사진첩 열기 rx 연결
         let inputUploadImageTrigger = PublishSubject<Void>()
         let inputUploadTrigger = PublishSubject<Void>()
@@ -107,7 +108,7 @@ class UploadViewController: BaseViewController {
                 self.inputPersonalColor.onNext(.fall)
                 self.mainView.personalSelectButton.setTitle("가을웜", for: .normal)
             }),
-            UIAction(title: "겨울쿨", state: .off, handler: { _ in
+            UIAction(title: "겨울쿨", handler: { _ in
                 self.inputPersonalColor.onNext(.winter)
                 self.mainView.personalSelectButton.setTitle("겨울쿨", for: .normal)
             })])

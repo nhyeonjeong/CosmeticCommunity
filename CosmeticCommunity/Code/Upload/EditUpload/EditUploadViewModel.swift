@@ -44,10 +44,18 @@ final class EditUploadViewModel: InputOutput {
         let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
         
         let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputPersonalColor.asObservable(), input.inputContentString.orEmpty, input.inputHashTags.orEmpty, photoString.asObserver())
+            .debug()
             .map { title, personalColor, content, hashtags, images in
-                print(title, content, personalColor.rawValue, hashtags, self.photoString)
+                print("🚨", title, content, personalColor.rawValue, hashtags, self.photoString)
                 return PostQuery(product_id: "\(ProductId.baseProductId)\(personalColor.rawValue)", title: title, content: "\(content) \n\n\(hashtags)", content1: personalColor.rawValue, files: images)
             }
+
+        input.inputTitleString.orEmpty
+            .debug()
+            .bind(with: self) { owner, value in
+                print("title text: \(value)")
+            }
+            .disposed(by: disposeBag)
         
         
         input.inputEditButton
@@ -60,7 +68,6 @@ final class EditUploadViewModel: InputOutput {
                 let title = value.0.trimmingCharacters(in: .whitespaces)
                 let content = value.1.trimmingCharacters(in: .whitespaces)
                 let hashtag = value.2.trimmingCharacters(in: .whitespaces)
-                print("🤬\(value.3)")
                 if title == "" || content == "" || hashtag == "" || value.3 == .none {
                     outputValid.accept((false, "수정"))
                 } else {
@@ -78,7 +85,6 @@ final class EditUploadViewModel: InputOutput {
                     input.inputEditTrigger.onNext(())
                     return Observable<PostImageStingModel>.never()
                 }
-                print("image flatMap")
                 var photoDatas: [Data]? = [] // Data타입으로 변경한 사진들(네트워크)
                 for photo in self.photos {
                     photoDatas?.append(photo.changeToData())
@@ -141,7 +147,6 @@ final class EditUploadViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { onwer, value in
-                print("inputUploadTrigger subscribe")
                 outputEditTrigger.onNext(value)
             }
             .disposed(by: disposeBag)
@@ -161,5 +166,16 @@ final class EditUploadViewModel: InputOutput {
             .disposed(by: disposeBag)
         
         return Output(outputValid: outputValid.asDriver(onErrorJustReturn: (false, "")), outputEditTrigger: outputEditTrigger, outputLoginView: outputLoginView, outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []))
+    }
+    
+    // 5개 이하의 이미지만 업로드 가능
+    func appendPhotos(_ item: NSItemProviderReading?) {
+        if photos.count > 4 {
+            return
+        }
+        guard let item else {
+            return
+        }
+        photos.append(item)
     }
 }
