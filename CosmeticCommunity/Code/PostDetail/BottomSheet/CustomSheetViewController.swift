@@ -87,7 +87,9 @@ final class CustomSheetViewController: BaseViewController {
     @objc func editButtonClicked() {
         let vc = EditUploadViewController()
         vc.postData = postData
-        self.present(UINavigationController(rootViewController: vc), animated: true)
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        self.present(nav, animated: true)
     }
     override func configureHierarchy() {
         buttonView.addViews([editButton, deleteButton])
