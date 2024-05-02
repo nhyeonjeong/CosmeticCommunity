@@ -25,6 +25,7 @@ enum Router {
     case checkSpecificPost(postId: String)
     case checkUserPosts(userId: String)
     case deletePost(postId: String)
+    case editPost(postId: String, query: PostQuery)
     // Likst
     case likeStatus(query: LikeQuery, postId: String)
     case myLikedPosts
@@ -52,6 +53,8 @@ extension Router: RouterType {
             return .get
         case .deleteComment, .deletePost:
             return .delete
+        case .editPost:
+            return .put
         }
     }
     
@@ -65,7 +68,7 @@ extension Router: RouterType {
         case .login, .join:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
-        case  .upload, .likeStatus, .uploadComment, .hashtag:
+        case  .upload, .editPost, .likeStatus, .uploadComment, .hashtag:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
@@ -97,6 +100,8 @@ extension Router: RouterType {
             return "v1/posts/files"
         case .upload, .checkPosts:
             return "v1/posts"
+        case .editPost(let postId, _):
+            return "v1/posts/\(postId)"
             
         case .checkSpecificPost(let postId):
             return "v1/posts/\(postId)"
@@ -128,6 +133,12 @@ extension Router: RouterType {
                     ParameterKey.content.rawValue: query.content,
                     ParameterKey.content1.rawValue: query.content1,
                     ParameterKey.files.rawValue: query.files]
+        case .editPost(_, let query):
+            return [ParameterKey.product_id.rawValue: query.product_id,
+                    ParameterKey.title.rawValue: query.title,
+                    ParameterKey.content.rawValue: query.content,
+                    ParameterKey.content1.rawValue: query.content1,
+                    ParameterKey.files.rawValue: query.files]
         case .likeStatus(let query, _):
             return [ParameterKey.like_status.rawValue: query.like_status]
         case .uploadComment(let query, _):
@@ -149,7 +160,7 @@ extension Router: RouterType {
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id),
                     URLQueryItem(name: QueryKey.hashTag.rawValue, value: query.hashTag)]
             
-        case .login, .join, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment:
+        case .login, .join, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost:
             return nil
         }
     }
@@ -159,6 +170,8 @@ extension Router: RouterType {
         case .tokenRefresh:
             return nil
         case .login(let query):
+            return jsonEncoding(query)
+        case .editPost(_, let query):
             return jsonEncoding(query)
         case .join(let query):
             return jsonEncoding(query)
@@ -175,7 +188,7 @@ extension Router: RouterType {
     
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag:
+        case .tokenRefresh, .login, .join, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag, .editPost:
             return nil
         case .uploadPostImage(let query):
             return query

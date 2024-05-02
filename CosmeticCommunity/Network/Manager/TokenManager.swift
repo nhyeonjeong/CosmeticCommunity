@@ -12,9 +12,8 @@ import RxCocoa
 final class TokenManager {
     static let shared = TokenManager()
     let disposeBag = DisposeBag()
-    
     private init() { }
-    //
+    
     func accessTokenAPI(completionHandler: @escaping(() -> Void), failureHandler: @escaping (() -> Void), loginAgainHandler: @escaping (() -> Void)) {
         print("엑세스토큰 재발행")
         tokenRefresh()

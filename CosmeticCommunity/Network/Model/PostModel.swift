@@ -21,7 +21,7 @@ struct HashtagQuery {
 }
 
 struct PostQuery: Encodable {
-    let product_id: String // 게시판..
+    var product_id: String? // 게시판..
     let title: String // 제목
     let content: String // 내용
     let content1: String // 웜쿨

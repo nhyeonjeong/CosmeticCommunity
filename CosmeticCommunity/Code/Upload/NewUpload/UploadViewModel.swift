@@ -10,14 +10,6 @@ import RxSwift
 import RxCocoa
 
 final class UploadViewModel: InputOutput {
-    enum UploadType {
-        case upload
-        case edit
-    }
-    var uploadType: UploadType?
-    init(uploadType: UploadType = .upload) {
-        self.uploadType = uploadType
-    }
     let postManager = PostManager()
     var disposeBag = DisposeBag()
     
@@ -72,17 +64,10 @@ final class UploadViewModel: InputOutput {
                 let hashtag = value.2.trimmingCharacters(in: .whitespaces)
                 print("🤬\(value.3)")
                 if title == "" || content == "" || hashtag == "" || value.3 == .none {
-                    if owner.uploadType == .upload {
-                        outputValid.accept((false, "업로드"))
-                    } else {
-                        outputValid.accept((false, "수정"))
-                    }
+                    outputValid.accept((false, "업로드"))
+
                 } else {
-                    if owner.uploadType == .upload {
-                        outputValid.accept((true, "업로드"))
-                    } else {
-                        outputValid.accept((true, "수정"))
-                    }
+                    outputValid.accept((true, "업로드"))
                 }
             }
             .disposed(by: disposeBag)
@@ -172,7 +157,7 @@ final class UploadViewModel: InputOutput {
                 input.inputSelectPhotos.onNext(())
             }
             .disposed(by: disposeBag)
-        
+
         return Output(outputValid: outputValid.asDriver(onErrorJustReturn: (false, "")), outputUploadTrigger: outputUploadTrigger, outputLoginView: outputLoginView, outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []))
     }
     // 5개 이하의 이미지만 업로드 가능

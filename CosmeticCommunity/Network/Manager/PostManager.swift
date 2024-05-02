@@ -37,7 +37,10 @@ final class PostManager {
     func deletePost(postId: String) -> Observable<Void> {
         return NetworkManager.shared.deleteFetchAPI(router: Router.deletePost(postId: postId))
     }
-    
+    // 포스트 수정
+    func editPost(postId: String, query: PostQuery) -> Observable<PostModel> {
+        return NetworkManager.shared.fetchAPI(type: PostModel.self, router: Router.editPost(postId: postId, query: query))
+    }
     // 최근 본 포스트 유저디폴트에 저장
     func saveRecentPostsUserDefaults(postId: String) {
         let recentPosts = getRecentPostsUserDefaults()

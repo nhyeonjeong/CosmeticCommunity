@@ -40,6 +40,7 @@ class UploadViewController: BaseViewController {
             navigationController?.present(vc, animated: true)
             return
         }
+        
     }
     override func bind() {
         bindGallery() // 사진첩 열기 rx 연결
@@ -90,39 +91,23 @@ class UploadViewController: BaseViewController {
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
-        
-        mainView.personalSelectButton.rx.tap
-            .subscribe(with: self) { owner, _ in
-                let alertController = UIAlertController(title: "Title", message: "Message", preferredStyle: .actionSheet)
-                
-                // 네 개의 문자열로 구성된 팝업 버튼 추가
-                let strings: [String] = ["Button 1", "Button 2", "Button 3", "Button 4"]
-                for string in strings {
-                    alertController.addAction(UIAlertAction(title: string, style: .default, handler: { action in
-                        // 각 버튼 클릭 시 수행할 동작
-                        print("\(string) tapped")
-                    }))
-                }
-                
-            }
-            .disposed(by: disposeBag)
     }
     override func configureView() {
         setNavigationBar()
         mainView.personalSelectButton.menu = UIMenu(title: "퍼스널 컬러", children: [
-            UIAction(title: "봄웜", handler: { _ in
+            UIAction(title: "봄웜", state: .off, handler: { _ in
                 self.inputPersonalColor.onNext(.spring)
                 self.mainView.personalSelectButton.setTitle("봄웜", for: .normal)
             }),
-            UIAction(title: "여름쿨", handler: { _ in
+            UIAction(title: "여름쿨", state: .off, handler: { _ in
                 self.inputPersonalColor.onNext(.summer)
                 self.mainView.personalSelectButton.setTitle("여름쿨", for: .normal)
             }),
-            UIAction(title: "가을웜", handler: { _ in
+            UIAction(title: "가을웜", state: .off, handler: { _ in
                 self.inputPersonalColor.onNext(.fall)
                 self.mainView.personalSelectButton.setTitle("가을웜", for: .normal)
             }),
-            UIAction(title: "겨울쿨", handler: { _ in
+            UIAction(title: "겨울쿨", state: .off, handler: { _ in
                 self.inputPersonalColor.onNext(.winter)
                 self.mainView.personalSelectButton.setTitle("겨울쿨", for: .normal)
             })])
@@ -149,7 +134,7 @@ class UploadViewController: BaseViewController {
 }
 
 extension UploadViewController {
-    private func bindGallery() {
+    func bindGallery() {
         // 사진첩 열기
         mainView.addPhotoButton.rx.tap
             .bind(with: self) { owner, _ in
