@@ -65,7 +65,6 @@ final class SaveViewModel: InputOutput{
                     }
             }
             .bind(with: self) { owner, value in
-                print("😇 \(value)")
                 outputFetchLikedPosts.accept(value.data)
             }
             .disposed(by: disposeBag)
@@ -75,7 +74,6 @@ final class SaveViewModel: InputOutput{
                 guard let postIds = self.postManager.getRecentPostsUserDefaults() else {
                     return Observable<[String]>.never()
                 }
-                print("input.iputRecentPosts: \(postIds)")
                 return BehaviorSubject(value: postIds).asObservable()
             }
             .flatMap { postIds in
@@ -96,12 +94,10 @@ final class SaveViewModel: InputOutput{
                                 self.outputLoginView.accept(())
                             }
                         }
-                        print("--------------------------======error")
                         outputRecentPosts.accept(nil)
                         return Observable<PostModel>.empty()
                     }
                     postModelArray.append(postObservable) // Observable<PostModel> 배열 추가
-                    print("🥳\(postModelArray)")
                 }
                 // <PostModel>을 <[PostModel]>로 바꿔줌
                 let singleObservable: Observable<PostModel> = Observable.from(postModelArray).merge()
@@ -112,7 +108,6 @@ final class SaveViewModel: InputOutput{
                 // 정렬은 userdefault배열대로 다시 정렬
                 var getData: [PostModel] = []
                 getData = data
-                print("🥳\(data)")
                 outputRecentPosts.accept(owner.sortRecentPosts(data: getData))
             }
             .disposed(by: disposeBag)
