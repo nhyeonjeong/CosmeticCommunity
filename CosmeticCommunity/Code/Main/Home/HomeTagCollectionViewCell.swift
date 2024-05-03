@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 // 태그
 final class HomeTagCollectionViewCell: BaseCollectionViewCell {
     let tagLabel = {
@@ -24,7 +25,10 @@ final class HomeTagCollectionViewCell: BaseCollectionViewCell {
             make.edges.equalTo(contentView)
         }
     }
+    override func configureView() {
+        contentView.layer.cornerRadius = 10
+    }
     func upgradeCell(_ text: String) {
-        tagLabel.text = "  #\(text)  "
+        tagLabel.text = "  # \(text)  "
     }
 }

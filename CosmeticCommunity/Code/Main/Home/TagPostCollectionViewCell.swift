@@ -10,11 +10,12 @@ import RxSwift
 import RxCocoa
 
 final class TagPostCollectionViewCell: BaseCollectionViewCell {
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     lazy var collectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
-        view.layer.cornerRadius = 10
         view.register(HomePostCollectionViewCell.self, forCellWithReuseIdentifier: HomePostCollectionViewCell.identifier)
+        view.backgroundColor = .gray
+        view.isScrollEnabled = false
         return view
     }()
     
@@ -26,23 +27,36 @@ final class TagPostCollectionViewCell: BaseCollectionViewCell {
             make.edges.equalTo(contentView)
         }
     }
+    override func configureView() {
+        contentView.layer.cornerRadius = 10
+        contentView.clipsToBounds = true
+    }
     func upgradeCell(_ postList: [PostModel]) {
-        Observable.just(postList)
-            .bind(to:         collectionView.rx.items(cellIdentifier: HomePostCollectionViewCell.identifier, cellType: HomePostCollectionViewCell.self)) {(row, element, cell) in
+        BehaviorSubject(value: postList)
+            .bind(to: collectionView.rx.items(cellIdentifier: HomePostCollectionViewCell.identifier, cellType: HomePostCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
     }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
 }
 extension TagPostCollectionViewCell {
     func collectionViewLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 120, height: 200) // 없으면 안됨
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        
-        layout.scrollDirection = .horizontal // 스크롤 방향도 FlowLayout에 속한다 -> contentMode때문에 Fill로
-        return layout
+        // item
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        // Group
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+        let group: NSCollectionLayoutGroup
+        group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.interItemSpacing = .fixed(2) // item간의 가로 간격
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 2
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        return UICollectionViewCompositionalLayout(section: section)
     }
 }

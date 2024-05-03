@@ -73,15 +73,16 @@ final class HomeViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
+                // 퍼스널컬러별로 100개씩 가져와서 정렬
                 self.allPosts.append(contentsOf: value.data)
                 owner.fetchCount += 1
                 if owner.fetchCount > 3 {
-                    // 정렬
                     let likeSortedList = self.allPosts.sorted { post1, post2 in
                         return post1.likes.count > post2.likes.count
                     }
                     // 태그
                     var tagDic: [String: Int] = [:]
+                    // 어떤 태그가 얼마나 있는지
                     for model in owner.allPosts {
                         for tag in model.hashTags {
                             if let number = tagDic[tag] {
@@ -115,7 +116,7 @@ final class HomeViewModel: InputOutput {
         
         searchTagPost
             .flatMap { tag, personalCase in
-                let query = HashtagQuery(next: "", limit: "2", product_id: "\(ProductId.baseProductId)\(personalCase.rawValue)", hashTag: tag)
+                let query = HashtagQuery(next: "", limit: "50", product_id: "\(ProductId.baseProductId)\(personalCase.rawValue)", hashTag: tag)
                 return self.postManager.checkWithHashTag(query: query)
                     .catch { error in
                         guard let error = error as? APIError else {
@@ -134,12 +135,20 @@ final class HomeViewModel: InputOutput {
                         return Observable<CheckPostModel>.never()
                     }
             }
-            .debug()
             .subscribe(with: self) { owner, value in
                 owner.tagFetchCount += 1
-                owner.tagPosts.append(value.data)
+                if value.data.count != 0 {
+                    let likeSortedList = value.data.sorted { post1, post2 in
+                        return post1.likes.count > post2.likes.count
+                    }
+                    owner.tagPosts.append(Array(likeSortedList[..<min(6, likeSortedList.count)]))
+                }
+//                print("😍\(owner.tagFetchCount)")
+//                dump(Array(likeSortedList[..<min(6, likeSortedList.count)]))
                 if owner.tagFetchCount > 3 {
                     outputTagPostsItem.onNext(owner.tagPosts)
+                    owner.tagFetchCount = 0
+                    owner.tagPosts = []
                 }
             }
             .disposed(by: disposeBag)
@@ -151,7 +160,7 @@ final class HomeViewModel: InputOutput {
                 }
             }
             .disposed(by: disposeBag)
-
+        
         return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputMostLikedPostsItem: outputMostLikedPostsItem.asDriver(onErrorJustReturn: []), outputTagItems: outputTagItems.asDriver(onErrorJustReturn: []), outputTagPostsItem: outputTagPostsItem.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView)
     }
 }

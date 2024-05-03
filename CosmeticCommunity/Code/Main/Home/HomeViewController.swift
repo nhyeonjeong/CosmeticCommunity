@@ -50,36 +50,58 @@ final class HomeViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         output.outputMostLikedPostsItem
-//            .drive(with: self) { owner, value in
-//                print("🥳")
-//                dump(value)
-//            }
-//            .disposed(by: disposeBag)
+            .debug()
             .drive(mainView.mostLikedCollectionView.rx.items(cellIdentifier: HomePostCollectionViewCell.identifier, cellType: HomePostCollectionViewCell.self)) {(row, element, cell) in
 //                print("🥳", element)
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
-        
         output.outputTagItems
+            .debug()
             .drive(mainView.tagCollectionView.rx.items(cellIdentifier: HomeTagCollectionViewCell.identifier, cellType: HomeTagCollectionViewCell.self)) {(row, element, cell) in
 //                print("🥳", element)
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
+        output.outputTagPostsItem
+            .drive(mainView.tagPostCollectionView.rx.items(cellIdentifier: TagPostCollectionViewCell.identifier, cellType: TagPostCollectionViewCell.self)) {(row, element, cell) in
+                print("💎")
+                print(element)
+                cell.upgradeCell(element)
+                cell.collectionView.rx.modelSelected(PostModel.self)
+                    .bind(with: self) { owner, post in
+                        print("🩷")
+                        let vc = PostDetailViewController()
+                        vc.postId = post.post_id
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        mainView.mostLikedCollectionView.rx.modelSelected(PostModel.self)
+            .bind(with: self) { owner, post in
+                let vc = PostDetailViewController()
+                vc.postId = post.post_id
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
         
         mainView.tagCollectionView.rx.modelSelected(String.self)
+            .debug()
             .bind(with: self) { owner, tag in
-                print("🥲") // 왜 클릭이 안되지...?ㅜㅜㅜㅜㅜ
                 owner.inputTagSelectedTrigger.onNext(tag)
             }
             .disposed(by: disposeBag)
         
-        output.outputTagPostsItem
-            .drive(mainView.tagPostCollectionView.rx.items(cellIdentifier: TagPostCollectionViewCell.identifier, cellType: TagPostCollectionViewCell.self)) {(row, element, cell) in
-                cell.upgradeCell(element)
+        mainView.tagPostCollectionView.rx.modelSelected(PostModel.self)
+            .bind(with: self) { owner, post in
+                print("🩷")
+                let vc = PostDetailViewController()
+                vc.postId = post.post_id
+                owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
+    
     }
     override func configureView() {
         configureNavigationBar()
