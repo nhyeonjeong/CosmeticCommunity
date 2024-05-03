@@ -115,7 +115,7 @@ final class UploadViewModel: InputOutput {
         input.inputUploadTrigger
             .withLatestFrom(postObservable)
             .flatMap { postData in
-                print(postData)
+                print("😀", postData)
                 print("업로드 네트워크")
                 print("inputUploadTrigger network")
                 return self.postManager.uploadPost(postData)

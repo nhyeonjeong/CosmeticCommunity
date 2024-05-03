@@ -14,7 +14,6 @@ final class TagPostCollectionViewCell: BaseCollectionViewCell {
     lazy var collectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
         view.register(HomePostCollectionViewCell.self, forCellWithReuseIdentifier: HomePostCollectionViewCell.identifier)
-        view.backgroundColor = .gray
         view.isScrollEnabled = false
         return view
     }()

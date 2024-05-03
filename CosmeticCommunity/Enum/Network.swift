@@ -50,6 +50,8 @@ enum APIError: Error {
     case accessTokenExpired_419 // 엑세스 토큰 만료 갱신필요
     case noPostAuthority_445 // 게시글 수정, 삭제 권한 없음
     
+    case someError
+    
     var errorMessage: String {
         switch self {
         case .sesacKeyError_420:
@@ -76,6 +78,8 @@ enum APIError: Error {
             return "419"
         case .noPostAuthority_445:
             return "445"
+        case .someError:
+            return "some"
         }
     }
 }

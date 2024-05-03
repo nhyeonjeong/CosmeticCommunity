@@ -120,8 +120,6 @@ final class EditUploadViewModel: InputOutput {
             .withLatestFrom(postObservable)
             .flatMap { postData in
                 print(postData)
-                print("업로드 네트워크")
-                print("inputUploadTrigger network")
                 guard let postId = self.postId else {
                     return Observable<PostModel>.never()
                 }

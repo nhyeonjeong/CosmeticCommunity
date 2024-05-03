@@ -66,13 +66,15 @@ final class NetworkManager {
                             case 418:
                                 observer.onError(APIError.refreshTokenExpired_418)
                             case 419:
-                                
                                 observer.onError(APIError.accessTokenExpired_419)
+                            case 500:
+                                observer.onError(APIError.serverError_500)
                             case .none:
                                 print("error ----------> none Error")
                                 return
                             case .some(_):
                                 print("error ---------------> some Error")
+                                observer.onError(APIError.serverError_500)
                                 return
                             }
                             print("time out..?")
@@ -140,15 +142,20 @@ extension NetworkManager {
                         observer.onError(APIError.requestError_400)
                     case 401:
                         observer.onError(APIError.invalidUserError_401)
+                    case 403:
+                        observer.onError(APIError.forbiddenError_403)
                     case 418:
                         observer.onError(APIError.refreshTokenExpired_418)
                     case 419:
                         observer.onError(APIError.accessTokenExpired_419)
+                    case 500:
+                        observer.onError(APIError.serverError_500)
                     case .none:
                         print("error ----------> none Error")
                         return
                     case .some(_):
                         print("error ---------------> some Error")
+                        observer.onError(APIError.someError)
                         return
                     }
                     print("time out..?")

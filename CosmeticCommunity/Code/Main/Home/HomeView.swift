@@ -28,7 +28,6 @@ final class HomeView: BaseView {
     lazy var mostLikedCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: mostLikedcollectionViewLayout())
         view.register(HomePostCollectionViewCell.self, forCellWithReuseIdentifier: HomePostCollectionViewCell.identifier)
-        view.backgroundColor = .systemGreen
         view.clipsToBounds = true
         view.bounces = false
         return view
@@ -48,7 +47,6 @@ final class HomeView: BaseView {
     lazy var tagPostCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: tagPostcollectionViewLayout())
         view.register(TagPostCollectionViewCell.self, forCellWithReuseIdentifier: TagPostCollectionViewCell.identifier)
-        view.backgroundColor = .systemMint
         view.clipsToBounds = true
         view.isPagingEnabled = true
         return view
