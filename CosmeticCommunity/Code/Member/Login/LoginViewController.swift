@@ -46,6 +46,4 @@ final class LoginViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
     }
-    
-// contenttype, sesackey 필수라고요?
 }

@@ -70,7 +70,7 @@ final class RegisterViewController: BaseViewController {
         
         output.outputRegister
             .drive(with: self) { owner, _ in
-//                owner.navigationController?.popViewController(animated: true) // 다시 로그인 화면으로 넘어가기
+                owner.navigationController?.popViewController(animated: true) // 다시 로그인 화면으로 넘어가기
             }.disposed(by: disposeBag)
     }
     

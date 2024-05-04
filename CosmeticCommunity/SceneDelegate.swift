@@ -18,9 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         
         let tabBarvc = CustomTabBarViewController()
-        var tabBarItems = tabBarvc.tabBar.items ?? []
         
-        let firstNav = UINavigationController(rootViewController: RegisterViewController())
+        let firstNav = UINavigationController(rootViewController: HomeViewController())
         let secondNav = UINavigationController(rootViewController: ViewController())
         let thirdNav = UINavigationController(rootViewController: SaveViewController())
         
