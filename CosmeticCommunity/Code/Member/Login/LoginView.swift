@@ -9,9 +9,9 @@ import UIKit
 import SnapKit
 
 final class LoginView: BaseView {
-    let emailTextField = UITextField()
-    let passwordTextField = UITextField()
-    
+    let emailTextField = CustomTextField(placeholder: "이메일을 입력하세요")
+    let passwordTextField = CustomTextField(placeholder: "비밀번호를 입력하세요")
+        
     let loginButton = PointButton()
     let registerButton = PointButton()
     
@@ -31,27 +31,18 @@ final class LoginView: BaseView {
         }
         loginButton.snp.makeConstraints { make in
             make.top.equalTo(passwordTextField.snp.bottom).offset(15)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)
             
         }
         registerButton.snp.makeConstraints { make in
             make.top.equalTo(loginButton.snp.bottom).offset(4)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)
-//            make.bottom.greaterThanOrEqualTo(safeAreaLayoutGuide).inset(10)
         }
     }
     override func configureView() {
-        configureTextField(emailTextField, placeholer: "이메일을 입력해주세요")
-        configureTextField(passwordTextField, placeholer: "비밀번호를 입력해주세요")
         loginButton.configureTitle("로그인")
-        registerButton.configureTitle("회원가입")
-    }
-    private func configureTextField(_ view: UITextField, placeholer ph: String) {
-        view.layer.cornerRadius = 10
-        view.placeholder = ph
-        view.layer.borderColor = Constants.Color.point.cgColor
-        view.layer.borderWidth = 2
+        registerButton.configureTitle("회원가입 하러가기")
     }
 }

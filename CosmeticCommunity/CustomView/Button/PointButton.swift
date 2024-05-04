@@ -11,9 +11,10 @@ final class PointButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        self.setTitleColor(Constants.Color.text, for: .normal)
     }
     func configureView() {
-        self.backgroundColor = Constants.Color.point
+        self.backgroundColor = Constants.Color.secondPoint
         self.setTitleColor(.white, for: .normal)
         self.layer.cornerRadius = 10
     }

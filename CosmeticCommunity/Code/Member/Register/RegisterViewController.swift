@@ -65,7 +65,7 @@ final class RegisterViewController: BaseViewController {
         output.outputRegisterButtonEnabled
             .drive(with: self) { owner, valid in
                 owner.mainView.registerButton.isEnabled = valid
-                owner.mainView.registerButton.backgroundColor = valid ? .secondPoint : Constants.Color.subText
+                owner.mainView.registerButton.backgroundColor = valid ? .secondPoint : Constants.Color.gray6
             }.disposed(by: disposeBag)
         
         output.outputRegister

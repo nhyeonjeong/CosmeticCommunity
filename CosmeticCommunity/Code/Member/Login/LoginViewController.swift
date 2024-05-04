@@ -23,8 +23,8 @@ final class LoginViewController: BaseViewController {
     
     override func bind() {
         let input = LoginViewModel.Input(inputLoginButton: mainView.loginButton.rx.tap,
-                                         inputEmailTextField: mainView.emailTextField.rx.text,
-                                         inputPasswordTextField: mainView.passwordTextField.rx.text)
+                                         inputEmailTextField: mainView.emailTextField.textField.rx.text,
+                                         inputPasswordTextField: mainView.passwordTextField.textField.rx.text)
         
         let output = viewModel.transform(input: input)
         // 로그인버튼

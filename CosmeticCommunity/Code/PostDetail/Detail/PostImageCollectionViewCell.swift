@@ -13,7 +13,7 @@ final class PostImageCollectionViewCell: BaseCollectionViewCell {
     let kingfisher = KingfisherManager.shared
     let imageView = {
         let view = UIImageView()
-        view.tintColor = Constants.Color.noImageTint
+        view.tintColor = Constants.Color.gray6
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         return view

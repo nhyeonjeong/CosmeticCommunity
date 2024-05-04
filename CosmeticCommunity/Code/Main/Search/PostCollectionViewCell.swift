@@ -16,7 +16,7 @@ final class PostCollectionViewCell: BaseCollectionViewCell {
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         view.contentMode = .scaleAspectFill
-        view.tintColor = Constants.Color.noImageTint
+        view.tintColor = Constants.Color.gray6
         return view
     }()
     

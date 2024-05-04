@@ -13,7 +13,7 @@ enum Constants {
         static let secondPoint = UIColor.secondPoint
         static let text = UIColor.black
         static let subText = UIColor.lightGray
-        static let noImageTint = UIColor.systemGray6
+        static let gray6 = UIColor.systemGray6
     }
     
     enum Image {
