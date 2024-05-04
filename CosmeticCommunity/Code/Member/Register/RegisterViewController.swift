@@ -17,6 +17,7 @@ final class RegisterViewController: BaseViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        configureNavBar()
         setScrollViewTapGesture()
     }
     override func bind() {
@@ -25,7 +26,7 @@ final class RegisterViewController: BaseViewController {
                                             inputPassword: mainView.passwordTextField.textField.rx.text,
                                             inputCheckPassword: mainView.checkPasswordTextField.textField.rx.text,
                                             inputNickname: mainView.nicknameTextField.textField.rx.text,
-                                            registerButtonTrigger: mainView.registerButton.rx.tap)
+                                            inputRegisterButtonTrigger: mainView.registerButton.rx.tap)
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
@@ -50,13 +51,13 @@ final class RegisterViewController: BaseViewController {
         
         output.outputNicknameMessage
             .drive(with: self) { owner, value in
-                owner.mainView.nicknameValidMessageLabel.text = value ? "" : "한글이나 영문으로 구성된 10자리 이하의 닉네임을 작성해주세요"
+                owner.mainView.nicknameValidMessageLabel.text = value ? "" : "한글이나 영문으로 구성된 5-10자리 이하의 닉네임을 작성해주세요"
                 owner.mainView.nicknameValidMessageLabel.textColor = .red
             }.disposed(by: disposeBag)
         
         output.outputAlert
             .drive(with: self) { owner, message in
-                owner.alert(message: "통신오류 발생", defaultTitle: "뒤로가기") {
+                owner.alert(message: message, defaultTitle: "뒤로가기") {
                     owner.navigationController?.popViewController(animated: true)
                 }
             }.disposed(by: disposeBag)
@@ -65,6 +66,11 @@ final class RegisterViewController: BaseViewController {
             .drive(with: self) { owner, valid in
                 owner.mainView.registerButton.isEnabled = valid
                 owner.mainView.registerButton.backgroundColor = valid ? .secondPoint : Constants.Color.subText
+            }.disposed(by: disposeBag)
+        
+        output.outputRegister
+            .drive(with: self) { owner, _ in
+//                owner.navigationController?.popViewController(animated: true) // 다시 로그인 화면으로 넘어가기
             }.disposed(by: disposeBag)
     }
     
@@ -77,5 +83,10 @@ final class RegisterViewController: BaseViewController {
     }
     @objc func MyTapMethod(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
+    }
+}
+extension RegisterViewController {
+    func configureNavBar() {
+        navigationItem.title = "회원가입"
     }
 }

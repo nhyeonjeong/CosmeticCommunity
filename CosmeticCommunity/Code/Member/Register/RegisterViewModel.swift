@@ -21,7 +21,7 @@ final class RegisterViewModel: InputOutput {
         let inputPassword: ControlProperty<String?>
         let inputCheckPassword: ControlProperty<String?>
         let inputNickname: ControlProperty<String?>
-        let registerButtonTrigger: ControlEvent<Void>
+        let inputRegisterButtonTrigger: ControlEvent<Void>
     }
     
     struct Output {
@@ -31,6 +31,7 @@ final class RegisterViewModel: InputOutput {
         let outputNicknameMessage: Driver<Bool>
         let outputAlert: Driver<String>
         let outputRegisterButtonEnabled: Driver<Bool>
+        let outputRegister: Driver<Void>
         let outputLoginView: PublishRelay<Void>
     }
     
@@ -43,12 +44,25 @@ final class RegisterViewModel: InputOutput {
         let outputNicknameMessage = BehaviorRelay<Bool>(value: false)
         let outputAlert = PublishRelay<String>()
         let outputRegisterButtonEnabled = BehaviorRelay<Bool>(value: false)
+        let joinSubject = PublishSubject<Void>()
+        let outputRegister = PublishRelay<Void>()
         
+        // 회원가입 정보
+        let joinQuery = Observable.combineLatest(input.inputEmail.orEmpty, input.inputPassword.orEmpty, input.inputNickname.orEmpty, input.inputPersonal)
+            .map { values in
+                let query = JoinQuery(email: values.0, password: values.1, nick: values.2, birthDay: self.personalCases[values.3].rawValue)
+//                print("⭐️\(query)")
+                return query
+            }
+        
+        
+        // 비밀번호를 둘 다 똑같이 썼는지
         let checkPasswordObservable = Observable.combineLatest(input.inputCheckPassword.orEmpty, input.inputPassword)
             .map { password, checkPassword in
 //                print("🤬passwordCheck: \(password == checkPassword)")
                 return password == checkPassword
             }
+        // 유효성 검사를 모두 통과해야 회원가입버튼 활성화
         let registerValidObservable = Observable.combineLatest(outputEmailMessage, outputCheckEmailMessage,  outputPasswordMessage, checkPasswordObservable, outputNicknameMessage)
             .bind(with: self) { owner, valids in
 //                print("🤬registerValidObservable : \(valids)")
@@ -95,7 +109,7 @@ final class RegisterViewModel: InputOutput {
             .map { text in
                 let regex = "^[a-zA-Z가-힇]*$"
                 let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
-                return text.count < 11 && text.count > 5 && predicate.evaluate(with: text)
+                return text.count < 11 && text.count > 4 && predicate.evaluate(with: text)
             }
             .bind(with: self) { owner, valid in
                 outputNicknameMessage.accept(valid)
@@ -137,6 +151,40 @@ final class RegisterViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputEmailMessage: outputEmailMessage.asDriver(onErrorJustReturn: false), outputCheckEmailMessage: outputCheckEmailMessage.asDriver(onErrorJustReturn: false), outputPasswordMessage: outputPasswordMessage.asDriver(onErrorJustReturn: false), outputNicknameMessage: outputNicknameMessage.asDriver(onErrorJustReturn: false), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"), outputRegisterButtonEnabled: outputRegisterButtonEnabled.asDriver(onErrorJustReturn: false), outputLoginView: outputLoginView)
+        input.inputRegisterButtonTrigger
+            .bind(to: joinSubject)
+            .disposed(by: disposeBag)
+
+        joinSubject
+            .withLatestFrom(joinQuery)
+            .flatMap { query in
+                return UserManager.shared.join(query)
+                    .catch { error in
+                        guard let error = error as? APIError else {
+                            outputAlert.accept("통신오류가 발생했습니다.")
+                            return Observable<JoinModel>.empty()
+                        }
+                        if error == APIError.accessTokenExpired_419 {
+                            TokenManager.shared.accessTokenAPI {
+                                joinSubject.onNext(())
+                            } failureHandler: {
+                                //
+                            } loginAgainHandler: {
+                                print("다시 로그인해야돼용")
+                                self.outputLoginView.accept(())
+                            }
+                        }else if error == APIError.alreadyFollow_409 {
+                            outputAlert.accept("이미 가입한 유저입니다")
+                        }
+                        outputAlert.accept("통신오류가 발생했습니다")
+                        return Observable<JoinModel>.empty()
+                    }
+            }
+            .subscribe(with: self) { owner, value in
+//                print("☠️\(value)")
+                outputRegister.accept(())
+            }.disposed(by: disposeBag)
+        
+        return Output(outputEmailMessage: outputEmailMessage.asDriver(onErrorJustReturn: false), outputCheckEmailMessage: outputCheckEmailMessage.asDriver(onErrorJustReturn: false), outputPasswordMessage: outputPasswordMessage.asDriver(onErrorJustReturn: false), outputNicknameMessage: outputNicknameMessage.asDriver(onErrorJustReturn: false), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"), outputRegisterButtonEnabled: outputRegisterButtonEnabled.asDriver(onErrorJustReturn: false), outputRegister: outputRegister.asDriver(onErrorJustReturn: ()), outputLoginView: outputLoginView)
     }
 }

@@ -17,7 +17,6 @@ struct JoinQuery: Encodable {
     let email: String
     let password: String
     let nick: String
-    let phoneNum: String
     let birthDay: String
 }
 struct ValidEmailQuery: Encodable {
@@ -104,7 +103,11 @@ struct CreatorModel: Decodable {
         self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? Constants.Image.defualtProfilePath
     }
 }
-
+struct JoinModel: Decodable {
+    let user_id: String
+    let email: String
+    let nick: String
+}
 struct ValidMessageModel: Decodable {
     let message: String
 }

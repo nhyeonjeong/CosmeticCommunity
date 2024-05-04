@@ -78,8 +78,8 @@ final class UserManager {
         })
     }
     
-    func join() {
-        
+    func join(_ data: JoinQuery) -> Observable<JoinModel> {
+        return NetworkManager.shared.fetchAPI(type: JoinModel.self, router: Router.join(query: data))
     }
     
     func withdraw() {
