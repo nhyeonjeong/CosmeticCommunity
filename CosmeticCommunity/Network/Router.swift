@@ -13,7 +13,7 @@ enum Router {
     case tokenRefresh
     case login(query: LoginQuery)
     case join(query: JoinQuery)
-    //    case validEmail
+    case validEmail(query: ValidEmailQuery)
     //    case withdraw
     //Profile
     case myProfile
@@ -47,7 +47,7 @@ extension Router: RouterType {
     
     var method: HTTPMethod {
         switch self {
-        case .login, .join, .uploadPostImage, .upload, .likeStatus, .uploadComment:
+        case .login, .join, .validEmail, .uploadPostImage, .upload, .likeStatus, .uploadComment:
             return .post
         case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile,  .myLikedPosts, .hashtag:
             return .get
@@ -65,10 +65,10 @@ extension Router: RouterType {
             return [HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? "",
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.refreshToken.rawValue: UserManager.shared.getRefreshToken() ?? ""] // refreshToken도 들어가야함
-        case .login, .join:
+        case .login, .join, .validEmail:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
-        case  .upload, .editPost, .likeStatus, .uploadComment, .hashtag:
+        case .upload, .editPost, .likeStatus, .uploadComment, .hashtag:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
@@ -91,6 +91,9 @@ extension Router: RouterType {
             return "v1/users/login"
         case .join:
             return "v1/users/join"
+        case .validEmail:
+            return "v1/validation/email"
+            
         case .myProfile:
             return "v1/users/me/profile"
         case .otherProfile(let userId):
@@ -127,6 +130,8 @@ extension Router: RouterType {
         case .login(let query):
             return [ParameterKey.email.rawValue: query.email,
                     ParameterKey.password.rawValue: query.password]
+        case .validEmail(let query):
+            return [ParameterKey.email.rawValue: query.email]
         case .upload(let query):
             return [ParameterKey.product_id.rawValue: query.product_id,
                     ParameterKey.title.rawValue: query.title,
@@ -160,7 +165,7 @@ extension Router: RouterType {
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id),
                     URLQueryItem(name: QueryKey.hashTag.rawValue, value: query.hashTag)]
             
-        case .login, .join, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost:
+        case .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost:
             return nil
         }
     }
@@ -170,6 +175,8 @@ extension Router: RouterType {
         case .tokenRefresh:
             return nil
         case .login(let query):
+            return jsonEncoding(query)
+        case .validEmail(let query):
             return jsonEncoding(query)
         case .editPost(_, let query):
             return jsonEncoding(query)
@@ -188,7 +195,7 @@ extension Router: RouterType {
     
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag, .editPost:
+        case .tokenRefresh, .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag, .editPost:
             return nil
         case .uploadPostImage(let query):
             return query

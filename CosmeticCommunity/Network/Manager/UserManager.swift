@@ -22,6 +22,10 @@ final class UserManager {
     func saveAccessToken(_ token: String) {
         UserDefaults.standard.setValue(token, forKey: UserDefaultKey.User.accessToken.rawValue)
     }
+    func deleteAccessToken() {
+        UserDefaults.standard.set(nil, forKey: UserDefaultKey.User.accessToken.rawValue)
+        UserDefaults.standard.synchronize() // 변경사항 즉시 동기화
+    }
     
     // refreshToken가져오기
     func getRefreshToken() -> String? {
@@ -30,6 +34,10 @@ final class UserManager {
     // RefreshToken저장
     func saveRefreshToken(_ token: String) {
         UserDefaults.standard.setValue(token, forKey: UserDefaultKey.User.refreshToken.rawValue)
+    }
+    func deleteRefreshToken() {
+        UserDefaults.standard.set(nil, forKey: UserDefaultKey.User.refreshToken.rawValue)
+        UserDefaults.standard.synchronize() // 변경사항 즉시 동기화
     }
     
     // 유저아이디 가져오기
@@ -40,6 +48,11 @@ final class UserManager {
     func saveUserId(_ id: String) {
         UserDefaults.standard.setValue(id, forKey: UserDefaultKey.User.userId.rawValue)
     }
+    func deleteUserId() {
+        UserDefaults.standard.set(nil, forKey: UserDefaultKey.User.userId.rawValue)
+        UserDefaults.standard.synchronize() // 변경사항 즉시 동기화
+    }
+    
     // 프로필이미지 경로 가져오기
     func getProfileImagePath() -> String {
         if let path = UserDefaults.standard.string(forKey: UserDefaultKey.User.profileImagePath.rawValue) {
@@ -73,8 +86,8 @@ final class UserManager {
         
     }
     
-    func checkInvalidEmail() {
-        
+    func checkInvalidEmail(_ data: ValidEmailQuery) -> Observable<ValidMessageModel> {
+        return NetworkManager.shared.fetchAPI(type: ValidMessageModel.self, router: Router.validEmail(query: data))
     }
     // 내 프로필 확인
     func checkMyProfile() -> Observable<UserModel> {

@@ -88,7 +88,7 @@
 		8B428CA82BCCAA3400FD1B69 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CA72BCCAA3400FD1B69 /* LoginView.swift */; };
 		8B428CCA2BCD1CE500FD1B69 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CC92BCD1CE500FD1B69 /* RegisterViewController.swift */; };
 		8B428CCC2BCD1CED00FD1B69 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CCB2BCD1CED00FD1B69 /* RegisterView.swift */; };
-		8B428CCE2BCD1CF400FD1B69 /* ReigsterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CCD2BCD1CF400FD1B69 /* ReigsterViewModel.swift */; };
+		8B428CCE2BCD1CF400FD1B69 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CCD2BCD1CF400FD1B69 /* RegisterViewModel.swift */; };
 		8B428CD32BCE000A00FD1B69 /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CD22BCE000A00FD1B69 /* UploadViewController.swift */; };
 		8B428CD52BCE001400FD1B69 /* UploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CD42BCE001400FD1B69 /* UploadView.swift */; };
 		8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */; };
@@ -98,6 +98,7 @@
 		8B428CF92BCEA74E00FD1B69 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428CF82BCEA74E00FD1B69 /* HomeViewController.swift */; };
 		8B428D032BCF9EB500FD1B69 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */; };
 		8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D042BCFA1B600FD1B69 /* PostManager.swift */; };
+		8B5544E72BE5884700601489 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544E62BE5884700601489 /* CustomTextField.swift */; };
 		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
 		8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */; };
 		8B57ABB52BD26B52004BC76E /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */; };
@@ -189,7 +190,7 @@
 		8B428CA72BCCAA3400FD1B69 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		8B428CC92BCD1CE500FD1B69 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		8B428CCB2BCD1CED00FD1B69 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
-		8B428CCD2BCD1CF400FD1B69 /* ReigsterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReigsterViewModel.swift; sourceTree = "<group>"; };
+		8B428CCD2BCD1CF400FD1B69 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		8B428CD22BCE000A00FD1B69 /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
 		8B428CD42BCE001400FD1B69 /* UploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadView.swift; sourceTree = "<group>"; };
 		8B428CD62BCE001C00FD1B69 /* UploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewModel.swift; sourceTree = "<group>"; };
@@ -199,6 +200,7 @@
 		8B428CF82BCEA74E00FD1B69 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		8B428D042BCFA1B600FD1B69 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
+		8B5544E62BE5884700601489 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProviderReading+Extension.swift"; sourceTree = "<group>"; };
 		8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -474,6 +476,7 @@
 		8B428C852BCACA4300FD1B69 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
+				8B5544E52BE5882D00601489 /* TextField */,
 				8B3AFD122BD8D8BB0069773F /* Tabbar */,
 				8B3AFCC12BD56B420069773F /* SegmentedControl */,
 				8B57ABB62BD26F62004BC76E /* View */,
@@ -548,7 +551,7 @@
 			isa = PBXGroup;
 			children = (
 				8B428CC92BCD1CE500FD1B69 /* RegisterViewController.swift */,
-				8B428CCD2BCD1CF400FD1B69 /* ReigsterViewModel.swift */,
+				8B428CCD2BCD1CF400FD1B69 /* RegisterViewModel.swift */,
 				8B428CCB2BCD1CED00FD1B69 /* RegisterView.swift */,
 			);
 			path = Register;
@@ -561,6 +564,14 @@
 				8BB5708A2BE2C1E4006DF25A /* NewUpload */,
 			);
 			path = Upload;
+			sourceTree = "<group>";
+		};
+		8B5544E52BE5882D00601489 /* TextField */ = {
+			isa = PBXGroup;
+			children = (
+				8B5544E62BE5884700601489 /* CustomTextField.swift */,
+			);
+			path = TextField;
 			sourceTree = "<group>";
 		};
 		8B57ABB62BD26F62004BC76E /* View */ = {
@@ -706,7 +717,7 @@
 			files = (
 				8BB570852BE283A5006DF25A /* HomePostCollectionViewCell.swift in Sources */,
 				8B62899F2BE1BFB0005D2DAB /* UserDefaultManager.swift in Sources */,
-				8B428CCE2BCD1CF400FD1B69 /* ReigsterViewModel.swift in Sources */,
+				8B428CCE2BCD1CF400FD1B69 /* RegisterViewModel.swift in Sources */,
 				8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */,
 				8B428CD32BCE000A00FD1B69 /* UploadViewController.swift in Sources */,
 				8B3AFC9D2BD3FD7F0069773F /* PostDetailView.swift in Sources */,
@@ -784,6 +795,7 @@
 				8B3AFCA72BD420E30069773F /* RxProtocol.swift in Sources */,
 				8B3AFD9C2BDF8C570069773F /* CategoryCollectionViewCell.swift in Sources */,
 				8B428CA02BCCA7E700FD1B69 /* NotLoginViewController.swift in Sources */,
+				8B5544E72BE5884700601489 /* CustomTextField.swift in Sources */,
 				8B428C962BCC128300FD1B69 /* Network.swift in Sources */,
 				8B428C732BCAB89E00FD1B69 /* MyProfileView.swift in Sources */,
 				8B428C872BCACA6900FD1B69 /* NotLoginView.swift in Sources */,

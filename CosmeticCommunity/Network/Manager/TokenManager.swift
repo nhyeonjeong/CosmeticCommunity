@@ -25,6 +25,10 @@ final class TokenManager {
                 if error == .refreshTokenExpired_418 || error == .invalidUserError_401 {
                     print("리프레시토큰 만료")
                     loginAgainHandler()
+                    // 다시 로그인 하면서 유저디폴트에 관련 내용도 삭제
+                    UserManager.shared.deleteAccessToken()
+                    UserManager.shared.deleteRefreshToken()
+                    UserManager.shared.deleteUserId()
                 }
                 return Observable<RefreshAccessModel>.never()
             }

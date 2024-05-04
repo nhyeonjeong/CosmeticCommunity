@@ -38,10 +38,11 @@ final class NetworkManager {
             group.enter()
 //            print("😎2 \(router.path)")
             AF.request(urlRequest)
+                .validate(statusCode: 200..<201)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
-                        //                        print(success)
+                                                print(success)
                         group.leave()
 //                        print("😎3 \(router.path)")
                         group.notify(queue: .main) {
@@ -63,6 +64,8 @@ final class NetworkManager {
                                 observer.onError(APIError.requestError_400)
                             case 401:
                                 observer.onError(APIError.invalidUserError_401)
+                            case 409:
+                                observer.onError(APIError.alreadyFollow_409)
                             case 418:
                                 observer.onError(APIError.refreshTokenExpired_418)
                             case 419:

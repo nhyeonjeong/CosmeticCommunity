@@ -10,6 +10,7 @@ import UIKit
 enum Constants {
     enum Color {
         static let point = UIColor.systemPink
+        static let secondPoint = UIColor.secondPoint
         static let text = UIColor.black
         static let subText = UIColor.lightGray
         static let noImageTint = UIColor.systemGray6

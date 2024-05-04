@@ -20,6 +20,9 @@ struct JoinQuery: Encodable {
     let phoneNum: String
     let birthDay: String
 }
+struct ValidEmailQuery: Encodable {
+    let email: String
+}
 
 // Decodable
 struct LoginModel: Decodable {
@@ -100,4 +103,8 @@ struct CreatorModel: Decodable {
         self.nick = try container.decode(String.self, forKey: .nick)
         self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? Constants.Image.defualtProfilePath
     }
+}
+
+struct ValidMessageModel: Decodable {
+    let message: String
 }
