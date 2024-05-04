@@ -9,12 +9,17 @@ import UIKit
 
 enum Constants {
     enum Color {
-        static let point = UIColor.systemPink
+        static let point = UIColor.point
         static let secondPoint = UIColor.secondPoint
         static let text = UIColor.black
         static let subText = UIColor.lightGray
         static let gray6 = UIColor.systemGray6
     }
+    /*
+     #E7D9EA
+     
+     #FFC7EA
+     */
     
     enum Image {
         static let defulatProfileImage: UIImage = .defaultProfile

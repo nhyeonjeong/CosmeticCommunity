@@ -99,6 +99,7 @@
 		8B428D032BCF9EB500FD1B69 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */; };
 		8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D042BCFA1B600FD1B69 /* PostManager.swift */; };
 		8B5544E72BE5884700601489 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544E62BE5884700601489 /* CustomTextField.swift */; };
+		8B5544EA2BE6C37100601489 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544E92BE6C37100601489 /* IconView.swift */; };
 		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
 		8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */; };
 		8B57ABB52BD26B52004BC76E /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */; };
@@ -201,6 +202,7 @@
 		8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		8B428D042BCFA1B600FD1B69 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		8B5544E62BE5884700601489 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		8B5544E92BE6C37100601489 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
 		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProviderReading+Extension.swift"; sourceTree = "<group>"; };
 		8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 		8B428C852BCACA4300FD1B69 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
+				8B5544E82BE6C35B00601489 /* SigIcon */,
 				8B5544E52BE5882D00601489 /* TextField */,
 				8B3AFD122BD8D8BB0069773F /* Tabbar */,
 				8B3AFCC12BD56B420069773F /* SegmentedControl */,
@@ -572,6 +575,14 @@
 				8B5544E62BE5884700601489 /* CustomTextField.swift */,
 			);
 			path = TextField;
+			sourceTree = "<group>";
+		};
+		8B5544E82BE6C35B00601489 /* SigIcon */ = {
+			isa = PBXGroup;
+			children = (
+				8B5544E92BE6C37100601489 /* IconView.swift */,
+			);
+			path = SigIcon;
 			sourceTree = "<group>";
 		};
 		8B57ABB62BD26F62004BC76E /* View */ = {
@@ -738,6 +749,7 @@
 				8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */,
 				8B428C902BCBCA9400FD1B69 /* NetworkManager.swift in Sources */,
 				8B428C9D2BCC233700FD1B69 /* UserModel.swift in Sources */,
+				8B5544EA2BE6C37100601489 /* IconView.swift in Sources */,
 				8B3AFCAB2BD428B60069773F /* PostImageCollectionViewCell.swift in Sources */,
 				8B3AFD242BD979070069773F /* CustomSheetViewModel.swift in Sources */,
 				8B3AFCEB2BD6D0EE0069773F /* Profile.swift in Sources */,

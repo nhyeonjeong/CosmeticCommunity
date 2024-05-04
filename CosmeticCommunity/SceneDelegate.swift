@@ -16,24 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: scene)
-        
         let tabBarvc = CustomTabBarViewController()
-        
-        let firstNav = UINavigationController(rootViewController: HomeViewController())
-        let secondNav = UINavigationController(rootViewController: ViewController())
-        let thirdNav = UINavigationController(rootViewController: SaveViewController())
-        
-        firstNav.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 0)
-        // 두 번째 버튼 숨기기
-        let uploadTabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
-        uploadTabBarItem.isEnabled = false
-        secondNav.tabBarItem = uploadTabBarItem
-        
-        thirdNav.tabBarItem = UITabBarItem(title: "보관함", image: UIImage(systemName: "folder"), tag: 2)
-        tabBarvc.tabBar.tintColor = Constants.Color.point
-        tabBarvc.tabBar.barTintColor = .white
-        tabBarvc.viewControllers = [firstNav, secondNav, thirdNav]
-        
         window?.rootViewController = tabBarvc
         window?.makeKeyAndVisible()
     }
