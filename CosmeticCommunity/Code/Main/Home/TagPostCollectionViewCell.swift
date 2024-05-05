@@ -13,7 +13,7 @@ final class TagPostCollectionViewCell: BaseCollectionViewCell {
     var disposeBag = DisposeBag()
     lazy var collectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
-        view.register(HomePostCollectionViewCell.self, forCellWithReuseIdentifier: HomePostCollectionViewCell.identifier)
+        view.register(HomePostNormalCollectionViewCell.self, forCellWithReuseIdentifier: HomePostNormalCollectionViewCell.identifier)
         view.isScrollEnabled = false
         return view
     }()
@@ -32,7 +32,7 @@ final class TagPostCollectionViewCell: BaseCollectionViewCell {
     }
     func upgradeCell(_ postList: [PostModel]) {
         BehaviorSubject(value: postList)
-            .bind(to: collectionView.rx.items(cellIdentifier: HomePostCollectionViewCell.identifier, cellType: HomePostCollectionViewCell.self)) {(row, element, cell) in
+            .bind(to: collectionView.rx.items(cellIdentifier: HomePostNormalCollectionViewCell.identifier, cellType: HomePostNormalCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
@@ -48,7 +48,7 @@ extension TagPostCollectionViewCell {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         // Group
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(120))
         let group: NSCollectionLayoutGroup
         group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.interItemSpacing = .fixed(2) // item간의 가로 간격

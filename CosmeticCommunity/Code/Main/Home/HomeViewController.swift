@@ -17,7 +17,7 @@ final class HomeViewController: BaseViewController {
     // viewModel에 전달할 트리거
     let inputProfileImageTrigger = PublishSubject<Void>()
     let inputMostLikedPostsTrigger = PublishSubject<Void>()
-    let inputTagSelectedTrigger = PublishSubject<String>()
+    let inputTagSelectedTrigger = PublishSubject<Int>()
     override func loadView() {
         view = mainView
     }
@@ -29,7 +29,7 @@ final class HomeViewController: BaseViewController {
         super.viewWillAppear(true)
         inputProfileImageTrigger.onNext(())
         inputMostLikedPostsTrigger.onNext(())
-        
+//        inputTagSelectedTrigger.onNext(0)
     }
     override func bind() {
         let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputMostLikedPostsTrigger: inputMostLikedPostsTrigger, inputTagSelectedTrigger: inputTagSelectedTrigger)
@@ -51,16 +51,14 @@ final class HomeViewController: BaseViewController {
         
         output.outputMostLikedPostsItem
             .debug()
-            .drive(mainView.mostLikedCollectionView.rx.items(cellIdentifier: HomePostCollectionViewCell.identifier, cellType: HomePostCollectionViewCell.self)) {(row, element, cell) in
-//                print("🥳", element)
+            .drive(mainView.mostLikedCollectionView.rx.items(cellIdentifier: HomePostLargeCollectionViewCell.identifier, cellType: HomePostLargeCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
         output.outputTagItems
             .debug()
             .drive(mainView.tagCollectionView.rx.items(cellIdentifier: HomeTagCollectionViewCell.identifier, cellType: HomeTagCollectionViewCell.self)) {(row, element, cell) in
-//                print("🥳", element)
-                cell.upgradeCell(element)
+                cell.upgradeCell(element, isSelected: row == self.viewModel.selectedTagRow)
             }
             .disposed(by: disposeBag)
         output.outputTagPostsItem
@@ -86,10 +84,12 @@ final class HomeViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        mainView.tagCollectionView.rx.modelSelected(String.self)
+        mainView.tagCollectionView.rx.itemSelected
             .debug()
-            .bind(with: self) { owner, tag in
-                owner.inputTagSelectedTrigger.onNext(tag)
+            .bind(with: self) { owner, indexPath in
+                print("📆\(indexPath)")
+                owner.inputTagSelectedTrigger.onNext(indexPath.row)
+                
             }
             .disposed(by: disposeBag)
         

@@ -26,6 +26,7 @@ enum Constants {
         static let category = UIImage(systemName: "line.horizontal.3")
     }
     enum Font {
+        static let bigTitle = UIFont.systemFont(ofSize: 20, weight: .semibold)
         static let large = UIFont.systemFont(ofSize: 17)
         static let boldTitle = UIFont.systemFont(ofSize: 17)
         static let normal = UIFont.systemFont(ofSize: 15)

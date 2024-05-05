@@ -18,12 +18,14 @@ final class HomeViewModel: InputOutput {
     var tagFetchCount = 0
     var allPosts: [PostModel] = []
     var tagPosts: [[PostModel]] = [] // 2차원
+    var tagList: [String] = []
+    var selectedTagRow: Int = 0
     let personalCases = PersonalColor.personalCases
     var nextCursor = "0" // 결과로 가져온 다음 커서
     struct Input {
         let inputProfileImageTrigger: PublishSubject<Void>
         let inputMostLikedPostsTrigger: PublishSubject<Void>
-        let inputTagSelectedTrigger: PublishSubject<String>
+        let inputTagSelectedTrigger: PublishSubject<Int>
     }
     
     struct Output {
@@ -45,7 +47,6 @@ final class HomeViewModel: InputOutput {
         
         input.inputProfileImageTrigger
             .subscribe(with: self) { owner, _ in
-                
                 let imagePath = owner.userManager.getProfileImagePath()
                 outputProfileImageTrigger.accept(imagePath)
             }
@@ -97,11 +98,9 @@ final class HomeViewModel: InputOutput {
                     }.map { dic in
                         dic.key
                     }
-                    
-//                    print("😎\(Array(likeSortedList[..<min(24, likeSortedList.count)]))")
-                    outputMostLikedPostsItem.accept(Array(likeSortedList[..<min(24, likeSortedList.count)])) // 24개까지만 가져오기
-                    
-                    outputTagItems.accept(Array(sortedTagList[..<min(sortedTagList.count, 5)]))
+                    outputMostLikedPostsItem.accept(Array(likeSortedList[..<min(10, likeSortedList.count)])) // 24개까지만 가져오기
+                    owner.tagList = Array(sortedTagList[..<min(sortedTagList.count, 5)])
+                    outputTagItems.accept(owner.tagList)
                 }
             }
             .disposed(by: disposeBag)
@@ -143,9 +142,8 @@ final class HomeViewModel: InputOutput {
                     }
                     owner.tagPosts.append(Array(likeSortedList[..<min(6, likeSortedList.count)]))
                 }
-//                print("😍\(owner.tagFetchCount)")
-//                dump(Array(likeSortedList[..<min(6, likeSortedList.count)]))
                 if owner.tagFetchCount > 3 {
+                    outputTagItems.accept(owner.tagList)
                     outputTagPostsItem.onNext(owner.tagPosts)
                     owner.tagFetchCount = 0
                     owner.tagPosts = []
@@ -154,9 +152,10 @@ final class HomeViewModel: InputOutput {
             .disposed(by: disposeBag)
         
         input.inputTagSelectedTrigger
-            .bind(with: self) { owner, tag in
+            .bind(with: self) { owner, row in
+                owner.selectedTagRow = row
                 for item in owner.personalCases {
-                    searchTagPost.onNext((tag, item))
+                    searchTagPost.onNext((self.tagList[row], item))
                 }
             }
             .disposed(by: disposeBag)

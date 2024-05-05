@@ -13,6 +13,7 @@ final class HomeTagCollectionViewCell: BaseCollectionViewCell {
         let view = UILabel()
         view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
         view.layer.cornerRadius = 15
+        view.clipsToBounds = true
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.black.cgColor
         return view
@@ -28,7 +29,8 @@ final class HomeTagCollectionViewCell: BaseCollectionViewCell {
     override func configureView() {
         contentView.layer.cornerRadius = 10
     }
-    func upgradeCell(_ text: String) {
+    func upgradeCell(_ text: String, isSelected: Bool) {
         tagLabel.text = "  # \(text)  "
+        tagLabel.backgroundColor = isSelected ? Constants.Color.secondPoint : .white
     }
 }
