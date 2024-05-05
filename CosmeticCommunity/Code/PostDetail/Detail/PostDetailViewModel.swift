@@ -41,6 +41,7 @@ final class PostDetailViewModel: InputOutput {
         let outputPostData: Driver<PostModel?> // PostModel정보 VC으로 전달
         let outputLoginView: PublishRelay<Void>
         let outputLikeButton: Driver<PostModel?>
+        let outputLottieAnimation: Driver<Bool>
         let outputAlert: Driver<String>
         let outputNotValid: Driver<Void>
         // 작성자의 Id를 전달하면 뷰컨쪽에서 확인
@@ -51,6 +52,7 @@ final class PostDetailViewModel: InputOutput {
         let outputProfileButtonTrigger = PublishRelay<ProfileType?>()
         let outputPostData = PublishRelay<PostModel?>()
         let outputLikeButton = PublishRelay<PostModel?>()
+        let outputLottieAnimation = PublishRelay<Bool>()
         let outputAlert = PublishRelay<String>()
         let outputNotValid = PublishRelay<Void>()
         let postCreatorId = PublishRelay<String>()
@@ -140,7 +142,7 @@ final class PostDetailViewModel: InputOutput {
                 }
                 // 내가 올린 게시글이라면 UI업데이트 X
                 if value.creator.user_id == UserManager.shared.getUserId() {
-                    outputAlert.accept(("나의 포스트는 찜 할 수 없습니다"))
+                    outputAlert.accept(("나의 포스트는 추천할 수 없습니다"))
                     return Observable<LikeModel>.never()
                 }
                 
@@ -167,8 +169,10 @@ final class PostDetailViewModel: InputOutput {
                         return Observable<LikeModel>.never()
                     }
             }
-            .bind(with: self) { owner, _ in
+            .bind(with: self) { owner, value in
 //                print("버튼클릭했다")
+                print("💎\(value.like_status)")
+                outputLottieAnimation.accept(value.like_status)
                 input.inputPostIdTrigger.onNext(owner.postId)
             }
             .disposed(by: disposeBag)
@@ -245,7 +249,7 @@ final class PostDetailViewModel: InputOutput {
         
         return Output(outputProfileButtonTrigger: outputProfileButtonTrigger.asDriver(onErrorJustReturn: nil), outputPostData: outputPostData.asDriver(onErrorJustReturn: nil),
                       outputLoginView: outputLoginView,
-                      outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"),
+                      outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil), outputLottieAnimation: outputLottieAnimation.asDriver(onErrorJustReturn: false), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"),
                       outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()), postCreatorId: postCreatorId.asDriver(onErrorJustReturn: ""))
     }
 }

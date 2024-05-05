@@ -7,19 +7,22 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 final class PostDetailView: BaseView {
+    let likeLottie = {
+        let view: LottieAnimationView = .init(name: "thumbsup")
+        view.contentMode = .scaleAspectFit
+        view.isHidden = true // 처음에는 숨겨짐
+        return view
+    }()
     let scrollView = {
         let view = UIScrollView()
 //        view.showsVerticalScrollIndicator = false
         view.keyboardDismissMode = .onDrag
         return view
     }()
-    let contentView = {
-        let view = UIView()
-        view.backgroundColor = .yellow
-        return view
-    }()
+    let contentView = UIView()
     let imageCounterLabel = {
         let view = UILabel()
         view.backgroundColor = Constants.Color.subText.withAlphaComponent(0.5)
@@ -35,8 +38,11 @@ final class PostDetailView: BaseView {
     }()
     let likeButton = {
         let view = UIButton()
-        
+        var config = UIButton.Configuration.plain()
+        config.buttonSize = .large
+        view.configuration = config
         view.tintColor = Constants.Color.point
+        view.backgroundColor = .clear
         return view
     }()
     let creatorView = UserDataView(profileImageSize: .creator)
@@ -81,9 +87,13 @@ final class PostDetailView: BaseView {
         uploadCommentView.addViews([commentTextView, commentButton])
         contentView.addViews([imageCollectionView, imageCounterLabel, likeButton, creatorView, detailsView, contentLabel, commentsTableView, bottomHiddenView])
         scrollView.addSubview(contentView)
-        addViews([scrollView, uploadCommentView])
+        addViews([scrollView, uploadCommentView, likeLottie])
     }
     override func configureConstraints(){
+        likeLottie.snp.makeConstraints { make in
+            make.center.equalTo(safeAreaLayoutGuide)
+            make.size.equalTo(200)
+        }
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
         }
@@ -97,10 +107,11 @@ final class PostDetailView: BaseView {
             make.height.equalTo(300)
         }
         imageCounterLabel.snp.makeConstraints { make in
-            make.leading.bottom.equalTo(imageCollectionView).inset(10)
+            make.leading.equalTo(imageCollectionView).inset(20)
+            make.centerY.equalTo(likeButton)
         }
         likeButton.snp.makeConstraints { make in
-            make.trailing.bottom.equalTo(imageCollectionView).inset(10)
+            make.trailing.bottom.equalTo(imageCollectionView)
             make.size.equalTo(60)
         }
         creatorView.snp.makeConstraints { make in

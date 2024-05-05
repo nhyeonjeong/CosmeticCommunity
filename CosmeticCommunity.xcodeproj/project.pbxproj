@@ -100,6 +100,8 @@
 		8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D042BCFA1B600FD1B69 /* PostManager.swift */; };
 		8B5544E72BE5884700601489 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544E62BE5884700601489 /* CustomTextField.swift */; };
 		8B5544EA2BE6C37100601489 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544E92BE6C37100601489 /* IconView.swift */; };
+		8B5544F12BE748FB00601489 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5544F02BE748FB00601489 /* Lottie */; };
+		8B5544F32BE74B3800601489 /* thumbsup.json in Resources */ = {isa = PBXBuildFile; fileRef = 8B5544F22BE74B3800601489 /* thumbsup.json */; };
 		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
 		8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */; };
 		8B57ABB52BD26B52004BC76E /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */; };
@@ -203,6 +205,7 @@
 		8B428D042BCFA1B600FD1B69 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		8B5544E62BE5884700601489 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		8B5544E92BE6C37100601489 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
+		8B5544F22BE74B3800601489 /* thumbsup.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = thumbsup.json; sourceTree = "<group>"; };
 		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProviderReading+Extension.swift"; sourceTree = "<group>"; };
 		8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -229,6 +232,7 @@
 				8B428C822BCAB95100FD1B69 /* RxCocoa in Frameworks */,
 				8B428C762BCAB91300FD1B69 /* Toast in Frameworks */,
 				8B428C792BCAB92500FD1B69 /* Alamofire in Frameworks */,
+				8B5544F12BE748FB00601489 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,6 +359,7 @@
 		8B428C402BC980C700FD1B69 /* CosmeticCommunity */ = {
 			isa = PBXGroup;
 			children = (
+				8B5544EB2BE7475500601489 /* Lottie */,
 				8B428C882BCACAA000FD1B69 /* Enum */,
 				8B428C572BC981C200FD1B69 /* Network */,
 				8B428C5B2BCAB4C600FD1B69 /* Extension */,
@@ -585,6 +590,14 @@
 			path = SigIcon;
 			sourceTree = "<group>";
 		};
+		8B5544EB2BE7475500601489 /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				8B5544F22BE74B3800601489 /* thumbsup.json */,
+			);
+			path = Lottie;
+			sourceTree = "<group>";
+		};
 		8B57ABB62BD26F62004BC76E /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -661,6 +674,7 @@
 				8B428C812BCAB95100FD1B69 /* RxCocoa */,
 				8B428C832BCAB95100FD1B69 /* RxSwift */,
 				8B3AFCB72BD517EA0069773F /* IQKeyboardManagerSwift */,
+				8B5544F02BE748FB00601489 /* Lottie */,
 			);
 			productName = CosmeticCommunity;
 			productReference = 8B428C3E2BC980C700FD1B69 /* CosmeticCommunity.app */;
@@ -697,6 +711,7 @@
 				8B428C7D2BCAB93700FD1B69 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				8B428C802BCAB95100FD1B69 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				8B3AFCB62BD517EA0069773F /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				8B5544EF2BE748FB00601489 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 8B428C3F2BC980C700FD1B69 /* Products */;
 			projectDirPath = "";
@@ -713,6 +728,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B428C562BC9811600FD1B69 /* .gitignore in Resources */,
+				8B5544F32BE74B3800601489 /* thumbsup.json in Resources */,
 				8B428C4E2BC980C900FD1B69 /* LaunchScreen.storyboard in Resources */,
 				8B428C4B2BC980C900FD1B69 /* Assets.xcassets in Resources */,
 				8B428C492BC980C700FD1B69 /* Main.storyboard in Resources */,
@@ -1102,6 +1118,14 @@
 				minimumVersion = 6.6.0;
 			};
 		};
+		8B5544EF2BE748FB00601489 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1139,6 +1163,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B428C802BCAB95100FD1B69 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		8B5544F02BE748FB00601489 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B5544EF2BE748FB00601489 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

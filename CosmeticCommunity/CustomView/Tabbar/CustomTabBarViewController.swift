@@ -14,10 +14,10 @@ class CustomTabBarViewController: UITabBarController {
     let disposeBag = DisposeBag()
     let tabBarMiddleButton = {
         let button = UIButton()
-        let configuation = UIImage.SymbolConfiguration(pointSize: 25,
+        let configuration = UIImage.SymbolConfiguration(pointSize: 25,
                                                        weight: .bold,
                                                        scale: .large)
-        button.setImage(UIImage(systemName: "plus.circle", withConfiguration: configuation),
+        button.setImage(UIImage(systemName: "plus.circle", withConfiguration: configuration),
                         for: .normal)
         
         // 버튼 색상
@@ -29,7 +29,6 @@ class CustomTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        configureView()
         configureTabBarItems()
         setupTabbar(eachSide: 40, height: 60, y: 0)
     }
@@ -37,7 +36,7 @@ class CustomTabBarViewController: UITabBarController {
     func configureTabBarItems() {
         let homeViewController = UINavigationController(rootViewController: HomeViewController())
         homeViewController.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), tag: 0)
-//        homeViewController.tabBarItem.selectedImage = UIImage(systemName: "house.fill")
+
         homeViewController.tabBarItem.imageInsets = UIEdgeInsets(top: -10, left: 0, bottom: 10, right: 0)
         
         let saveViewController = UINavigationController(rootViewController: SaveViewController())
@@ -64,8 +63,6 @@ class CustomTabBarViewController: UITabBarController {
             make.top.equalToSuperview()
             make.size.equalTo(40)
         }
-    }
-    func configureView(){
     }
 }
 extension CustomTabBarViewController {

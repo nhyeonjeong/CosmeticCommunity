@@ -25,8 +25,8 @@ enum Constants {
         static let defulatProfileImage: UIImage = .defaultProfile
         static let defualtProfilePath = "uploads/posts/defaultprofileimage_1713676977790.jpeg"
         static let xButton = UIImage(systemName: "xmark.circle.fill")
-        static let unclickedLike = UIImage(systemName: "heart")
-        static let clickedLike = UIImage(systemName: "heart.fill")
+        static let unclickedLike = UIImage(systemName: "hand.thumbsup")
+        static let clickedLike = UIImage(systemName: "hand.thumbsup.fill")
         static let searchButton = UIImage(systemName: "magnifyingglass")
         static let recentSearchButton = UIImage(systemName: "arrow.up.left")
         static let category = UIImage(systemName: "line.horizontal.3")

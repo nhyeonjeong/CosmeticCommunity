@@ -78,15 +78,34 @@ final class PostDetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        // 추천
         output.outputLikeButton
             .drive(with: self) { owner, value in
                 if let value {
-                    let image = owner.viewModel.isClickedLikeButton(value) ? Constants.Image.clickedLike : Constants.Image.unclickedLike
+                    let isClicked = owner.viewModel.isClickedLikeButton(value)
+                    let image = isClicked ? Constants.Image.clickedLike : Constants.Image.unclickedLike
                     owner.mainView.likeButton.setImage(image, for: .normal) // 추천 버튼 실기간 변경
                     owner.mainView.detailsView.upgradeLikeCountLabel(value.likes.count)
                 }
             }
             .disposed(by: disposeBag)
+        
+        output.outputLottieAnimation
+            .drive(with: self) { owner, value in
+                if value {
+                    print("😇\(value)")
+                    owner.mainView.likeLottie.loopMode = .playOnce
+                    owner.mainView.likeLottie.animationSpeed = 1
+                    owner.mainView.likeLottie.play()
+                    owner.mainView.likeLottie.isHidden = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        // Hide the Lottie view
+                        owner.mainView.likeLottie.isHidden = true
+                    }
+                } else {
+                    owner.mainView.likeLottie.isHidden = true
+                }
+            }.disposed(by: disposeBag)
         
         output.outputNotValid
             .drive(with: self) { owner, _ in
