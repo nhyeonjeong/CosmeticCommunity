@@ -208,7 +208,6 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
-//                print("댓글 업로드 api통신 성공")
                 input.inputPostIdTrigger.onNext(self.postId)
             }
             .disposed(by: disposeBag)
@@ -220,8 +219,6 @@ final class PostDetailViewModel: InputOutput {
                     outputAlert.accept("댓글삭제에 실패했습니다")
                     return Observable<Void>.never()
                 }
-//                print("bug---------comment의 갯수: \(postData.comments.count)")
-//                print("bug---------삭제하려는 행의 ROW : \(row)")
                 return self.commentManager.deleteComment(postId: postData.post_id, commentId: postData.comments[row].comment_id)
                     .catch { error in
                         guard let error = error as? APIError else {

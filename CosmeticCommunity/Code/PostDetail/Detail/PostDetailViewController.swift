@@ -85,7 +85,7 @@ final class PostDetailViewController: BaseViewController {
                     let isClicked = owner.viewModel.isClickedLikeButton(value)
                     let image = isClicked ? Constants.Image.clickedLike : Constants.Image.unclickedLike
                     owner.mainView.likeButton.setImage(image, for: .normal) // 추천 버튼 실기간 변경
-                    owner.mainView.detailsView.upgradeLikeCountLabel(value.likes.count)
+                    owner.mainView.detailsView.upgradeLikeAndCommentsCountLabel(value)
                 }
             }
             .disposed(by: disposeBag)
@@ -93,7 +93,6 @@ final class PostDetailViewController: BaseViewController {
         output.outputLottieAnimation
             .drive(with: self) { owner, value in
                 if value {
-                    print("😇\(value)")
                     owner.mainView.likeLottie.loopMode = .playOnce
                     owner.mainView.likeLottie.animationSpeed = 1
                     owner.mainView.likeLottie.play()
@@ -180,7 +179,7 @@ extension PostDetailViewController {
                     cell.menuButton.isHidden = true
                 }
                 cell.upgradeCell(element)
-                
+                // 댓글테이블뷰 높이 다시 잡기
                 DispatchQueue.main.async {
                     let newHeight: CGFloat = max(1, self.mainView.commentsTableView.contentSize.height)
                     
@@ -188,7 +187,6 @@ extension PostDetailViewController {
                         make.height.equalTo(newHeight)
                     }
                 }
-                
             }
             .disposed(by: disposeBag)
     }

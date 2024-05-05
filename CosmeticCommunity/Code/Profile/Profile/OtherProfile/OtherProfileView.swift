@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class OtherProfileView: BaseView {
-    let profileView = UserDataView(profileImageSize: .profile)
+    let profileView = UserDataView(.profile)
     let personalLabel = {
         let view = UILabel()
         view.font = Constants.Font.large

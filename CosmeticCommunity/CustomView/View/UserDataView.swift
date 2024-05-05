@@ -12,24 +12,22 @@ import Kingfisher
 final class UserDataView: BaseView {
     let kingfisher = KingfisherManager.shared
     enum ProfileImageSize: CGFloat {
-        case profile = 70
+        case profile = 50
         case creator = 40
         case commentCreator = 30
     }
-    var profileImageSize: ProfileImageSize = .creator // 초기화
-    var size: CGFloat {
-        print("profileSIze", profileImageSize.rawValue)
-        return profileImageSize.rawValue
-    }
     
-    init(profileImageSize: ProfileImageSize) {
-        print("init: \(profileImageSize.rawValue)")
+    var profileImageSize: ProfileImageSize // 초기화
+    init(_ size: ProfileImageSize) {
+        self.profileImageSize = size
         super.init(frame: .zero)
-        self.profileImageSize = profileImageSize
-//        print("profileImageSize: \(self.profileImageSize)")
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    var size: CGFloat {
+        print("profileSIze", profileImageSize.rawValue)
+        return profileImageSize.rawValue
     }
     lazy var profileImageView = {
         let view = UIImageView()
@@ -55,11 +53,7 @@ final class UserDataView: BaseView {
     override func configureConstraints() {
         profileImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview()
-            make.size.equalTo(40)
-//            DispatchQueue.main.async {
-//                print("snp: \(self.profileImageSize.rawValue)")
-//                make.size.equalTo(self.profileImageSize.rawValue)
-//            }
+            make.size.equalTo(size)
             make.bottom.equalToSuperview()
         }
         nickname.snp.makeConstraints { make in

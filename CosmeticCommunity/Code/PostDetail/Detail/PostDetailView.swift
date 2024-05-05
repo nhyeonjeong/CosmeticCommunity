@@ -45,11 +45,10 @@ final class PostDetailView: BaseView {
         view.backgroundColor = .clear
         return view
     }()
-    let creatorView = UserDataView(profileImageSize: .creator)
+    let creatorView = UserDataView(.creator)
     let detailsView = PostDetailsView()
     let contentLabel = {
         let view = UILabel()
-        view.backgroundColor = .yellow
         view.numberOfLines = 0
         view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
         return view
@@ -59,7 +58,7 @@ final class PostDetailView: BaseView {
         let view = UITableView()
         view.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
         view.rowHeight = UITableView.automaticDimension
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .white
         view.isScrollEnabled = false
         return view
     }()
@@ -100,7 +99,6 @@ final class PostDetailView: BaseView {
         contentView.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()
             make.width.equalTo(scrollView.snp.width)
-//            make.horizontalEdges.equalTo(scrollView)
         }
         imageCollectionView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalToSuperview()
@@ -124,13 +122,12 @@ final class PostDetailView: BaseView {
             make.height.equalTo(100)
         }
         contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(detailsView.snp.bottom).offset(8)
+            make.top.equalTo(detailsView.personalColorLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(10)
         }
         commentsTableView.snp.makeConstraints { make in
             make.top.equalTo(contentLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView).inset(10)
-//            make.bottom.greaterThanOrEqualTo(contentView.snp.bottom).inset(50)
             make.height.equalTo(1)
         }
         bottomHiddenView.snp.makeConstraints { make in
@@ -162,7 +159,7 @@ extension PostDetailView {
         layout.minimumLineSpacing = 0 // 세로간
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.scrollDirection = .horizontal // 스크롤 방향도 FlowLayout에 속한다 -> contentMode때문에 Fill로
+        layout.scrollDirection = .horizontal
         return layout
     }
 }

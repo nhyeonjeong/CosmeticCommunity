@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class CommentTableViewCell: BaseTableViewCell {
-    let commentCreatorView = UserDataView(profileImageSize: .commentCreator)
+    let commentCreatorView = UserDataView(.commentCreator)
     let createdTimeLabel = {
         let view = UILabel()
 //        view.layer.borderColor = UIColor.red.cgColor
@@ -25,8 +25,6 @@ final class CommentTableViewCell: BaseTableViewCell {
     }()
     
     let menuButton = {
-
-//        let view = UIMenu(image: UIImage(systemName: "ellipsis"))
         let view = UIButton()
         view.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         view.tintColor = Constants.Color.point

@@ -42,7 +42,6 @@ final class PostCollectionViewCell: BaseCollectionViewCell {
         photoImage.image = nil
     }
     func upgradeCell(_ item: PostModel) {
-        
         kingfisher.getImageURL(path: item.files.first) { url in
             if let url {
                 photoImage.kf.setImage(with: url, options: [.requestModifier(kingfisher.modifier)])
@@ -52,6 +51,6 @@ final class PostCollectionViewCell: BaseCollectionViewCell {
             }
         }
         detailsView.upgradeView(item)
-        detailsView.upgradeLikeCountLabel(item.likes.count)
+        detailsView.upgradeLikeAndCommentsCountLabel(item)
     }
 }

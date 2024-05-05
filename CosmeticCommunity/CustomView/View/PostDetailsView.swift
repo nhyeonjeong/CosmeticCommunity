@@ -8,18 +8,11 @@
 import UIKit
 
 final class PostDetailsView: BaseView {
-    let likeSymbol = {
-        let view = UIImageView()
-        view.image = Constants.Image.clickedLike
-        view.tintColor = Constants.Color.point
-        return view
-    }()
-    let likeCountLabel = {
+    let likeAndCommentsCountLabel = {
         let view = UILabel()
         view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.small)
         return view
     }()
-    
     let titleLabel = {
         let view = UILabel()
         view.numberOfLines = 2
@@ -36,21 +29,16 @@ final class PostDetailsView: BaseView {
     }()
 
     override func configureHierarchy() {
-        addViews([likeSymbol, likeCountLabel, titleLabel, personalColorLabel])
+        addViews([likeAndCommentsCountLabel, titleLabel, personalColorLabel])
     }
     override func configureConstraints() {
-        likeSymbol.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview()
-            make.size.equalTo(20)
-        }
-        likeCountLabel.snp.makeConstraints { make in
-            make.leading.equalTo(likeSymbol.snp.trailing).offset(4)
-            make.top.trailing.equalToSuperview()
+        likeAndCommentsCountLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(20)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(likeSymbol.snp.bottom).offset(4)
+            make.top.equalTo(likeAndCommentsCountLabel.snp.bottom).offset(4)
             make.horizontalEdges.equalToSuperview()
 //            make.height.equalTo(20)
         }
@@ -64,14 +52,18 @@ final class PostDetailsView: BaseView {
     func upgradeView(_ item: PostModel) {
         titleLabel.text = item.title
         let text = item.personalColor.rawValue
-        if let type = PersonalColor(rawValue: text) {
+        if let type = PersonalColor(rawValue: item.personalColor.rawValue) {
             personalColorLabel.text = "  \(text)  "
             personalColorLabel.textColor = type.textColor
             personalColorLabel.backgroundColor = type.backgroundColor
         }
         
     }
-    func upgradeLikeCountLabel(_ likeCount: Int) {
-        likeCountLabel.text = likeCount.formatted()
+    func upgradeLikeAndCommentsCountLabel(_ item: PostModel) {
+        let text = "추천 \(item.likes.count.formatted()) | 댓글 \(item.comments.count.formatted())"
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttribute(.font, value: Constants.Font.smallTitle, range: (text as NSString).range(of: "\(item.likes.count)개"))
+        attributedString.addAttribute(.font, value: Constants.Font.smallTitle, range: (text as NSString).range(of: "\(item.comments.count)개"))
+        likeAndCommentsCountLabel.attributedText = attributedString
     }
 }
