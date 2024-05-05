@@ -20,15 +20,22 @@ final class PostDetailView: BaseView {
         view.backgroundColor = .yellow
         return view
     }()
-    
+    let imageCounterLabel = {
+        let view = UILabel()
+        view.backgroundColor = Constants.Color.subText.withAlphaComponent(0.5)
+        view.clipsToBounds = true
+        return view
+    }()
     lazy var imageCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: imageCollectionViewLayout())
         view.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
+        view.bounces = false
         view.isPagingEnabled = true
         return view
     }()
     let likeButton = {
         let view = UIButton()
+        
         view.tintColor = Constants.Color.point
         return view
     }()
@@ -72,7 +79,7 @@ final class PostDetailView: BaseView {
     }()
     override func configureHierarchy() {
         uploadCommentView.addViews([commentTextView, commentButton])
-        contentView.addViews([imageCollectionView, likeButton, creatorView, detailsView, contentLabel, commentsTableView, bottomHiddenView])
+        contentView.addViews([imageCollectionView, imageCounterLabel, likeButton, creatorView, detailsView, contentLabel, commentsTableView, bottomHiddenView])
         scrollView.addSubview(contentView)
         addViews([scrollView, uploadCommentView])
     }
@@ -88,6 +95,9 @@ final class PostDetailView: BaseView {
         imageCollectionView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalToSuperview()
             make.height.equalTo(300)
+        }
+        imageCounterLabel.snp.makeConstraints { make in
+            make.leading.bottom.equalTo(imageCollectionView).inset(10)
         }
         likeButton.snp.makeConstraints { make in
             make.trailing.bottom.equalTo(imageCollectionView).inset(10)

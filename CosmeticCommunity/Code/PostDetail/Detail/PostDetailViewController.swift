@@ -102,7 +102,6 @@ final class PostDetailViewController: BaseViewController {
         
         output.postCreatorId
             .drive(with: self) { owner, creatorId in
-//                print("내가 쓴 포스트인지 확인!!")
                 if creatorId == UserManager.shared.getUserId() {
                     self.configureNavigationBar()
                 }
@@ -139,6 +138,13 @@ extension PostDetailViewController {
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
+        mainView.imageCollectionView.rx.willDisplayCell
+            .map { $0.at }
+            .subscribe(with: self) { owner, indexPath in
+                if let post = self.viewModel.postData {
+                    owner.mainView.imageCounterLabel.text = " \(indexPath.row + 1) / \(post.files.count) "
+                }
+            }.disposed(by: disposeBag)
     }
     // 댓글 테이블뷰 그리기
     private func bindCommentItems() {
