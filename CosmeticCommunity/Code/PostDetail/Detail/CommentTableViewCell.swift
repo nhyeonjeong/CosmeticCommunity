@@ -12,7 +12,7 @@ final class CommentTableViewCell: BaseTableViewCell {
     let commentCreatorView = UserDataView(.commentCreator)
     let createdTimeLabel = {
         let view = UILabel()
-        view.configureLabel(textColor: Constants.Color.subText, font: Constants.Font.small)
+        view.configureLabel(textColor: Constants.Color.subText, font: Constants.Font.verySmall)
         return view
     }()
     let contentLabel = {
@@ -35,22 +35,21 @@ final class CommentTableViewCell: BaseTableViewCell {
         commentCreatorView.snp.makeConstraints { make in
             make.top.leading.equalTo(contentView).inset(4)
         }
+        createdTimeLabel.snp.makeConstraints { make in
+            make.leading.equalTo(commentCreatorView.snp.trailing).offset(4)
+            make.height.equalTo(20)
+            make.centerY.equalTo(commentCreatorView)
+        }
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(commentCreatorView.snp.bottom)
             make.leading.equalTo(commentCreatorView.nickname)
             make.trailing.equalTo(contentView).inset(4)
-//            make.height.equalTo(1)
+            make.bottom.equalTo(contentView).inset(4)
         }
         menuButton.snp.makeConstraints { make in
             make.centerY.equalTo(commentCreatorView)
             make.trailing.equalTo(contentView).inset(4)
-            make.leading.greaterThanOrEqualTo(commentCreatorView.snp.trailing).offset(2)
-        }
-        createdTimeLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentLabel.snp.bottom).offset(4)
-            make.leading.equalTo(commentCreatorView.nickname)
-            make.height.equalTo(20)
-            make.bottom.equalTo(contentView).inset(4)
+            make.leading.greaterThanOrEqualTo(createdTimeLabel.snp.trailing).offset(2)
         }
     }
     override func prepareForReuse() {
@@ -61,7 +60,7 @@ final class CommentTableViewCell: BaseTableViewCell {
     func upgradeCell(_ item: CommentModel) {
 //        print(#function)
         commentCreatorView.upgradeView(profileImage: item.creator.profileImage, nick: item.creator.nick)
-        createdTimeLabel.text = item.createdAt
+        createdTimeLabel.text = item.createdAt.getDateFromISO8601()
         contentLabel.text = item.content
     }
 }

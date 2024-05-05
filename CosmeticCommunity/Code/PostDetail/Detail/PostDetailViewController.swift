@@ -75,7 +75,7 @@ final class PostDetailViewController: BaseViewController {
                         content.removeSubrange(range.lowerBound...)
                     }
                     owner.mainView.contentLabel.text = content
-                    owner.mainView.creatTimeLabel.text = value.createdAt
+                    owner.mainView.creatTimeLabel.text = value.createdAt.getDateFromISO8601()
                     var hashtagText = ""
                     _ = value.hashTags.map({ hashtag in
                         hashtagText += "#\(hashtag)"

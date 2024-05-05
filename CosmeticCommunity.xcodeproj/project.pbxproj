@@ -102,6 +102,7 @@
 		8B5544EA2BE6C37100601489 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544E92BE6C37100601489 /* IconView.swift */; };
 		8B5544F12BE748FB00601489 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5544F02BE748FB00601489 /* Lottie */; };
 		8B5544F32BE74B3800601489 /* thumbsup.json in Resources */ = {isa = PBXBuildFile; fileRef = 8B5544F22BE74B3800601489 /* thumbsup.json */; };
+		8B5544F52BE78FDD00601489 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544F42BE78FDC00601489 /* String+Extension.swift */; };
 		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
 		8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */; };
 		8B57ABB52BD26B52004BC76E /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */; };
@@ -206,6 +207,7 @@
 		8B5544E62BE5884700601489 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		8B5544E92BE6C37100601489 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
 		8B5544F22BE74B3800601489 /* thumbsup.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = thumbsup.json; sourceTree = "<group>"; };
+		8B5544F42BE78FDC00601489 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProviderReading+Extension.swift"; sourceTree = "<group>"; };
 		8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 				8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */,
 				8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */,
 				8B3AFCAE2BD42A660069773F /* UILabel+Extension.swift */,
+				8B5544F42BE78FDC00601489 /* String+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -745,6 +748,7 @@
 				8BB570852BE283A5006DF25A /* HomePostCollectionViewCell.swift in Sources */,
 				8B62899F2BE1BFB0005D2DAB /* UserDefaultManager.swift in Sources */,
 				8B428CCE2BCD1CF400FD1B69 /* RegisterViewModel.swift in Sources */,
+				8B5544F52BE78FDD00601489 /* String+Extension.swift in Sources */,
 				8B428CD72BCE001C00FD1B69 /* UploadViewModel.swift in Sources */,
 				8B428CD32BCE000A00FD1B69 /* UploadViewController.swift in Sources */,
 				8B3AFC9D2BD3FD7F0069773F /* PostDetailView.swift in Sources */,

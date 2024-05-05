@@ -15,12 +15,6 @@ enum Constants {
         static let subText = UIColor.lightGray
         static let gray6 = UIColor.systemGray6
     }
-    /*
-     #E7D9EA
-     
-     #FFC7EA
-     */
-    
     enum Image {
         static let defulatProfileImage: UIImage = .defaultProfile
         static let defualtProfilePath = "uploads/posts/defaultprofileimage_1713676977790.jpeg"
@@ -37,6 +31,7 @@ enum Constants {
         static let normal = UIFont.systemFont(ofSize: 15)
         static let smallTitle = UIFont.boldSystemFont(ofSize: 13)
         static let small = UIFont.systemFont(ofSize: 13)
+        static let verySmall = UIFont.systemFont(ofSize: 11)
     }
 }
 
