@@ -70,8 +70,19 @@ final class PostDetailViewController: BaseViewController {
                     owner.imageItems.onNext(value.files)
                     owner.mainView.creatorView.upgradeView(profileImage: value.creator.profileImage, nick: value.creator.nick)
                     owner.mainView.detailsView.upgradeView(value)
-                    owner.mainView.contentLabel.text = value.content
+                    var content = value.content
+                    if let range = content.range(of: "#") {
+                        content.removeSubrange(range.lowerBound...)
+                    }
+                    owner.mainView.contentLabel.text = content
+                    owner.mainView.creatTimeLabel.text = value.createdAt
+                    var hashtagText = ""
+                    _ = value.hashTags.map({ hashtag in
+                        hashtagText += "#\(hashtag)"
+                    })
+                    owner.mainView.hashTagLabel.text = hashtagText
                     owner.commentItems.onNext(value.comments)
+                    owner.mainView.commentTextView.text = ""
                 } else {
                     owner.view.makeToast("정보불러오기에 실패했습니다", duration: 1.0, position: .top)
                 }

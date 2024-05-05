@@ -28,9 +28,10 @@ class CustomTabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
+        self.tabBar.barTintColor = .white
         configureTabBarItems()
-        setupTabbar(eachSide: 40, height: 60, y: 0)
+        setupTabbar(eachSide: 40, height: 50, y: 0)
     }
 
     func configureTabBarItems() {

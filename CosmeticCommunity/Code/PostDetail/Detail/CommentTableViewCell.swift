@@ -12,8 +12,6 @@ final class CommentTableViewCell: BaseTableViewCell {
     let commentCreatorView = UserDataView(.commentCreator)
     let createdTimeLabel = {
         let view = UILabel()
-//        view.layer.borderColor = UIColor.red.cgColor
-//        view.layer.borderWidth = 1
         view.configureLabel(textColor: Constants.Color.subText, font: Constants.Font.small)
         return view
     }()
@@ -37,22 +35,22 @@ final class CommentTableViewCell: BaseTableViewCell {
         commentCreatorView.snp.makeConstraints { make in
             make.top.leading.equalTo(contentView).inset(4)
         }
-        createdTimeLabel.snp.makeConstraints { make in
-//            make.trailing.equalTo(contentView).inset(4)
-            make.centerY.equalTo(commentCreatorView.snp.centerY)
-            make.height.equalTo(20)
-        }
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(commentCreatorView.snp.bottom)
-            make.leading.equalTo(18+UserDataView.ProfileImageSize.commentCreator.rawValue)
-            make.bottom.equalTo(contentView).inset(4)
+            make.leading.equalTo(commentCreatorView.nickname)
             make.trailing.equalTo(contentView).inset(4)
 //            make.height.equalTo(1)
         }
         menuButton.snp.makeConstraints { make in
             make.centerY.equalTo(commentCreatorView)
             make.trailing.equalTo(contentView).inset(4)
-            make.leading.equalTo(createdTimeLabel.snp.trailing).offset(2)
+            make.leading.greaterThanOrEqualTo(commentCreatorView.snp.trailing).offset(2)
+        }
+        createdTimeLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentLabel.snp.bottom).offset(4)
+            make.leading.equalTo(commentCreatorView.nickname)
+            make.height.equalTo(20)
+            make.bottom.equalTo(contentView).inset(4)
         }
     }
     override func prepareForReuse() {
@@ -65,9 +63,5 @@ final class CommentTableViewCell: BaseTableViewCell {
         commentCreatorView.upgradeView(profileImage: item.creator.profileImage, nick: item.creator.nick)
         createdTimeLabel.text = item.createdAt
         contentLabel.text = item.content
-//        print("높이", contentLabel.frame.height)
-      //  contentLabel.snp.updateConstraints { make in
-        //            make.height.equalTo(contentLabel.frame.height)
-        //        }
     }
 }
