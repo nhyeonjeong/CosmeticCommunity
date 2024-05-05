@@ -29,7 +29,6 @@ final class HomeViewController: BaseViewController {
         super.viewWillAppear(true)
         inputProfileImageTrigger.onNext(())
         inputMostLikedPostsTrigger.onNext(())
-//        inputTagSelectedTrigger.onNext(0)
     }
     override func bind() {
         let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputMostLikedPostsTrigger: inputMostLikedPostsTrigger, inputTagSelectedTrigger: inputTagSelectedTrigger)
@@ -63,12 +62,9 @@ final class HomeViewController: BaseViewController {
             .disposed(by: disposeBag)
         output.outputTagPostsItem
             .drive(mainView.tagPostCollectionView.rx.items(cellIdentifier: TagPostCollectionViewCell.identifier, cellType: TagPostCollectionViewCell.self)) {(row, element, cell) in
-                print("💎")
-                print(element)
                 cell.upgradeCell(element)
                 cell.collectionView.rx.modelSelected(PostModel.self)
                     .bind(with: self) { owner, post in
-                        print("🩷")
                         let vc = PostDetailViewController()
                         vc.postId = post.post_id
                         owner.navigationController?.pushViewController(vc, animated: true)
@@ -87,7 +83,6 @@ final class HomeViewController: BaseViewController {
         mainView.tagCollectionView.rx.itemSelected
             .debug()
             .bind(with: self) { owner, indexPath in
-                print("📆\(indexPath)")
                 owner.inputTagSelectedTrigger.onNext(indexPath.row)
                 
             }
@@ -95,7 +90,6 @@ final class HomeViewController: BaseViewController {
         
         mainView.tagPostCollectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, post in
-                print("🩷")
                 let vc = PostDetailViewController()
                 vc.postId = post.post_id
                 owner.navigationController?.pushViewController(vc, animated: true)
@@ -110,7 +104,7 @@ final class HomeViewController: BaseViewController {
         navigationController?.pushViewController(MyProfileViewController(), animated: true)
     }
     @objc func searchButtonClicked() {
-        navigationController?.pushViewController(SearchHomeViewController(), animated: true)
+        navigationController?.pushViewController(SearchViewController(), animated: true)
     }
 }
 

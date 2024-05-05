@@ -9,6 +9,14 @@ import UIKit
 import SnapKit
 
 final class OtherProfileView: BaseView {
+    let noResultLabel = {
+        let view = UILabel()
+        view.text = "게시글이 없습니다"
+        view.isHidden = true
+        view.textAlignment = .center
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.large)
+        return view
+    }()
     let profileView = UserDataView(.profile)
     let personalLabel = {
         let view = UILabel()
@@ -46,7 +54,7 @@ final class OtherProfileView: BaseView {
         followStackView.addArrangedSubview(followersCountButton)
         followStackView.addArrangedSubview(followingCountButton)
 
-        addViews([profileView, personalLabel, followStackView, followButton, postsCollectionView])
+        addViews([profileView, personalLabel, followStackView, followButton, postsCollectionView, noResultLabel])
     }
     override func configureConstraints() {
         profileView.snp.makeConstraints { make in
@@ -77,6 +85,10 @@ final class OtherProfileView: BaseView {
         postsCollectionView.snp.makeConstraints { make in
             make.top.equalTo(followButton.snp.bottom).offset(8)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
+        }
+        noResultLabel.snp.makeConstraints { make in
+            make.top.equalTo(followButton.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
         }
     }
     

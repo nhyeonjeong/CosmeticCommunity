@@ -16,20 +16,25 @@ final class OtherProfileViewModel: InputOutput {
     
     var outputLoginView = PublishRelay<Void>()
     var userId = ""
+    var nextCursor: String = ""
+    var postData: [PostModel] = []
     struct Input {
         let inputFetchProfile: BehaviorSubject<String?>
+        let inputPrepatchTrigger: PublishSubject<[IndexPath]>
     }
     
     struct Output {
         let outputProfileResult: Driver<UserModel?>
         let outputPostItems: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
+        let outputNoResult: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
         let outputProfileResult = PublishSubject<UserModel?>()
-        let fetchPostsSubject = PublishSubject<[String]?>()
+        let fetchPostsSubject = PublishSubject<Void?>()
         let outputPostItems = PublishSubject<[PostModel]?>()
+        let outputNoResult = PublishRelay<Bool>()
         
         // 만약 탈퇴한 회원이라면??
         input.inputFetchProfile
@@ -65,15 +70,15 @@ final class OtherProfileViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, data in
-//                print("상대방 프로필 패치 후 \(data.user_id)")
                 outputProfileResult.onNext(data)
-                fetchPostsSubject.onNext(data.posts)
+                fetchPostsSubject.onNext(())
             }
             .disposed(by: disposeBag)
         
         fetchPostsSubject
-            .flatMap { posts in
-                return self.postManager.checkUserPosts(userId: self.userId)
+            .flatMap { _ in
+                let query = CheckPostQuery(next: self.nextCursor, limit: "20", product_id: nil)
+                return self.postManager.checkUserPosts(userId: self.userId, query: query)
                     .catch { error in
                         print("에러발생")
                         guard let error = error as? APIError else {
@@ -82,7 +87,7 @@ final class OtherProfileViewModel: InputOutput {
                         }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
-                                fetchPostsSubject.onNext(posts)
+                                fetchPostsSubject.onNext(())
                             } failureHandler: {
                                 //
                             } loginAgainHandler: {
@@ -95,9 +100,33 @@ final class OtherProfileViewModel: InputOutput {
                     }
             }
             .bind(with: self) { owner, value in
+                owner.postData.append(contentsOf: value.data)
                 outputPostItems.onNext(value.data)
+                
+                if value.data.count == 0 {
+                    outputNoResult.accept(false)
+                } else {
+                    outputNoResult.accept(true)
+                }
+                owner.nextCursor = value.next_cursor
+//                owner.limit = "20" // limit 다시 돌리기
             }
             .disposed(by: disposeBag)
-        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView)
+        
+        input.inputPrepatchTrigger
+            .flatMap { indexPaths in
+                let row = indexPaths.first?.row
+                if row == self.postData.count - 4 || row == self.postData.count - 5 {
+                    return Observable.just(())
+                } else {
+                    return Observable.empty()
+                }
+            }
+            .bind(with: self) { owner, _ in
+                fetchPostsSubject.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false))
     }
 }

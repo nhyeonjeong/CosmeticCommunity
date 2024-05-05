@@ -23,7 +23,7 @@ enum Router {
     case upload(query: PostQuery)
     case checkPosts(query: CheckPostQuery)
     case checkSpecificPost(postId: String)
-    case checkUserPosts(userId: String)
+    case checkUserPosts(userId: String, query: CheckPostQuery)
     case deletePost(postId: String)
     case editPost(postId: String, query: PostQuery)
     // Likst
@@ -108,7 +108,7 @@ extension Router: RouterType {
             
         case .checkSpecificPost(let postId):
             return "v1/posts/\(postId)"
-        case .checkUserPosts(let userId):
+        case .checkUserPosts(let userId, _):
             return "v1/posts/users/\(userId)/"
         case .deletePost(let postId):
             return "v1/posts/\(postId)"
@@ -164,8 +164,10 @@ extension Router: RouterType {
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit),
                     URLQueryItem(name: QueryKey.product_id.rawValue, value: query.product_id),
                     URLQueryItem(name: QueryKey.hashTag.rawValue, value: query.hashTag)]
-            
-        case .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost:
+        case .checkUserPosts(_, let query):
+            return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
+                    URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit)]
+        case .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost:
             return nil
         }
     }

@@ -101,6 +101,9 @@ final class HomeViewModel: InputOutput {
                     outputMostLikedPostsItem.accept(Array(likeSortedList[..<min(10, likeSortedList.count)])) // 24개까지만 가져오기
                     owner.tagList = Array(sortedTagList[..<min(sortedTagList.count, 5)])
                     outputTagItems.accept(owner.tagList)
+                    if owner.selectedTagRow == 0 {
+                        input.inputTagSelectedTrigger.onNext(0)
+                    }
                 }
             }
             .disposed(by: disposeBag)

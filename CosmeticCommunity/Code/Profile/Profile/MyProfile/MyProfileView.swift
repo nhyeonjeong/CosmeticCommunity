@@ -9,7 +9,14 @@ import UIKit
 import SnapKit
 
 final class MyProfileView: BaseView {
-    
+    let noResultLabel = {
+        let view = UILabel()
+        view.text = "게시글이 없습니다"
+        view.isHidden = true
+        view.textAlignment = .center
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.large)
+        return view
+    }()
     let profileView = UserDataView(.profile)
     let personalLabel = {
         let view = UILabel()
@@ -55,7 +62,7 @@ final class MyProfileView: BaseView {
         
         buttonStack.addArrangedSubview(EditProfileButton)
         buttonStack.addArrangedSubview(logoutButton)
-        addViews([profileView, personalLabel, followStackView, buttonStack, postsCollectionView])
+        addViews([profileView, personalLabel, followStackView, buttonStack, postsCollectionView, noResultLabel])
     }
     override func configureConstraints() {
         profileView.snp.makeConstraints { make in
@@ -92,6 +99,10 @@ final class MyProfileView: BaseView {
         postsCollectionView.snp.makeConstraints { make in
             make.top.equalTo(buttonStack.snp.bottom).offset(8)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
+        }
+        noResultLabel.snp.makeConstraints { make in
+            make.top.equalTo(logoutButton.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
         }
     }
     func upgradeUserView(_ data: UserModel) { // 게시글 상단부분 업데이트

@@ -59,6 +59,12 @@ final class MyProfileViewController: BaseViewController {
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        output.outputNoResult
+            .drive(with: self) { owner, value in
+                owner.mainView.noResultLabel.isHidden = value
+            }
+            .disposed(by: disposeBag)
     }
     
     override func configureView() {

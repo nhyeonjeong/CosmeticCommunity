@@ -25,7 +25,7 @@ final class OtherProfileViewController: BaseViewController {
     private let mainView = OtherProfileView()
     private let viewModel = OtherProfileViewModel()
     private lazy var inputFetchProfile = BehaviorSubject<String?>(value: userId)
-    
+    let inputPrepatchTrigger = PublishSubject<[IndexPath]>()
     override func loadView() {
         view = mainView
     }
@@ -37,7 +37,7 @@ final class OtherProfileViewController: BaseViewController {
         inputFetchProfile.onNext(userId)
     }
     override func bind() {
-        let input = OtherProfileViewModel.Input(inputFetchProfile: inputFetchProfile)
+        let input = OtherProfileViewModel.Input(inputFetchProfile: inputFetchProfile, inputPrepatchTrigger: inputPrepatchTrigger)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
         output.outputProfileResult
@@ -70,6 +70,18 @@ final class OtherProfileViewController: BaseViewController {
                 let vc = PostDetailViewController()
                 vc.postId = data.post_id
                 owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        // prefetch
+        mainView.postsCollectionView.rx.prefetchItems
+            .bind(with: self) { owner, indexPaths in
+                owner.inputPrepatchTrigger.onNext(indexPaths)
+            }
+            .disposed(by: disposeBag)
+        output.outputNoResult
+            .drive(with: self) { owner, value in
+                owner.mainView.noResultLabel.isHidden = value
             }
             .disposed(by: disposeBag)
     }
