@@ -95,7 +95,7 @@ final class SaveViewModel: InputOutput{
                             }
                         }
                         outputRecentPosts.accept(nil)
-                        return Observable<PostModel>.empty()
+                        return Observable<PostModel>.empty() // 블로그
                     }
                     postModelArray.append(postObservable) // Observable<PostModel> 배열 추가
                 }

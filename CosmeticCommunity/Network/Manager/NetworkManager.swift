@@ -42,7 +42,7 @@ final class NetworkManager {
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
-                                                print(success)
+//                                                print(success)
                         group.leave()
 //                        print("😎3 \(router.path)")
                         group.notify(queue: .main) {

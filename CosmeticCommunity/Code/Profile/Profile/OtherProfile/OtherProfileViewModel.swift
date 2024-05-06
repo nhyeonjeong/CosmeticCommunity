@@ -18,6 +18,7 @@ final class OtherProfileViewModel: InputOutput {
     var userId = ""
     var nextCursor: String = ""
     var postData: [PostModel] = []
+    var limit = "20" // 디폴트
     struct Input {
         let inputFetchProfile: BehaviorSubject<String?>
         let inputPrepatchTrigger: PublishSubject<[IndexPath]>
@@ -57,8 +58,7 @@ final class OtherProfileViewModel: InputOutput {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputFetchProfile.onNext(id)
                             } failureHandler: {
-//                                outputProfileResult.onNext(nil)
-//                                fetchMyPostsSubject.onNext(nil)
+                                //
                             } loginAgainHandler: {
                                 print("다시 로그인해야돼용")
                                 self.outputLoginView.accept(())
@@ -69,7 +69,9 @@ final class OtherProfileViewModel: InputOutput {
                         return Observable<UserModel>.never()
                     }
             }
+            .debug()
             .subscribe(with: self) { owner, data in
+                print("😆inputFetchProfile")
                 outputProfileResult.onNext(data)
                 fetchPostsSubject.onNext(())
             }
@@ -77,7 +79,10 @@ final class OtherProfileViewModel: InputOutput {
         
         fetchPostsSubject
             .flatMap { _ in
-                let query = CheckPostQuery(next: self.nextCursor, limit: "20", product_id: nil)
+                if self.nextCursor == "0" {
+                    return Observable<CheckPostModel>.empty()
+                }
+                let query = CheckPostQuery(next: self.nextCursor, limit: self.limit, product_id: nil)
                 return self.postManager.checkUserPosts(userId: self.userId, query: query)
                     .catch { error in
                         print("에러발생")
@@ -101,7 +106,7 @@ final class OtherProfileViewModel: InputOutput {
             }
             .bind(with: self) { owner, value in
                 owner.postData.append(contentsOf: value.data)
-                outputPostItems.onNext(value.data)
+                outputPostItems.onNext(owner.postData)
                 
                 if value.data.count == 0 {
                     outputNoResult.accept(false)
@@ -109,14 +114,15 @@ final class OtherProfileViewModel: InputOutput {
                     outputNoResult.accept(true)
                 }
                 owner.nextCursor = value.next_cursor
-//                owner.limit = "20" // limit 다시 돌리기
+                owner.limit = "20" // viewWillAppear에서 limit이 바뀌었을 때 limit 다시 돌리기
             }
             .disposed(by: disposeBag)
         
         input.inputPrepatchTrigger
             .flatMap { indexPaths in
                 let row = indexPaths.first?.row
-                if row == self.postData.count - 4 || row == self.postData.count - 5 {
+                // 한 줄에 세 개니까 조건문 3개
+                if row == self.postData.count - 4 || row == self.postData.count - 5 || row == self.postData.count - 6 {
                     return Observable.just(())
                 } else {
                     return Observable.empty()

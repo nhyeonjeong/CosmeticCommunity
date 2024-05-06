@@ -13,7 +13,6 @@ import Toast
 final class OtherProfileViewController: BaseViewController {
     var userId: String // 넘어온 유저의 userId
     init(userId: String) {
-        
         self.userId = userId
         super.init(nibName: nil, bundle: nil)
     }
@@ -34,6 +33,7 @@ final class OtherProfileViewController: BaseViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        viewModel.limit = "\(max(viewModel.postData.count, 20))"
         inputFetchProfile.onNext(userId)
     }
     override func bind() {
@@ -79,6 +79,7 @@ final class OtherProfileViewController: BaseViewController {
                 owner.inputPrepatchTrigger.onNext(indexPaths)
             }
             .disposed(by: disposeBag)
+        
         output.outputNoResult
             .drive(with: self) { owner, value in
                 owner.mainView.noResultLabel.isHidden = value

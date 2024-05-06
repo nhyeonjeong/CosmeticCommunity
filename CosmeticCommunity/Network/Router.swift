@@ -59,7 +59,7 @@ extension Router: RouterType {
     }
     
     var headers: HTTPHeaders {
-        print("----network---", self.path, ", \n headersAccessToken", UserManager.shared.getAccessToken())
+//        print("----network---", self.path, ", \n headersAccessToken", UserManager.shared.getAccessToken())
         switch self {
         case .tokenRefresh:
             return [HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? "",
@@ -97,7 +97,6 @@ extension Router: RouterType {
         case .myProfile:
             return "v1/users/me/profile"
         case .otherProfile(let userId):
-            print("otherProfile network =---------userid : \(userId)")
             return "v1/users/\(userId)/profile"
         case .uploadPostImage:
             return "v1/posts/files"
