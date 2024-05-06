@@ -42,10 +42,10 @@ final class EditUploadViewController: BaseViewController {
         bindGallery()
         let inputUploadImageTrigger = PublishSubject<Void>()
         let inputUploadTrigger = PublishSubject<Void>()
-        let input = EditUploadViewModel.Input(inputTitleString: mainView.titleTextField.rx.text, inputPersonalColor: inputPersonalColor,
+        let input = EditUploadViewModel.Input(inputTitleString: mainView.titleTextField.textField.rx.text, inputPersonalColor: inputPersonalColor,
                                           inputContentString: mainView.contentTextView.rx.text,
                                               inputEditButton: inputEditButton, inputUploadImagesTrigger: inputUploadImageTrigger,
-                                              inputEditTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems, inputHashTags: mainView.hashtagTextField.rx.text,
+                                              inputEditTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems, inputHashTags: mainView.hashtagTextField.textField.rx.text,
                                           inputXbuttonTrigger: inputXbuttonTrigger)
         settingPostData() // 여기 있어야 하는 이유?
         
@@ -120,13 +120,13 @@ final class EditUploadViewController: BaseViewController {
         }
         
         print("postData.title: \(postData.title)")
-        mainView.titleTextField.text = postData.title
+        mainView.titleTextField.textField.text = postData.title
         mainView.contentTextView.text = postData.content
 //        mainView.titleTextField.text = postData.title
 
         inputPersonalColor.onNext(postData.personalColor)
         let hashTagText = postData.hashTags.map{"#\($0)"}.joined(separator: " ")
-        mainView.hashtagTextField.text = hashTagText
+        mainView.hashtagTextField.textField.text = hashTagText
 //        configureView()
     }
     // 업로드 버튼

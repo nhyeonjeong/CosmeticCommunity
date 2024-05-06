@@ -26,43 +26,58 @@ final class UploadView: BaseView {
         return view
     }()
     let titleTextField = {
-        let view = UITextField()
+        let view = CustomTextField(placeholder: "제목을 입력해주세요")
         view.placeholder = "제목을 입력해주세요"
+        view.textField.font = Constants.Font.normal
+        return view
+    }()
+    let contentBackView = {
+        let view = UIView()
+        view.layer.cornerRadius = 10
+        view.layer.borderColor = Constants.Color.secondPoint.cgColor
+        view.layer.borderWidth = 1
         return view
     }()
     let contentTextView = {
         let view = UITextView()
-        view.text = "내용"
         view.font = Constants.Font.normal
-        
         return view
     }()
-//    let personalColorPicker = {
-//        let view = UIPickerView()
-//        view.selectedRow(inComponent: 0)
-//        return view
-//    }()
     let personalSelectButton = {
         let view = UIButton()
-        view.setTitle("퍼스널컬러 선택", for: .normal)
-        view.setTitleColor(Constants.Color.text, for: .normal)
+        var config = UIButton.Configuration.filled()
+        config.image = Constants.Image.cursorClickImage
+        config.imagePadding = 5
+        config.imagePlacement = .trailing
+        config.title = "상품의 퍼스널 컬러를 선택해주세요"
+        config.baseBackgroundColor = Constants.Color.secondPoint
+        config.baseForegroundColor = Constants.Color.text
+        view.configuration = config
+        view.layer.cornerRadius = 10
         return view
     }()
     
     let hashtagTextField = {
-        let view = UITextField()
+        let view = CustomTextField(placeholder: "해시태그를 입력해주세요! 검색에 활용됩니다")
         view.placeholder = "해시태그를 입력해주세요. 검색에 활용됩니다."
+        view.textField.font = Constants.Font.normal
+        return view
+    }()
+    let uploadButton = {
+        let view = PointButton()
+        view.configureTitle("업로드")
         return view
     }()
     
     override func configureHierarchy() {
-        addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentTextView, hashtagTextField])
+        contentBackView.addSubview(contentTextView)
+        addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, uploadButton])
     }
     
     override func configureConstraints() {
 
         addPhotoButton.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(safeAreaLayoutGuide).inset(10)
             make.leading.equalTo(safeAreaLayoutGuide).inset(10)
             make.size.equalTo(100)
         }
@@ -73,27 +88,33 @@ final class UploadView: BaseView {
             make.height.equalTo(100)
         }
         titleTextField.snp.makeConstraints { make in
-            make.top.equalTo(addPhotoButton.snp.bottom).offset(8)
+            make.top.equalTo(addPhotoButton.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
             make.centerX.equalToSuperview()
         }
         personalSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(titleTextField.snp.bottom).offset(4)
-            make.height.equalTo(70)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(10)
+            make.top.equalTo(titleTextField.snp.bottom).offset(8)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
         }
-        contentTextView.snp.makeConstraints { make in
-            make.top.equalTo(personalSelectButton.snp.bottom)
+        contentBackView.snp.makeConstraints { make in
+            make.top.equalTo(personalSelectButton.snp.bottom).offset(8)
             make.height.equalTo(200)
             make.horizontalEdges.equalToSuperview().inset(10)
-//            make.centerX.equalToSuperview()
+        }
+        contentTextView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(10)
         }
         hashtagTextField.snp.makeConstraints { make in
-            make.top.equalTo(contentTextView.snp.bottom).offset(4)
+            make.top.equalTo(contentBackView.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(10)
+//            make.bottom.greaterThanOrEqualTo(keyboardLayoutGuide).inset(300)
+        }
+        uploadButton.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview().inset(10)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
+            make.height.equalTo(50)
         }
     }
-
 }
 
 extension UploadView {

@@ -22,7 +22,7 @@ final class CustomTextField: BaseView {
         let view = UIView()
         view.layer.cornerRadius = 10
         view.layer.borderColor = Constants.Color.secondPoint.cgColor
-        view.layer.borderWidth = 2
+        view.layer.borderWidth = 1
         return view
     }()
     let textField = UITextField()

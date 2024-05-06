@@ -13,7 +13,7 @@ final class NotLoginView: BaseView {
         let view = UIButton()
         var config = UIButton.Configuration.filled()
         config.imagePadding = 10
-        config.image = UIImage(systemName: "cursorarrow.rays")
+        config.image = Constants.Image.cursorClickImage
         config.title = "로그인 하러 가기"
         config.baseBackgroundColor = Constants.Color.secondPoint
         config.baseForegroundColor = Constants.Color.text

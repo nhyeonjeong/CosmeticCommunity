@@ -23,6 +23,7 @@ class UploadViewController: BaseViewController {
     // x버튼
     private let inputXbuttonTrigger = PublishSubject<Int>()
     private let inputPersonalColor = BehaviorSubject<PersonalColor>(value: .none)
+    private let contentTextIsEditing = BehaviorSubject<Bool>(value: false)
     override func loadView() {
         view = mainView
     }
@@ -47,10 +48,10 @@ class UploadViewController: BaseViewController {
         bindGallery() // 사진첩 열기 rx 연결
         let inputUploadImageTrigger = PublishSubject<Void>()
         let inputUploadTrigger = PublishSubject<Void>()
-        let input = UploadViewModel.Input(inputTitleString: mainView.titleTextField.rx.text, inputPersonalColor: inputPersonalColor,
+        let input = UploadViewModel.Input(inputTitleString: mainView.titleTextField.textField.rx.text, inputPersonalColor: inputPersonalColor,
                                           inputContentString: mainView.contentTextView.rx.text,
                                           inputUploadButton: inputUploadButton, inputUploadImagesTrigger: inputUploadImageTrigger,
-                                          inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems, inputHashTags: mainView.hashtagTextField.rx.text,
+                                          inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems, inputHashTags: mainView.hashtagTextField.textField.rx.text,
                                           inputXbuttonTrigger: inputXbuttonTrigger)
         
         let output = viewModel.transform(input: input)
@@ -66,7 +67,7 @@ class UploadViewController: BaseViewController {
                         inputUploadImageTrigger.onNext(()) // 이미지 먼저 올리기..
                     }
                 } else {
-                    owner.view.makeToast("제목,내용,해시태그,퍼스널컬러를 입력해주세요", duration: 1.0, position: .center)
+                    owner.view.makeToast("모든 항목을 작성해주세요", duration: 1.0, position: .bottom)
                 }
             }
             .disposed(by: disposeBag)
@@ -92,6 +93,42 @@ class UploadViewController: BaseViewController {
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
+    
+        // MARK: - contentTextView placeholder
+        contentTextIsEditing
+            .bind(with: self) { owner, isEditing in
+                if !isEditing { // 작성중이 아니라면
+                    owner.mainView.contentTextView.text = "상품에 대한 설명을 입력해주세요"
+                    owner.mainView.contentTextView.textColor = Constants.Color.subText
+                } else {
+                    owner.mainView.contentTextView.textColor = Constants.Color.text
+                }
+            }.disposed(by: disposeBag)
+        
+        mainView.contentTextView.rx.didEndEditing
+            .withLatestFrom(contentTextIsEditing)
+            .debug()
+            .bind(with: self) { owner, isEditing in
+                if owner.mainView.contentTextView.text == "" {
+                    owner.contentTextIsEditing.onNext(false)
+                }
+                print("😎change")
+            }.disposed(by: disposeBag)
+        
+        mainView.contentTextView.rx.didBeginEditing
+            .withLatestFrom(contentTextIsEditing)
+            .bind(with: self) { owner, isEditing in
+                if !isEditing {
+                    owner.mainView.contentTextView.text = ""
+                    owner.contentTextIsEditing.onNext(true)
+                }
+            }.disposed(by: disposeBag)
+        
+        mainView.uploadButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.inputUploadButton.onNext(())
+            }.disposed(by: disposeBag)
+
     }
     override func configureView() {
         setNavigationBar()
@@ -99,18 +136,22 @@ class UploadViewController: BaseViewController {
             UIAction(title: "봄웜", state: .off, handler: { _ in
                 self.inputPersonalColor.onNext(.spring)
                 self.mainView.personalSelectButton.setTitle("봄웜", for: .normal)
+                self.setSelectedPersonalButtonImage()
             }),
             UIAction(title: "여름쿨", state: .off, handler: { _ in
                 self.inputPersonalColor.onNext(.summer)
                 self.mainView.personalSelectButton.setTitle("여름쿨", for: .normal)
+                self.setSelectedPersonalButtonImage()
             }),
             UIAction(title: "가을웜", state: .off, handler: { _ in
                 self.inputPersonalColor.onNext(.fall)
                 self.mainView.personalSelectButton.setTitle("가을웜", for: .normal)
+                self.setSelectedPersonalButtonImage()
             }),
             UIAction(title: "겨울쿨", handler: { _ in
                 self.inputPersonalColor.onNext(.winter)
                 self.mainView.personalSelectButton.setTitle("겨울쿨", for: .normal)
+                self.setSelectedPersonalButtonImage()
             })])
         
         mainView.personalSelectButton.showsMenuAsPrimaryAction = true
@@ -118,28 +159,27 @@ class UploadViewController: BaseViewController {
     @objc func xButtonClicked(_ sender: UIButton) {
         inputXbuttonTrigger.onNext(sender.tag)
     }
-    // 업로드 버튼
-    @objc func rightBarButtonItemClicked() {
-        inputUploadButton.onNext(())
-    }
+
     @objc func popButtonClicked() {
         navigationController?.dismiss(animated: true)
     }
     func setNavigationBar() {
-        let uploadButton = UIBarButtonItem(title: "업로드", style: .plain, target: self, action: #selector(rightBarButtonItemClicked))
-        
+        navigationItem.title = "상품 등록"
         let popButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(popButtonClicked))
-        navigationItem.rightBarButtonItem = uploadButton
+        popButton.tintColor = Constants.Color.point
         navigationItem.leftBarButtonItem = popButton
     }
 }
 
 extension UploadViewController {
+    func setSelectedPersonalButtonImage() {
+        mainView.personalSelectButton.configuration?.title = "봄웜"
+        mainView.personalSelectButton.configuration?.image = Constants.Image.checkedItem
+    }
     func bindGallery() {
         // 사진첩 열기
         mainView.addPhotoButton.rx.tap
             .bind(with: self) { owner, _ in
-                
                 var configuration = PHPickerConfiguration()
                 
                 // 배열형태로 여러 형태의 미디어를 가져올 수 있다. .any(of: [])

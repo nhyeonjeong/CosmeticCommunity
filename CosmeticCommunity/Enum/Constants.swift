@@ -24,6 +24,8 @@ enum Constants {
         static let searchButton = UIImage(systemName: "magnifyingglass")
         static let recentSearchButton = UIImage(systemName: "arrow.up.left")
         static let category = UIImage(systemName: "line.horizontal.3")
+        static let cursorClickImage = UIImage(systemName: "cursorarrow.rays")
+        static let checkedItem = UIImage(systemName: "checkmark.circle")
     }
     enum Font {
         static let bigTitle = UIFont.systemFont(ofSize: 20, weight: .semibold)
