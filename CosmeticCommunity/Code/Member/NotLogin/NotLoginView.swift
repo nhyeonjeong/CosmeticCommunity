@@ -11,8 +11,15 @@ import SnapKit
 final class NotLoginView: BaseView {
     let loginButton = {
         let view = UIButton()
-        view.setTitle("로그인 하러 가기 >", for: .normal)
-        view.setTitleColor(Constants.Color.point, for: .normal)
+        var config = UIButton.Configuration.filled()
+        config.imagePadding = 10
+        config.image = UIImage(systemName: "cursorarrow.rays")
+        config.title = "로그인 하러 가기"
+        config.baseBackgroundColor = Constants.Color.secondPoint
+        config.baseForegroundColor = Constants.Color.text
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
+        view.configuration = config
         return view
     }()
     @objc func loginButtonClicked() {

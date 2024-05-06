@@ -85,7 +85,7 @@ final class RegisterView: BaseView {
         }
         emailValidButton.snp.makeConstraints { make in
             make.leading.equalTo(emailTextField.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().inset(10)
+            make.trailing.equalToSuperview().inset(20)
             make.height.equalTo(40)
             make.centerY.equalTo(emailTextField)
         }
@@ -114,7 +114,7 @@ final class RegisterView: BaseView {
             make.horizontalEdges.equalToSuperview().inset(20)
         }
         nicknameTitle.snp.makeConstraints { make in
-            make.top.equalTo(checkPasswordTextField.snp.bottom).offset(28)
+            make.top.equalTo(checkPasswordTextField.snp.bottom).offset(10)
             make.leading.equalToSuperview().inset(20)
             make.height.equalTo(20)
         }
@@ -130,7 +130,7 @@ final class RegisterView: BaseView {
         registerButton.snp.makeConstraints { make in
             make.top.greaterThanOrEqualTo(nicknameValidMessageLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.bottom.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)
         }
     }

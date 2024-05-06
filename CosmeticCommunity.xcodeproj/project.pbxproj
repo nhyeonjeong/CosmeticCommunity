@@ -496,7 +496,6 @@
 				8B3AFCC12BD56B420069773F /* SegmentedControl */,
 				8B57ABB62BD26F62004BC76E /* View */,
 				8B428CA92BCCABF800FD1B69 /* Button */,
-				8B428C9E2BCCA7D400FD1B69 /* NotLogin */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -537,6 +536,7 @@
 		8B428CA12BCCA98B00FD1B69 /* Member */ = {
 			isa = PBXGroup;
 			children = (
+				8B428C9E2BCCA7D400FD1B69 /* NotLogin */,
 				8B428CC82BCD1CDB00FD1B69 /* Register */,
 				8B428CA22BCCA99E00FD1B69 /* Login */,
 			);
