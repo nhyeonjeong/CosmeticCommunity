@@ -16,6 +16,8 @@ class BaseViewController: UIViewController, RxProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setViewTapGesture(mainView: self.view)
+        
         bind()
         configureHierarchy()
         configureConstraints()
@@ -39,6 +41,7 @@ class BaseViewController: UIViewController, RxProtocol {
     }
     
     func bindLoginView() {
+        // 리프레시토큰 만료시 로그인 화면으로
         outputLoginView
             .asDriver(onErrorJustReturn: ())
             .drive(with: self) { owner, _ in

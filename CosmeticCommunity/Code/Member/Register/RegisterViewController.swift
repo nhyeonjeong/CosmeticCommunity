@@ -18,7 +18,6 @@ final class RegisterViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         configureNavBar()
-        setScrollViewTapGesture()
     }
     override func bind() {
         let input = RegisterViewModel.Input(inputPersonal: mainView.personalSegment.rx.selectedSegmentIndex, inputEmail: mainView.emailTextField.textField.rx.text,
@@ -72,17 +71,6 @@ final class RegisterViewController: BaseViewController {
             .drive(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true) // 다시 로그인 화면으로 넘어가기
             }.disposed(by: disposeBag)
-    }
-    
-    func setScrollViewTapGesture() {
-        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MyTapMethod))
-        singleTapGestureRecognizer.numberOfTapsRequired = 1
-        singleTapGestureRecognizer.isEnabled = true
-        singleTapGestureRecognizer.cancelsTouchesInView = false
-        mainView.addGestureRecognizer(singleTapGestureRecognizer)
-    }
-    @objc func MyTapMethod(sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
     }
 }
 extension RegisterViewController {

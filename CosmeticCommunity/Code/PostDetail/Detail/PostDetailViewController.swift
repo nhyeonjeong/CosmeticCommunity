@@ -34,7 +34,6 @@ final class PostDetailViewController: BaseViewController {
         super.viewWillAppear(true)
         print("😍\(postId)")
         inputPostIdTrigger.onNext(postId ?? "")
-        setScrollViewTapGesture()
         // userdefault에 최근 본 포스트 저장
         mainView.uploadCommentView.isUserInteractionEnabled = true
     }
@@ -213,15 +212,5 @@ extension PostDetailViewController {
             //
         }
         return [deleteAction, editAction]
-    }
-    func setScrollViewTapGesture() {
-        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MyTapMethod))
-        singleTapGestureRecognizer.numberOfTapsRequired = 1
-        singleTapGestureRecognizer.isEnabled = true
-        singleTapGestureRecognizer.cancelsTouchesInView = false
-        mainView.scrollView.addGestureRecognizer(singleTapGestureRecognizer)
-    }
-    @objc func MyTapMethod(sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
     }
 }

@@ -29,6 +29,17 @@ extension UIViewController {
         present(alert, animated: true)
 //        return alert
     }
+    
+    func setViewTapGesture(mainView: UIView) {
+        let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MyTapMethod))
+        singleTapGestureRecognizer.numberOfTapsRequired = 1
+        singleTapGestureRecognizer.isEnabled = true
+        singleTapGestureRecognizer.cancelsTouchesInView = false
+        mainView.addGestureRecognizer(singleTapGestureRecognizer)
+    }
+    @objc func MyTapMethod(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
 }
 
 extension UIViewController {
