@@ -29,12 +29,12 @@ final class NetworkManager {
                 observer.onError(APIError.invalidURLError_444)
                 return Disposables.create()
             }
-            
+            /*
              AF.request(urlRequest)
              .responseString { response in
                  print("⭐️responseString : \(response)")
              }
-
+             */
             AF.request(urlRequest)
                 .validate(statusCode: 200..<201)
                 .responseDecodable(of: T.self) { response in

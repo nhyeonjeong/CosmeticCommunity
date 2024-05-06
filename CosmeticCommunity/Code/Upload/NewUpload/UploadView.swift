@@ -13,10 +13,12 @@ final class UploadView: BaseView {
     let addPhotoButton = {
         let view = UIButton()
         view.setImage(UIImage(systemName: "camera"), for: .normal)
-        view.tintColor = Constants.Color.point
+        view.backgroundColor = Constants.Color.secondPoint
+        view.tintColor = Constants.Color.text
         view.layer.cornerRadius = 10
-        view.layer.borderWidth = 1
-        view.layer.borderColor = Constants.Color.point.cgColor
+        var config = UIButton.Configuration.plain()
+        config.buttonSize = .large
+        view.configuration = config
         return view
     }()
     lazy var photoCollectionView = {
@@ -63,15 +65,14 @@ final class UploadView: BaseView {
         view.textField.font = Constants.Font.normal
         return view
     }()
-    let uploadButton = {
+    let button = {
         let view = PointButton()
-        view.configureTitle("업로드")
         return view
     }()
     
     override func configureHierarchy() {
         contentBackView.addSubview(contentTextView)
-        addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, uploadButton])
+        addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, button])
     }
     
     override func configureConstraints() {
@@ -109,7 +110,7 @@ final class UploadView: BaseView {
             make.horizontalEdges.equalToSuperview().inset(10)
 //            make.bottom.greaterThanOrEqualTo(keyboardLayoutGuide).inset(300)
         }
-        uploadButton.snp.makeConstraints { make in
+        button.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(10)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)

@@ -89,6 +89,11 @@ final class EditUploadViewController: BaseViewController {
                 cell.upgradeCell(element)
             }
             .disposed(by: disposeBag)
+        
+        mainView.button.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.inputEditButton.onNext(())
+            }.disposed(by: disposeBag)
     }
     override func configureView() {
         // 가져온 데이터가 없으면 dismiss
@@ -97,6 +102,7 @@ final class EditUploadViewController: BaseViewController {
             return
         }
         setNavigationBar()
+        mainView.button.configureTitle("수정")
         mainView.personalSelectButton.menu = UIMenu(title: "퍼스널 컬러", children: {
             var components: [UIMenuElement] = []
             for item in viewModel.personalCases {
@@ -118,20 +124,14 @@ final class EditUploadViewController: BaseViewController {
             dismiss(animated: true)
             return
         }
-        
         print("postData.title: \(postData.title)")
         mainView.titleTextField.textField.text = postData.title
         mainView.contentTextView.text = postData.content
-//        mainView.titleTextField.text = postData.title
 
         inputPersonalColor.onNext(postData.personalColor)
         let hashTagText = postData.hashTags.map{"#\($0)"}.joined(separator: " ")
         mainView.hashtagTextField.textField.text = hashTagText
-//        configureView()
-    }
-    // 업로드 버튼
-    @objc func rightBarButtonItemClicked() {
-        inputEditButton.onNext(())
+//        configureView() // ? 여기서 하면 title이 안써짐
     }
     @objc func xButtonClicked(_ sender: UIButton) {
         inputXbuttonTrigger.onNext(sender.tag)
@@ -141,10 +141,7 @@ final class EditUploadViewController: BaseViewController {
         popEditSheet?() // dismiss하면서 다시 포스트 조회하도록
     }
     func setNavigationBar() {
-        let uploadButton = UIBarButtonItem(title: "수정", style: .plain, target: self, action: #selector(rightBarButtonItemClicked))
-        
         let popButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(popButtonClicked))
-        navigationItem.rightBarButtonItem = uploadButton
         navigationItem.leftBarButtonItem = popButton
     }
 }

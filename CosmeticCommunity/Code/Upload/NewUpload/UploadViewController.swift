@@ -124,7 +124,7 @@ class UploadViewController: BaseViewController {
                 }
             }.disposed(by: disposeBag)
         
-        mainView.uploadButton.rx.tap
+        mainView.button.rx.tap
             .bind(with: self) { owner, _ in
                 owner.inputUploadButton.onNext(())
             }.disposed(by: disposeBag)
@@ -132,6 +132,9 @@ class UploadViewController: BaseViewController {
     }
     override func configureView() {
         setNavigationBar()
+        
+        mainView.button.configureTitle("업로드")
+        
         mainView.personalSelectButton.menu = UIMenu(title: "퍼스널 컬러", children: [
             UIAction(title: "봄웜", state: .off, handler: { _ in
                 self.inputPersonalColor.onNext(.spring)

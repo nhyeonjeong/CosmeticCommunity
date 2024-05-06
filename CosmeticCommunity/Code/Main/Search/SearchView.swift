@@ -24,11 +24,12 @@ final class SearchView: BaseView {
     }()
     let removeAllButton = {
         let view = UIButton()
-        view.setTitle("모두 삭제", for: .normal)
-        view.setTitleColor(Constants.Color.text, for: .normal)
-        view.layer.cornerRadius = 10
-        view.layer.borderWidth = 1
-        view.layer.borderColor = Constants.Color.point.cgColor
+        var config = UIButton.Configuration.filled()
+        config.title = "모두 삭제"
+        config.baseBackgroundColor = .clear
+        config.baseForegroundColor = Constants.Color.text
+        config.buttonSize = .small
+        view.configuration = config
         return view
     }()
     let recentSearchTableView = {
@@ -76,7 +77,7 @@ final class SearchView: BaseView {
         textfield.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()
             make.leading.equalToSuperview().inset(10)
-//            make.width.equalTo(300)
+//            make.width.equalTo(330)
         }
         xButton.snp.makeConstraints { make in
             make.verticalEdges.trailing.equalToSuperview()
@@ -89,7 +90,8 @@ final class SearchView: BaseView {
             make.edges.equalTo(safeAreaLayoutGuide)
         }
         removeAllButton.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(4)
+            make.trailing.equalToSuperview().inset(10)
         }
         recentSearchTableView.snp.makeConstraints { make in
             make.top.equalTo(removeAllButton.snp.bottom).offset(10)
@@ -106,7 +108,7 @@ final class SearchView: BaseView {
             make.height.equalTo(50)
         }
         resultCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(categoryTitleLabel.snp.bottom).offset(10)
+            make.top.equalTo(categoryTitleLabel.snp.bottom).offset(20)
             make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
         }
     }
@@ -120,7 +122,7 @@ extension SearchView {
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
         let group: NSCollectionLayoutGroup
         group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.interItemSpacing = .fixed(20) // item간의 가로 간격
+        group.interItemSpacing = .fixed(15) // item간의 가로 간격
         // Section
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)

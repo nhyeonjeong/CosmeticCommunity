@@ -69,11 +69,7 @@ final class PostDetailViewController: BaseViewController {
                     owner.imageItems.onNext(value.files)
                     owner.mainView.creatorView.upgradeView(profileImage: value.creator.profileImage, nick: value.creator.nick)
                     owner.mainView.detailsView.upgradeView(value)
-                    var content = value.content
-                    if let range = content.range(of: "#") {
-                        content.removeSubrange(range.lowerBound...)
-                    }
-                    owner.mainView.contentLabel.text = content
+                    owner.mainView.contentLabel.text = value.content
                     owner.mainView.creatTimeLabel.text = value.createdAt.getDateFromISO8601()
                     var hashtagText = ""
                     _ = value.hashTags.map({ hashtag in

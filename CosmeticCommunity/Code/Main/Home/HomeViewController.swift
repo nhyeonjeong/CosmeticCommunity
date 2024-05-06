@@ -116,8 +116,8 @@ extension HomeViewController {
         
         let profileButton = UIBarButtonItem(customView: customView)
         
-        let searchButton = UIBarButtonItem(image: Constants.Image.category                                         , style: .plain, target: self, action: #selector(searchButtonClicked))
-        
+        let searchButton = UIBarButtonItem(image: Constants.Image.searchButton                                         , style: .plain, target: self, action: #selector(searchButtonClicked))
+        searchButton.tintColor = Constants.Color.point
         navigationItem.rightBarButtonItems = [profileButton, searchButton]
     }
 }

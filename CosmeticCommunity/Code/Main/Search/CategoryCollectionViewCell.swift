@@ -13,19 +13,29 @@ final class CategoryCollectionViewCell: BaseCollectionViewCell {
         let view = UILabel()
         view.font = Constants.Font.boldTitle
         view.textAlignment = .center
+        view.textColor = Constants.Color.subText
         return view
     }()
+    let underLine = UIView()
     
     override func configureHierarchy() {
+        categoryLabel.addSubview(underLine)
         contentView.addViews([categoryLabel])
     }
     override func configureConstraints() {
         categoryLabel.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
+        underLine.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview().inset(2)
+            make.height.equalTo(5)
+        }
     }
-    func upgradeCell(_ personal: PersonalColor) {
-        categoryLabel.text = personal.rawValue == "" ? "전체" : personal.rawValue
-        categoryLabel.textColor = personal.rawValue == "" ? personal.textColor : personal.backgroundColor
+    func upgradeCell(_ personal: PersonalColor, isSelected: Bool) {
+//        categoryLabel.backgroundColor = isSelected ? Constants.Color.secondPoint : .white
+        categoryLabel.textColor = isSelected ? Constants.Color.text : Constants.Color.subText
+        categoryLabel.text = " \(personal.rawValue)  "
+        underLine.backgroundColor = isSelected ? Constants.Color.secondPoint : .clear
     }
 }

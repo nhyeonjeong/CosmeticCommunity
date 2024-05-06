@@ -16,7 +16,7 @@ final class SearchViewModel: InputOutput {
     
     var postData: [PostModel] = []
     var nextCursor: String = ""
-    var category: PersonalColor = .spring
+    var selectedCategory: PersonalColor = .spring
     var limit = "20" // 디폴트
     
     let categoryCases = BehaviorSubject(value: PersonalColor.personalCases)
@@ -53,12 +53,13 @@ final class SearchViewModel: InputOutput {
                 // 다시 초기화
                 self.nextCursor = ""
                 self.postData = []
-                self.category = category
+                self.selectedCategory = category
             }
             .debug()
             .withLatestFrom(input.inputSearchText.orEmpty)
             .bind(with: self) { owner, value in
-                searchTrigger.onNext((value, owner.category)) // 하나라도 반응하면 네트워크 통신
+                searchTrigger.onNext((value, owner.selectedCategory)) // 하나라도 반응하면 네트워크 통신
+                owner.categoryCases.onNext(PersonalColor.personalCases)
                 if value.trimmingCharacters(in: .whitespaces) != "" {
                     // enter누르면 최근검색어 사라지게
                     outputHideRecentSearch.accept(true)
@@ -99,7 +100,7 @@ final class SearchViewModel: InputOutput {
             .debug()
             .withLatestFrom(input.inputSearchText.orEmpty)
             .bind(with: self, onNext: { owner, text in
-                searchTrigger.onNext((text, owner.category)) // 하나라도 반응하면 네트워크 통신
+                searchTrigger.onNext((text, owner.selectedCategory)) // 하나라도 반응하면 네트워크 통신
             })
             .disposed(by: disposeBag)
         // 네트워크 통신

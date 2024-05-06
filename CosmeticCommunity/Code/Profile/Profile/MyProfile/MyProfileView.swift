@@ -20,7 +20,9 @@ final class MyProfileView: BaseView {
     let profileView = UserDataView(.profile)
     let personalLabel = {
         let view = UILabel()
-        view.font = Constants.Font.large
+        view.font = Constants.Font.normal
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         return view
     }()
     let followStackView = {
@@ -70,12 +72,12 @@ final class MyProfileView: BaseView {
         }
 
         personalLabel.snp.makeConstraints { make in
-            make.leading.equalTo(profileView.snp.trailing).offset(4)
+            make.leading.equalTo(profileView.snp.trailing).offset(10)
             make.centerY.equalTo(profileView)
             make.height.equalTo(30)
         }
         followStackView.snp.makeConstraints { make in
-            make.top.equalTo(personalLabel.snp.bottom).offset(10)
+            make.top.equalTo(personalLabel.snp.bottom).offset(16)
             make.centerX.equalToSuperview()
             make.height.equalTo(70)
         }
@@ -97,7 +99,7 @@ final class MyProfileView: BaseView {
             make.verticalEdges.trailing.equalToSuperview()
         }
         postsCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(buttonStack.snp.bottom).offset(8)
+            make.top.equalTo(buttonStack.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
         noResultLabel.snp.makeConstraints { make in
@@ -109,7 +111,7 @@ final class MyProfileView: BaseView {
         print(data)
         profileView.upgradeView(profileImage: data.profileImage, nick: data.nick)
         personalLabel.textColor = data.personalColor.textColor
-        personalLabel.text = data.personalColor.rawValue
+        personalLabel.text = " \(data.personalColor.rawValue) "
         personalLabel.backgroundColor = data.personalColor.backgroundColor
         
         followersCountButton.countLabel.text = "\(data.followers.count)"

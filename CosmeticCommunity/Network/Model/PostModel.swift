@@ -67,7 +67,11 @@ struct PostModel: Decodable {
         self.post_id = try container.decode(String.self, forKey: .post_id)
         self.product_id = try container.decode(String.self, forKey: .product_id)
         self.title = try container.decode(String.self, forKey: .title)
-        self.content = try container.decode(String.self, forKey: .content)
+        var contentText = try container.decode(String.self, forKey: .content)
+        if let range = contentText.range(of: "#") {
+            contentText.removeSubrange(range.lowerBound...)
+        }
+        self.content = contentText
         let personalColorString = try container.decodeIfPresent(String.self, forKey: .content1) ?? PersonalColor.none.rawValue
         self.personalColor = PersonalColor(rawValue: personalColorString) ?? PersonalColor.none
         self.createdAt = try container.decode(String.self, forKey: .createdAt)

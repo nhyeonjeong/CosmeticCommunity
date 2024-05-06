@@ -20,7 +20,9 @@ final class OtherProfileView: BaseView {
     let profileView = UserDataView(.profile)
     let personalLabel = {
         let view = UILabel()
-        view.font = Constants.Font.large
+        view.font = Constants.Font.normal
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         return view
     }()
     
@@ -44,7 +46,12 @@ final class OtherProfileView: BaseView {
         return view
     }()
 
-    let followButton = ProfileCustomButton("")
+    let followButton = {
+        let view = ProfileCustomButton("팔로우")
+        view.backgroundColor = Constants.Color.secondPoint
+        return view
+    }()
+    
     lazy var postsCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
         view.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
@@ -62,12 +69,12 @@ final class OtherProfileView: BaseView {
         }
 
         personalLabel.snp.makeConstraints { make in
-            make.leading.equalTo(profileView.snp.trailing).offset(4)
+            make.leading.equalTo(profileView.snp.trailing).offset(10)
             make.centerY.equalTo(profileView)
             make.height.equalTo(30)
         }
         followStackView.snp.makeConstraints { make in
-            make.top.equalTo(personalLabel.snp.bottom).offset(10)
+            make.top.equalTo(personalLabel.snp.bottom).offset(16)
             make.centerX.equalToSuperview()
             make.height.equalTo(70)
         }
@@ -83,7 +90,7 @@ final class OtherProfileView: BaseView {
             make.height.equalTo(40)
         }
         postsCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(followButton.snp.bottom).offset(8)
+            make.top.equalTo(followButton.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
         noResultLabel.snp.makeConstraints { make in

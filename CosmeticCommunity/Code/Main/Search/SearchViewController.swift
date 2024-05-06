@@ -25,7 +25,7 @@ final class SearchViewController: BaseViewController {
         inputRecentSearchTable.onNext(UserDefaultManager.shared.getRecentSearch())
         // 포스트로 갔다가 뒤로 돌아올 때 이전에 패치했던 부분까지 다시 패치
         viewModel.limit = "\(max(viewModel.postData.count, 20))"
-        inputCategorySelected.onNext(viewModel.category)
+        inputCategorySelected.onNext(viewModel.selectedCategory)
     }
     
     override func configureView() {
@@ -78,7 +78,7 @@ final class SearchViewController: BaseViewController {
         
         viewModel.categoryCases
             .bind(to: mainView.categoryCollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) {(row, element, cell) in
-                cell.upgradeCell(element)
+                cell.upgradeCell(element, isSelected: self.viewModel.selectedCategory == element)
             }
             .disposed(by: disposeBag)
         // 카테고리 눌렸을 때
