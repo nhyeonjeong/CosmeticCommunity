@@ -13,46 +13,48 @@ final class SaveCollectionViewCell: BaseCollectionViewCell {
     let kingfisherManager = KingfisherManager.shared
     let postImageView = {
         let view = UIImageView()
-        view.layer.cornerRadius = 10
+        view.backgroundColor = Constants.Color.secondPoint
         view.clipsToBounds = true
         view.contentMode = .scaleAspectFill
-        return view
-    }()
-
-    let postTitleLabel = {
-        let view = UILabel()
-        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
-        view.numberOfLines = 0
         return view
     }()
     
     let personalColorLabel = {
         let view = UILabel()
-        view.font = Constants.Font.normal
+        view.font = Constants.Font.verySmall
+        view.layer.cornerRadius = 4
+        view.clipsToBounds = true
         return view
     }()
     
+    let postTitleLabel = {
+        let view = UILabel()
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
+        view.numberOfLines = 2
+        return view
+    }()
     override func configureHierarchy() {
-        contentView.addViews([postImageView, postTitleLabel, personalColorLabel])
+        contentView.addViews([postImageView, personalColorLabel, postTitleLabel])
     }
     override func configureConstraints() {
         postImageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(contentView)
-            make.height.equalTo(170)
-        }
-        postTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(postImageView.snp.bottom).offset(4)
-            make.horizontalEdges.equalTo(contentView)
-            make.height.equalTo(20)
+            make.height.equalTo(100)
         }
         personalColorLabel.snp.makeConstraints { make in
-            make.top.equalTo(postTitleLabel.snp.bottom).offset(2)
+            make.top.equalTo(postImageView.snp.bottom).offset(2)
             make.height.equalTo(20)
-            make.bottom.horizontalEdges.equalTo(contentView)
+            make.leading.equalTo(contentView)
+        }
+        postTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(personalColorLabel.snp.bottom).offset(2)
+            make.horizontalEdges.equalTo(contentView)
         }
         
     }
-    
+    override func configureView() {
+        contentView.clipsToBounds = true
+    }
     override func prepareForReuse() {
         postImageView.image = nil
     }
@@ -65,7 +67,7 @@ final class SaveCollectionViewCell: BaseCollectionViewCell {
             }
         }
         postTitleLabel.text = item.title
-        personalColorLabel.text = item.personalColor.rawValue
+        personalColorLabel.text = " \(item.personalColor.rawValue) "
         personalColorLabel.backgroundColor = item.personalColor.backgroundColor
         personalColorLabel.textColor = item.personalColor.textColor
     }

@@ -12,12 +12,15 @@ import SnapKit
 final class SaveCustomCollectionView: BaseView {
     let title = {
         let view = UILabel()
-        view.configureLabel(textColor: Constants.Color.point, font: Constants.Font.boldTitle)
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.bigTitle)
         return view
     }()
     lazy var collectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
         view.register(SaveCollectionViewCell.self, forCellWithReuseIdentifier: SaveCollectionViewCell.identifier)
+        view.layer.cornerRadius = 10
+        view.showsVerticalScrollIndicator = false
+        view.alwaysBounceVertical = false
         return view
     }()
     override func configureHierarchy() {
@@ -25,12 +28,12 @@ final class SaveCustomCollectionView: BaseView {
     }
     override func configureConstraints() {
         title.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.leading.equalTo(safeAreaLayoutGuide).inset(10)
         }
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(title.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
-            make.height.equalTo(200)
+            make.height.equalTo(320)
         }
     }
 }
@@ -43,39 +46,61 @@ final class SaveView: BaseView {
         view.clipsToBounds = true
         return view
     }()
-
+    let scrollView = {
+        let view = UIScrollView()
+//        view.showsVerticalScrollIndicator = false
+        view.keyboardDismissMode = .onDrag
+        return view
+    }()
+    let contentView = UIView()
     let likedPostsCollection = SaveCustomCollectionView()
     let recentPostsCollection = SaveCustomCollectionView()
     
     override func configureHierarchy() {
-        addViews([likedPostsCollection, recentPostsCollection])
+        contentView.addViews([likedPostsCollection, recentPostsCollection])
+        scrollView.addSubview(contentView)
+        addViews([scrollView])
     }
     override func configureConstraints() {
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        contentView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview()
+            make.width.equalTo(scrollView.snp.width)
+        }
         likedPostsCollection.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).inset(20)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.equalToSuperview().inset(20)
+            make.horizontalEdges.equalToSuperview()
             
         }
         recentPostsCollection.snp.makeConstraints { make in
-            make.top.equalTo(likedPostsCollection.snp.bottom).inset(10)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(likedPostsCollection.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview().inset(30)
         }
     }
     override func configureView() {
-        likedPostsCollection.title.text = "하트투른 포스트"
-        recentPostsCollection.title.text = "최근 본 포스트"
+        likedPostsCollection.title.text = "추천누른 게시글"
+        recentPostsCollection.title.text = "최근 본 게시글"
     }
 }
 
 extension SaveCustomCollectionView {
     func collectionViewLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 120, height: 160) // 없으면 안됨
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        
-        layout.scrollDirection = .horizontal // 스크롤 방향도 FlowLayout에 속한다 -> contentMode때문에 Fill로
-        return layout
+        // item
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.5))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        // Group
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(100), heightDimension: .absolute(320))
+        let group: NSCollectionLayoutGroup
+        group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        group.interItemSpacing = .fixed(2) // item간의 가로 간격
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 2
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.orthogonalScrollingBehavior = .continuous
+        return UICollectionViewCompositionalLayout(section: section)
     }
 }
