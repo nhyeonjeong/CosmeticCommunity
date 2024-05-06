@@ -16,8 +16,10 @@ final class MyProfileViewModel: InputOutput {
     
     var nextCursor: String = ""
     var postData: [PostModel] = []
+    var limit = "20" // 디폴트
     struct Input {
         let inputFetchProfile: PublishSubject<Void>
+        let inputPrepatchTrigger: PublishSubject<[IndexPath]>
     }
     
     struct Output {
@@ -30,7 +32,7 @@ final class MyProfileViewModel: InputOutput {
     
     func transform(input: Input) -> Output {
         let outputProfileResult = PublishSubject<UserModel?>()
-        let fetchMyPostsSubject = PublishSubject<[String]?>()
+        let fetchMyPostsSubject = PublishSubject<Void?>()
         let outputPostItems = PublishSubject<[PostModel]?>()
         let outputNoResult = PublishRelay<Bool>()
         
@@ -62,15 +64,18 @@ final class MyProfileViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, data in
-//                print("내 프로필 패치 후 \(data.user_id)")
                 outputProfileResult.onNext(data)
-                fetchMyPostsSubject.onNext(data.posts)
+                fetchMyPostsSubject.onNext(())
             }
             .disposed(by: disposeBag)
         
         fetchMyPostsSubject
             .flatMap { posts in
-                let query = CheckPostQuery(next: self.nextCursor, limit: "20", product_id: nil)
+                if self.nextCursor == "0" {
+                    return Observable<CheckPostModel>.empty()
+                }
+                print("네트워크통신!!!!!😎")
+                let query = CheckPostQuery(next: self.nextCursor, limit: self.limit, product_id: nil)
                 return self.postManager.checkUserPosts(userId: self.userManager.getUserId() ?? "", query: query)
                     .catch { error in
                         print("에러발생")
@@ -94,17 +99,39 @@ final class MyProfileViewModel: InputOutput {
             }
             .bind(with: self) { owner, value in
                 owner.postData.append(contentsOf: value.data)
-                outputPostItems.onNext(value.data)
+                outputPostItems.onNext(owner.postData)
+                print("😎postData.append 후에 : \(owner.postData.count)")
                 
                 if value.data.count == 0 {
                     outputNoResult.accept(false)
                 } else {
                     outputNoResult.accept(true)
                 }
+                print("😎nextCursor : \(value.next_cursor)")
                 owner.nextCursor = value.next_cursor
-//                owner.limit = "20" // limit 다시 돌리기
+                owner.limit = "20" // limit 다시 돌리기
             }
             .disposed(by: disposeBag)
+        
+        // prefetch
+        input.inputPrepatchTrigger
+            .flatMap { indexPaths in
+                let row = indexPaths.first?.row
+                // 한 줄에 세 개니까 조건문 3개
+                if row == self.postData.count - 4 || row == self.postData.count - 5 || row == self.postData.count - 6 {
+                    print("😎\(row)")
+                    return Observable.just(())
+                } else {
+                    return Observable.empty()
+                }
+            }
+            .bind(with: self) { owner, _ in
+                print("😎prefetch하자!~!~!~~!")
+                fetchMyPostsSubject.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        
         return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false))
     }
 }

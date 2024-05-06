@@ -12,7 +12,9 @@ import RxCocoa
 final class MyProfileViewController: BaseViewController {
     private let mainView = MyProfileView()
     private let viewModel = MyProfileViewModel()
+    
     private let inputFetchProfile = PublishSubject<Void>()
+    private let inputPrepatchTrigger = PublishSubject<[IndexPath]>()
     override func loadView() {
         view = mainView
     }
@@ -22,11 +24,13 @@ final class MyProfileViewController: BaseViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        viewModel.limit = "\(max(viewModel.postData.count, 20))"
         inputFetchProfile.onNext(())
     }
     override func bind() {
-        let input = MyProfileViewModel.Input(inputFetchProfile: inputFetchProfile)
+        let input = MyProfileViewModel.Input(inputFetchProfile: inputFetchProfile, inputPrepatchTrigger: inputPrepatchTrigger)
         let output = viewModel.transform(input: input)
+        
         outputLoginView = output.outputLoginView
         output.outputProfileResult
             .drive(with: self) { owner, data in
@@ -57,6 +61,13 @@ final class MyProfileViewController: BaseViewController {
                 let vc = PostDetailViewController()
                 vc.postId = data.post_id
                 owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        // prefetch
+        mainView.postsCollectionView.rx.prefetchItems
+            .bind(with: self) { owner, indexPaths in
+                owner.inputPrepatchTrigger.onNext(indexPaths)
             }
             .disposed(by: disposeBag)
         

@@ -71,7 +71,6 @@ final class OtherProfileViewModel: InputOutput {
             }
             .debug()
             .subscribe(with: self) { owner, data in
-                print("😆inputFetchProfile")
                 outputProfileResult.onNext(data)
                 fetchPostsSubject.onNext(())
             }

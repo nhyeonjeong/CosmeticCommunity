@@ -16,7 +16,6 @@ final class OtherProfileViewController: BaseViewController {
         self.userId = userId
         super.init(nibName: nil, bundle: nil)
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -24,7 +23,7 @@ final class OtherProfileViewController: BaseViewController {
     private let mainView = OtherProfileView()
     private let viewModel = OtherProfileViewModel()
     private lazy var inputFetchProfile = BehaviorSubject<String?>(value: userId)
-    let inputPrepatchTrigger = PublishSubject<[IndexPath]>()
+    private let inputPrepatchTrigger = PublishSubject<[IndexPath]>()
     override func loadView() {
         view = mainView
     }

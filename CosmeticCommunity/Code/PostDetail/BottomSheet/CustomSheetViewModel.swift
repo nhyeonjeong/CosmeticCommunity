@@ -60,7 +60,6 @@ final class CustomSheetViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, _ in
-                print("왜오래온램노애롬ㄴ애롬내올")
                 outputDeleteButton.accept(())
             }
             .disposed(by: disposeBag)

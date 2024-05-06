@@ -29,28 +29,20 @@ final class NetworkManager {
                 observer.onError(APIError.invalidURLError_444)
                 return Disposables.create()
             }
-            /*
+            
              AF.request(urlRequest)
              .responseString { response in
-             print("responseString : \(response)")
+                 print("⭐️responseString : \(response)")
              }
-             */
-            group.enter()
-//            print("😎2 \(router.path)")
+
             AF.request(urlRequest)
                 .validate(statusCode: 200..<201)
                 .responseDecodable(of: T.self) { response in
                     switch response.result {
                     case .success(let success):
-//                                                print(success)
-                        group.leave()
-//                        print("😎3 \(router.path)")
-                        group.notify(queue: .main) {
-                            completionHandler(success) // 성공시 실행할 게 있다면 실행하기
-                            observer.onNext(success)
-                            observer.onCompleted()
-                        }
-                        
+                        completionHandler(success) // 성공시 실행할 게 있다면 실행하기
+                        observer.onNext(success)
+                        observer.onCompleted()
                         return
                     case .failure(let failure):
 //                        print("😎3 \(router.path)")
@@ -77,6 +69,8 @@ final class NetworkManager {
                                 return
                             case .some(_):
                                 print("error ---------------> some Error")
+                                print("🚨\(router)")
+                                print("\(response.response?.statusCode)")
                                 observer.onError(APIError.serverError_500)
                                 return
                             }
@@ -86,10 +80,6 @@ final class NetworkManager {
                         
                     }
                 }
-            group.leave()
-            group.notify(queue: .main) {
-//                print("😎4 \(router.path)")
-            }
             return Disposables.create()
         }
     }

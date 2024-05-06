@@ -15,6 +15,7 @@ final class CustomSheetViewController: BaseViewController {
     
     var popPostDetailView: (() -> Void)?
     var popAfterEditPost: (() -> Void)?
+//    var popAfterDeletePost: (() -> Void)?
     let viewModel = CustomSheetViewModel()
     let inputPostIdTrigger = PublishSubject<String?>()
     let inputEditButtonTrigger = PublishSubject<Void>()
