@@ -10,15 +10,13 @@ import Kingfisher
 
 final class HomePostLargeCollectionViewCell: BaseCollectionViewCell {
     let kingfisher = KingfisherManager.shared
-    let backView = {
-        let view = UIView()
-        view.backgroundColor = Constants.Color.secondPoint
-        return view
-    }()
+    let backView = UIView()
     let imageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.layer.cornerRadius = 10
+        view.backgroundColor = Constants.Color.secondPoint
         return view
     }()
     let personalLabel = {
@@ -43,7 +41,7 @@ final class HomePostLargeCollectionViewCell: BaseCollectionViewCell {
             make.edges.equalTo(contentView)
         }
         imageView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview()
+            make.top.horizontalEdges.equalToSuperview()
         }
         personalLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(4)
@@ -74,6 +72,7 @@ final class HomePostLargeCollectionViewCell: BaseCollectionViewCell {
             }
         }
         personalLabel.text = " \(item.personalColor.rawValue) "
+        personalLabel.textColor = item.personalColor.textColor
         personalLabel.backgroundColor = item.personalColor.backgroundColor
         titleLabel.text = item.title
     }

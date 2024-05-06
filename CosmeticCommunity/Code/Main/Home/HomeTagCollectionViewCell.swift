@@ -15,7 +15,7 @@ final class HomeTagCollectionViewCell: BaseCollectionViewCell {
         view.layer.cornerRadius = 15
         view.clipsToBounds = true
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.black.cgColor
+        view.layer.borderColor = Constants.Color.subText.cgColor
         return view
     }()
     override func configureHierarchy() {
@@ -31,6 +31,7 @@ final class HomeTagCollectionViewCell: BaseCollectionViewCell {
     }
     func upgradeCell(_ text: String, isSelected: Bool) {
         tagLabel.text = "  # \(text)  "
+        tagLabel.textColor = isSelected ? Constants.Color.text : Constants.Color.subText
         tagLabel.backgroundColor = isSelected ? Constants.Color.secondPoint : .white
     }
 }

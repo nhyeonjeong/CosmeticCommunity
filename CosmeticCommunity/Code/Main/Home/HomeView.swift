@@ -34,15 +34,10 @@ final class HomeView: BaseView {
         return view
     }()
     
-    let tagTitleLabel = {
-        let view = UILabel()
-        view.text = ""
-        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.boldTitle)
-        return view
-    }
     lazy var tagCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.tagCollectionViewLayout())
         view.register(HomeTagCollectionViewCell.self, forCellWithReuseIdentifier: HomeTagCollectionViewCell.identifier)
+        view.alwaysBounceVertical = false
         return view
     }()
     lazy var tagPostCollectionView = {
@@ -66,7 +61,7 @@ final class HomeView: BaseView {
 //            make.width.equalTo(scrollView.snp.width)
 //        }
         likedTitleLabel.snp.makeConstraints { make in
-            make.top.leading.equalTo(safeAreaLayoutGuide).inset(10)
+            make.top.leading.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(22)
         }
         mostLikedCollectionView.snp.makeConstraints { make in

@@ -61,6 +61,7 @@ class HomePostNormalCollectionViewCell: BaseCollectionViewCell {
             }
         }
         personalLabel.text = " \(item.personalColor.rawValue) "
+        personalLabel.textColor = item.personalColor.textColor
         personalLabel.backgroundColor = item.personalColor.backgroundColor
         titleLabel.text = item.title
     }
