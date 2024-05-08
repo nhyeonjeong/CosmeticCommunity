@@ -26,7 +26,7 @@ final class NotLoginView: BaseView {
 
     }
     override func configureHierarchy() {
-        addSubview(loginButton)
+        addViews([loginButton])
     }
     override func configureConstraints() {
         loginButton.snp.makeConstraints { make in

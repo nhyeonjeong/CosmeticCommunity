@@ -51,6 +51,8 @@ final class EditUploadViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
+        outputNotInNetworkTrigger = output.outputNotInNetworkTrigger
+        
         // 수정할 때
         output.outputValid
             .drive(with: self) { owner, value in
@@ -93,6 +95,25 @@ final class EditUploadViewController: BaseViewController {
         mainView.button.rx.tap
             .bind(with: self) { owner, _ in
                 owner.inputEditButton.onNext(())
+            }.disposed(by: disposeBag)
+        
+        // MARK: - Network
+        // 새로고침 버튼 tap
+        mainView.notInNetworkView.restartButton.rx.tap
+            .withLatestFrom(viewModel.outputNotInNetworkTrigger)
+            .debug()
+            .bind(with: self) { owner, againFunc in
+                againFunc?()
+            }.disposed(by: disposeBag)
+        
+        outputNotInNetworkTrigger
+            .asDriver(onErrorJustReturn: {})
+            .drive(with: self) { owner, value in
+                if let value {
+                    owner.mainView.notInNetworkView.isHidden = false
+                } else {
+                    owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
+                }
             }.disposed(by: disposeBag)
     }
     override func configureView() {

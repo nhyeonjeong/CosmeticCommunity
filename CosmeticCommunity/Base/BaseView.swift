@@ -8,13 +8,12 @@
 import UIKit
 
 class BaseView: UIView {
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         configureHierarchy()
         configureConstraints()
         configureView()
+//        configureNetworkView() // 더 나중에 해야함
     }
     
     required init?(coder: NSCoder) {
@@ -32,6 +31,5 @@ class BaseView: UIView {
     func configureView() {
         
     }
-    
-    
+  
 }

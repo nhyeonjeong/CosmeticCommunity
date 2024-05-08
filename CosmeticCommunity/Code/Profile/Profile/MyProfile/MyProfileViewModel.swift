@@ -13,6 +13,7 @@ final class MyProfileViewModel: InputOutput {
     let userManager = UserManager.shared
     let postManager = PostManager()
     let outputLoginView = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     
     var nextCursor: String = ""
     var postData: [PostModel] = []
@@ -27,6 +28,7 @@ final class MyProfileViewModel: InputOutput {
         let outputPostItems: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
         let outputNoResult: Driver<Bool>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
     var disposeBag = DisposeBag()
     
@@ -47,6 +49,11 @@ final class MyProfileViewModel: InputOutput {
                             fetchMyPostsSubject.onNext(nil)
                             return Observable<UserModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputFetchProfile.onNext(())
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputFetchProfile.onNext(())
@@ -64,6 +71,7 @@ final class MyProfileViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, data in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 outputProfileResult.onNext(data)
                 fetchMyPostsSubject.onNext(())
             }
@@ -74,7 +82,6 @@ final class MyProfileViewModel: InputOutput {
                 if self.nextCursor == "0" {
                     return Observable<CheckPostModel>.empty()
                 }
-                print("네트워크통신!!!!!😎")
                 let query = CheckPostQuery(next: self.nextCursor, limit: self.limit, product_id: nil)
                 return self.postManager.checkUserPosts(userId: self.userManager.getUserId() ?? "", query: query)
                     .catch { error in
@@ -82,6 +89,11 @@ final class MyProfileViewModel: InputOutput {
                         guard let error = error as? APIError else {
                             outputPostItems.onNext(nil)
                             return Observable<CheckPostModel>.never()
+                        }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                fetchMyPostsSubject.onNext(posts)
+                            }
                         }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
@@ -98,16 +110,14 @@ final class MyProfileViewModel: InputOutput {
                     }
             }
             .bind(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 owner.postData.append(contentsOf: value.data)
                 outputPostItems.onNext(owner.postData)
-                print("😎postData.append 후에 : \(owner.postData.count)")
-                
                 if value.data.count == 0 {
                     outputNoResult.accept(false)
                 } else {
                     outputNoResult.accept(true)
                 }
-                print("😎nextCursor : \(value.next_cursor)")
                 owner.nextCursor = value.next_cursor
                 owner.limit = "20" // limit 다시 돌리기
             }
@@ -119,19 +129,17 @@ final class MyProfileViewModel: InputOutput {
                 let row = indexPaths.first?.row
                 // 한 줄에 세 개니까 조건문 3개
                 if row == self.postData.count - 4 || row == self.postData.count - 5 || row == self.postData.count - 6 {
-                    print("😎\(row)")
                     return Observable.just(())
                 } else {
                     return Observable.empty()
                 }
             }
             .bind(with: self) { owner, _ in
-                print("😎prefetch하자!~!~!~~!")
                 fetchMyPostsSubject.onNext(())
             }
             .disposed(by: disposeBag)
         
         
-        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false))
+        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
 }

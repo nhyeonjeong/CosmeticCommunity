@@ -16,6 +16,7 @@ final class PostDetailViewModel: InputOutput {
     }
 
     let outputLoginView = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     let postManager = PostManager()
     let likeManager = LikeManager()
     let commentManager = CommentManager()
@@ -46,6 +47,7 @@ final class PostDetailViewModel: InputOutput {
         let outputNotValid: Driver<Void>
         // 작성자의 Id를 전달하면 뷰컨쪽에서 확인
         let postCreatorId: Driver<String>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
 
     func transform(input: Input) -> Output {
@@ -106,6 +108,11 @@ final class PostDetailViewModel: InputOutput {
                             outputPostData.accept(nil)
                             return Observable<PostModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputPostIdTrigger.onNext(self.postId)
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputPostIdTrigger.onNext(self.postId)
@@ -122,6 +129,7 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 // 최근 본 포스트 저장
                 owner.postManager.saveRecentPostsUserDefaults(postId: owner.postId)
                 postCreatorId.accept(value.creator.user_id)
@@ -154,6 +162,11 @@ final class PostDetailViewModel: InputOutput {
                             outputLikeButton.accept(nil)
                             return Observable<LikeModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputPostIdTrigger.onNext(self.postId)
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputPostIdTrigger.onNext(self.postId)
@@ -170,8 +183,7 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .bind(with: self) { owner, value in
-//                print("버튼클릭했다")
-                print("💎\(value.like_status)")
+                owner.outputNotInNetworkTrigger.accept(nil)
                 outputLottieAnimation.accept(value.like_status)
                 input.inputPostIdTrigger.onNext(owner.postId)
             }
@@ -192,6 +204,11 @@ final class PostDetailViewModel: InputOutput {
                         guard let error = error as? APIError else {
                             return Observable<CommentModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputPostIdTrigger.onNext(self.postId)
+                            }
+                        }
                         // 리프레시 토큰이 만료된거라면 로그인 화면으로...
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
@@ -208,6 +225,7 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 input.inputPostIdTrigger.onNext(self.postId)
             }
             .disposed(by: disposeBag)
@@ -225,6 +243,11 @@ final class PostDetailViewModel: InputOutput {
                             outputAlert.accept("댓글삭제에 실패했습니다")
                             return Observable<Void>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputCommentDeleteTrigger.onNext(row)
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputCommentDeleteTrigger.onNext(row)
@@ -240,6 +263,7 @@ final class PostDetailViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, _ in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 input.inputPostIdTrigger.onNext(self.postId)
             }
             .disposed(by: disposeBag)
@@ -247,7 +271,7 @@ final class PostDetailViewModel: InputOutput {
         return Output(outputProfileButtonTrigger: outputProfileButtonTrigger.asDriver(onErrorJustReturn: nil), outputPostData: outputPostData.asDriver(onErrorJustReturn: nil),
                       outputLoginView: outputLoginView,
                       outputLikeButton: outputLikeButton.asDriver(onErrorJustReturn: nil), outputLottieAnimation: outputLottieAnimation.asDriver(onErrorJustReturn: false), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"),
-                      outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()), postCreatorId: postCreatorId.asDriver(onErrorJustReturn: ""))
+                      outputNotValid: outputNotValid.asDriver(onErrorJustReturn: ()), postCreatorId: postCreatorId.asDriver(onErrorJustReturn: ""), outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
 }
 

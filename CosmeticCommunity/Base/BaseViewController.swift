@@ -11,7 +11,7 @@ import RxCocoa
 
 class BaseViewController: UIViewController, RxProtocol {
     var outputLoginView = PublishRelay<Void>()
-    
+    var outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     var disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,5 +51,4 @@ class BaseViewController: UIViewController, RxProtocol {
             }
             .disposed(by: disposeBag)
     }
-    
 }

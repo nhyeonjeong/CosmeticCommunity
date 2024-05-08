@@ -62,8 +62,6 @@ final class SaveCollectionViewCell: BaseCollectionViewCell {
         kingfisherManager.getImageURL(path: item.files.first) { url in
             if let url {
                 postImageView.kf.setImage(with: url, options: [.requestModifier(kingfisherManager.modifier)])
-            } else {
-                postImageView.backgroundColor = .lightGray
             }
         }
         postTitleLabel.text = item.title

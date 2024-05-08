@@ -66,6 +66,7 @@ final class NetworkManager {
                                 observer.onError(APIError.serverError_500)
                             case .none:
                                 print("error ----------> none Error")
+                                observer.onError(APIError.notInNetwork)
                                 return
                             case .some(_):
                                 print("error ---------------> some Error")

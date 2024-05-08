@@ -15,5 +15,6 @@ protocol InputOutput: RxProtocol {
     
     var disposeBag: DisposeBag { get }
     var outputLoginView: PublishRelay<Void> { get }
+//    var outputNotInNetworkTrigger: PublishRelay<(() -> Void)?> { get }
     func transform(input: Input) -> Output
 }

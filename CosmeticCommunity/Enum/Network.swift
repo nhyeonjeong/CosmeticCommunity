@@ -51,6 +51,7 @@ enum APIError: Error {
     case noPostAuthority_445 // 게시글 수정, 삭제 권한 없음
     
     case someError
+    case notInNetwork
     
     var errorMessage: String {
         switch self {
@@ -80,6 +81,8 @@ enum APIError: Error {
             return "445"
         case .someError:
             return "some"
+        case .notInNetwork:
+            return "notInNetwork"
         }
     }
 }

@@ -39,6 +39,11 @@ final class SaveCustomCollectionView: BaseView {
 }
 
 final class SaveView: BaseView {
+    let notInNetworkView = {
+        let view = NotInNetworkView()
+        view.isHidden = true
+        return view
+    }()
     // NavigationBarButton커스텀버튼(프로필 이미지 패치)
     let navigationProfilebutton = {
         let view = UIButton()
@@ -59,7 +64,7 @@ final class SaveView: BaseView {
     override func configureHierarchy() {
         contentView.addViews([likedPostsCollection, recentPostsCollection])
         scrollView.addSubview(contentView)
-        addViews([scrollView])
+        addViews([scrollView, notInNetworkView])
     }
     override func configureConstraints() {
         scrollView.snp.makeConstraints { make in
@@ -78,6 +83,9 @@ final class SaveView: BaseView {
             make.top.equalTo(likedPostsCollection.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview().inset(30)
+        }
+        notInNetworkView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
     }
     override func configureView() {

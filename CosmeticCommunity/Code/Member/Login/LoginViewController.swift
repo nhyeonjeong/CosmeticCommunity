@@ -27,6 +27,7 @@ final class LoginViewController: BaseViewController {
                                          inputPasswordTextField: mainView.passwordTextField.textField.rx.text)
         
         let output = viewModel.transform(input: input)
+        outputNotInNetworkTrigger = output.outputNotInNetworkTrigger
         // 로그인버튼
         output.outputLoginButton
             .bind(with: self) { owner, value in
@@ -45,5 +46,24 @@ final class LoginViewController: BaseViewController {
                 owner.navigationController?.pushViewController(RegisterViewController(), animated: true)
             }
             .disposed(by: disposeBag)
+        
+        // MARK: - Network
+        // 새로고침 버튼 tap
+        mainView.notInNetworkView.restartButton.rx.tap
+            .withLatestFrom(viewModel.outputNotInNetworkTrigger)
+            .debug()
+            .bind(with: self) { owner, againFunc in
+                againFunc?()
+            }.disposed(by: disposeBag)
+        
+        outputNotInNetworkTrigger
+            .asDriver(onErrorJustReturn: {})
+            .drive(with: self) { owner, value in
+                if let value {
+                    owner.mainView.notInNetworkView.isHidden = false
+                } else {
+                    owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
+                }
+            }.disposed(by: disposeBag)
     }
 }

@@ -9,6 +9,11 @@ import UIKit
 import SnapKit
 
 final class OtherProfileView: BaseView {
+    let notInNetworkView = {
+        let view = NotInNetworkView()
+        view.isHidden = true
+        return view
+    }()
     let noResultLabel = {
         let view = UILabel()
         view.text = "게시글이 없습니다"
@@ -61,7 +66,7 @@ final class OtherProfileView: BaseView {
         followStackView.addArrangedSubview(followersCountButton)
         followStackView.addArrangedSubview(followingCountButton)
 
-        addViews([profileView, personalLabel, followStackView, followButton, postsCollectionView, noResultLabel])
+        addViews([profileView, personalLabel, followStackView, followButton, postsCollectionView, noResultLabel, notInNetworkView])
     }
     override func configureConstraints() {
         profileView.snp.makeConstraints { make in
@@ -96,6 +101,9 @@ final class OtherProfileView: BaseView {
         noResultLabel.snp.makeConstraints { make in
             make.top.equalTo(followButton.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
+        }
+        notInNetworkView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
     }
     

@@ -10,6 +10,11 @@ import SnapKit
 import Lottie
 
 final class PostDetailView: BaseView {
+    let notInNetworkView = {
+        let view = NotInNetworkView()
+        view.isHidden = true
+        return view
+    }()
     let likeLottie = {
         let view: LottieAnimationView = .init(name: "thumbsup")
         view.contentMode = .scaleAspectFit
@@ -103,7 +108,7 @@ final class PostDetailView: BaseView {
         uploadCommentView.addViews([commentTextView, commentButton])
         contentView.addViews([imageCollectionView, imageCounterLabel, likeButton, creatorView, detailsView, contentLabel, hashTagLabel, creatTimeLabel, commentsTableView, bottomHiddenView])
         scrollView.addSubview(contentView)
-        addViews([scrollView, uploadCommentView, likeLottie])
+        addViews([scrollView, uploadCommentView, likeLottie, notInNetworkView])
     }
     override func configureConstraints(){
         likeLottie.snp.makeConstraints { make in
@@ -174,6 +179,9 @@ final class PostDetailView: BaseView {
             make.leading.equalTo(commentTextView.snp.trailing).offset(8)
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(10)
+        }
+        notInNetworkView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
     }
 }

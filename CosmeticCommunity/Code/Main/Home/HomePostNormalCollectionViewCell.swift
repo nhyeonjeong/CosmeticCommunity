@@ -35,7 +35,7 @@ class HomePostNormalCollectionViewCell: BaseCollectionViewCell {
     }
     override func configureConstraints() {
         imageView.snp.makeConstraints { make in
-            make.top.leading.equalTo(contentView)
+            make.edges.equalTo(contentView)
         }
         personalLabel.snp.makeConstraints { make in
 //            make.top.equalTo(imageView.snp.bottom).offset(4)
@@ -51,13 +51,17 @@ class HomePostNormalCollectionViewCell: BaseCollectionViewCell {
         contentView.clipsToBounds = true
         contentView.backgroundColor = Constants.Color.secondPoint
     }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
     func upgradeCell(_ item: PostModel) {
         kingfisher.getImageURL(path: item.files.first) { url in
             if let url {
                 imageView.kf.setImage(with: url, options: [.requestModifier(kingfisher.modifier)])
             } else {
                 imageView.backgroundColor = Constants.Color.secondPoint
-                imageView.contentMode = .scaleAspectFit
+//                imageView.contentMode = .scaleAspectFit
             }
         }
         personalLabel.text = " \(item.personalColor.rawValue) "

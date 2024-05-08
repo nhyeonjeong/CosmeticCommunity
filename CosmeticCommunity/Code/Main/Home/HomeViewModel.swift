@@ -13,6 +13,7 @@ final class HomeViewModel: InputOutput {
     let userManager = UserManager.shared
     let postManager = PostManager()
     let outputLoginView = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     
     var fetchCount = 0
     var tagFetchCount = 0
@@ -34,6 +35,7 @@ final class HomeViewModel: InputOutput {
         let outputTagItems: Driver<[String]>
         let outputTagPostsItem: Driver<[[PostModel]]>
         let outputLoginView: PublishRelay<Void>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
     var disposeBag = DisposeBag()
     
@@ -60,6 +62,11 @@ final class HomeViewModel: InputOutput {
                         guard let error = error as? APIError else {
                             return Observable<CheckPostModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                searchPersonalCasesPost.onNext(personalColor)
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 searchPersonalCasesPost.onNext(personalColor)
@@ -74,6 +81,7 @@ final class HomeViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 // 퍼스널컬러별로 100개씩 가져와서 정렬
                 self.allPosts.append(contentsOf: value.data)
                 owner.fetchCount += 1
@@ -124,6 +132,11 @@ final class HomeViewModel: InputOutput {
                         guard let error = error as? APIError else {
                             return Observable<CheckPostModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                searchTagPost.onNext((tag, personalCase))
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 searchTagPost.onNext((tag, personalCase))
@@ -138,6 +151,7 @@ final class HomeViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 owner.tagFetchCount += 1
                 if value.data.count != 0 {
                     let likeSortedList = value.data.sorted { post1, post2 in
@@ -163,6 +177,6 @@ final class HomeViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputMostLikedPostsItem: outputMostLikedPostsItem.asDriver(onErrorJustReturn: []), outputTagItems: outputTagItems.asDriver(onErrorJustReturn: []), outputTagPostsItem: outputTagPostsItem.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView)
+        return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputMostLikedPostsItem: outputMostLikedPostsItem.asDriver(onErrorJustReturn: []), outputTagItems: outputTagItems.asDriver(onErrorJustReturn: []), outputTagPostsItem: outputTagPostsItem.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView, outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
 }

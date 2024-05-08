@@ -11,7 +11,11 @@ import SnapKit
 final class HomeView: BaseView {
 //    let scrollView = UIScrollView()
 //    let contentView = UIView()
-    
+    let notInNetworkView = {
+        let view = NotInNetworkView()
+        view.isHidden = true
+        return view
+    }()
     // NavigationBarButton커스텀버튼(프로필 이미지 패치)
     let navigationProfilebutton = {
         let view = UIButton()
@@ -50,7 +54,7 @@ final class HomeView: BaseView {
     override func configureHierarchy() {
 //        addSubview(scrollView)
 //        scrollView.addSubview(contentView)
-        addViews([likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView])
+        addViews([likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView, notInNetworkView])
     }
     override func configureConstraints() {
 //        scrollView.snp.makeConstraints { make in
@@ -78,6 +82,9 @@ final class HomeView: BaseView {
             make.top.equalTo(tagCollectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(240)
+        }
+        notInNetworkView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
     }
 }

@@ -16,6 +16,7 @@ final class UploadViewModel: InputOutput {
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
     var photoString = BehaviorSubject<[String]>(value: [])
     let outputLoginView = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     deinit {
         print("UploadViewModel Deinit")
     }
@@ -39,6 +40,7 @@ final class UploadViewModel: InputOutput {
         let outputUploadTrigger: PublishSubject<PostModel?>
         let outputLoginView: PublishRelay<Void>
         let outputPhotoItems: Driver<[NSItemProviderReading]>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
     
     func transform(input: Input) -> Output {
@@ -62,7 +64,6 @@ final class UploadViewModel: InputOutput {
                 let title = value.0.trimmingCharacters(in: .whitespaces)
                 let content = value.1.trimmingCharacters(in: .whitespaces)
                 let hashtag = value.2.trimmingCharacters(in: .whitespaces)
-                print("🤬\(value.3)")
                 if title == "" || content == "" || hashtag == "" || value.3 == .none {
                     outputValid.accept((false, "업로드"))
 
@@ -92,6 +93,11 @@ final class UploadViewModel: InputOutput {
                             outputUploadTrigger.onNext(nil)
                             return Observable<PostImageStingModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputUploadImagesTrigger.onNext(())
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputUploadImagesTrigger.onNext(())
@@ -106,6 +112,7 @@ final class UploadViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 owner.photoString.onNext(value.files)
                 print("사진 업로드성공 후 \(value.files)")
                 input.inputUploadTrigger.onNext(())
@@ -115,14 +122,17 @@ final class UploadViewModel: InputOutput {
         input.inputUploadTrigger
             .withLatestFrom(postObservable)
             .flatMap { postData in
-                print("😀", postData)
-                print("업로드 네트워크")
                 print("inputUploadTrigger network")
                 return self.postManager.uploadPost(postData)
                     .catch { error in
                         guard let error = error as? APIError else {
                             outputUploadTrigger.onNext(nil)
                             return Observable<PostModel>.never()
+                        }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputUploadTrigger.onNext(())
+                            }
                         }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
@@ -138,7 +148,8 @@ final class UploadViewModel: InputOutput {
                         return Observable<PostModel>.never()
                     }
             }
-            .subscribe(with: self) { onwer, value in
+            .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 print("inputUploadTrigger subscribe")
                 outputUploadTrigger.onNext(value)
             }
@@ -158,7 +169,7 @@ final class UploadViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
 
-        return Output(outputValid: outputValid.asDriver(onErrorJustReturn: (false, "")), outputUploadTrigger: outputUploadTrigger, outputLoginView: outputLoginView, outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []))
+        return Output(outputValid: outputValid.asDriver(onErrorJustReturn: (false, "")), outputUploadTrigger: outputUploadTrigger, outputLoginView: outputLoginView, outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []), outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
     // 5개 이하의 이미지만 업로드 가능
     func appendPhotos(_ item: NSItemProviderReading?) {

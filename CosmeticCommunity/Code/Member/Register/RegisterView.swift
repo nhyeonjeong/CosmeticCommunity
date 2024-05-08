@@ -9,6 +9,11 @@ import UIKit
 import SnapKit
 
 final class RegisterView: BaseView {
+    let notInNetworkView = {
+        let view = NotInNetworkView()
+        view.isHidden = true
+        return view
+    }()
     let personalTitle = UILabel()
     let personalSegment = {
         let view = UISegmentedControl()
@@ -61,7 +66,7 @@ final class RegisterView: BaseView {
         return view
     }()
     override func configureHierarchy() {
-        addViews([personalTitle, personalSegment, emailTitle, passwordTitle, nicknameTitle, emailTextField, emailValidButton, emailValidMessageLabel, passwordTextField, passwordValidMessageLabel, checkPasswordTextField, nicknameTextField, nicknameValidMessageLabel, registerButton])
+        addViews([personalTitle, personalSegment, emailTitle, passwordTitle, nicknameTitle, emailTextField, emailValidButton, emailValidMessageLabel, passwordTextField, passwordValidMessageLabel, checkPasswordTextField, nicknameTextField, nicknameValidMessageLabel, registerButton, notInNetworkView])
     }
     override func configureConstraints() {
         personalTitle.snp.makeConstraints { make in
@@ -132,6 +137,9 @@ final class RegisterView: BaseView {
             make.horizontalEdges.equalToSuperview().inset(10)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)
+        }
+        notInNetworkView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
     }
     override func configureView() {

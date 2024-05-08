@@ -9,7 +9,11 @@ import UIKit
 import SnapKit
 
 final class UploadView: BaseView {
-
+    let notInNetworkView = {
+        let view = NotInNetworkView()
+        view.isHidden = true
+        return view
+    }()
     let addPhotoButton = {
         let view = UIButton()
         view.setImage(UIImage(systemName: "camera"), for: .normal)
@@ -72,7 +76,7 @@ final class UploadView: BaseView {
     
     override func configureHierarchy() {
         contentBackView.addSubview(contentTextView)
-        addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, button])
+        addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, button, notInNetworkView])
     }
     
     override func configureConstraints() {
@@ -114,6 +118,9 @@ final class UploadView: BaseView {
             make.horizontalEdges.equalToSuperview().inset(10)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)
+        }
+        notInNetworkView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
         }
     }
 }

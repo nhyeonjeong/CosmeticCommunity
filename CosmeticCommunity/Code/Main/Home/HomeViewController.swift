@@ -31,11 +31,13 @@ final class HomeViewController: BaseViewController {
         inputMostLikedPostsTrigger.onNext(())
     }
     override func bind() {
+        inputTagSelectedTrigger.onNext(viewModel.selectedTagRow)//여기에 해야 indexrange 오류가 안 난다..?
+        
         let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputMostLikedPostsTrigger: inputMostLikedPostsTrigger, inputTagSelectedTrigger: inputTagSelectedTrigger)
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView // 로그인화면으로 넘기는 로직연결
-
+        outputNotInNetworkTrigger = output.outputNotInNetworkTrigger
         // 상단 프로필버튼 이미지 가져오기
         output.outputProfileImageTrigger
             .drive(with: self) { owner, path in
@@ -95,6 +97,25 @@ final class HomeViewController: BaseViewController {
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        // MARK: - Network
+        // 새로고침 버튼 tap
+        mainView.notInNetworkView.restartButton.rx.tap
+            .withLatestFrom(viewModel.outputNotInNetworkTrigger)
+            .debug()
+            .bind(with: self) { owner, againFunc in
+                againFunc?()
+            }.disposed(by: disposeBag)
+        
+        outputNotInNetworkTrigger
+            .asDriver(onErrorJustReturn: {})
+            .drive(with: self) { owner, value in
+                if let value {
+                    owner.mainView.notInNetworkView.isHidden = false
+                } else {
+                    owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
+                }
+            }.disposed(by: disposeBag)
     
     }
     override func configureView() {

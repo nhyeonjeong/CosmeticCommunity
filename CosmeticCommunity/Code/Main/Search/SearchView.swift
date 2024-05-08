@@ -8,6 +8,11 @@
 import UIKit
 
 final class SearchView: BaseView {
+    let notInNetworkView = {
+        let view = NotInNetworkView()
+        view.isHidden = true
+        return view
+    }()
     let noResultLabel = {
         let view = UILabel()
         view.text = "검색 결과가 없습니다\n다시 검색해주세요"
@@ -71,7 +76,7 @@ final class SearchView: BaseView {
         textFieldView.addViews([textfield, xButton])
         resultCollectionView.addSubview(noResultLabel)
         recentView.addViews([removeAllButton, recentSearchTableView])
-        addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView, recentView])
+        addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView, recentView, notInNetworkView])
     }
     override func configureConstraints() {
         textfield.snp.makeConstraints { make in
@@ -110,6 +115,10 @@ final class SearchView: BaseView {
         resultCollectionView.snp.makeConstraints { make in
             make.top.equalTo(categoryTitleLabel.snp.bottom).offset(20)
             make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
+        }
+        notInNetworkView.snp.makeConstraints { make in
+            make.top.equalTo(categoryCollectionView.snp.bottom)
+            make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
     }
 }

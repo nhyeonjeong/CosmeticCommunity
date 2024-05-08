@@ -10,8 +10,8 @@ import RxSwift
 import RxCocoa
 
 final class RegisterViewModel: InputOutput {
-    
     var outputLoginView: RxRelay.PublishRelay<Void> = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     var disposeBag: DisposeBag = DisposeBag()
     let personalCases = PersonalColor.personalCases
     struct Input {
@@ -33,6 +33,7 @@ final class RegisterViewModel: InputOutput {
         let outputRegisterButtonEnabled: Driver<Bool>
         let outputRegister: Driver<Void>
         let outputLoginView: PublishRelay<Void>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
     
     func transform(input: Input) -> Output {
@@ -131,6 +132,12 @@ final class RegisterViewModel: InputOutput {
                             outputAlert.accept("오류가 발생했습니다.")
                             return Observable<ValidMessageModel>.empty()
                         }
+                        // 네트워크와 연결되지 않았다면
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                emailCheckSubject.onNext(())
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 emailCheckSubject.onNext(())
@@ -147,6 +154,7 @@ final class RegisterViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, message in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 outputCheckEmailMessage.accept(true)
             }
             .disposed(by: disposeBag)
@@ -163,6 +171,11 @@ final class RegisterViewModel: InputOutput {
                         guard let error = error as? APIError else {
                             outputAlert.accept("통신오류가 발생했습니다.")
                             return Observable<JoinModel>.empty()
+                        }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                emailCheckSubject.onNext(())
+                            }
                         }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
@@ -181,10 +194,10 @@ final class RegisterViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
-//                print("☠️\(value)")
+                owner.outputNotInNetworkTrigger.accept(nil)
                 outputRegister.accept(())
             }.disposed(by: disposeBag)
         
-        return Output(outputEmailMessage: outputEmailMessage.asDriver(onErrorJustReturn: false), outputCheckEmailMessage: outputCheckEmailMessage.asDriver(onErrorJustReturn: false), outputPasswordMessage: outputPasswordMessage.asDriver(onErrorJustReturn: false), outputNicknameMessage: outputNicknameMessage.asDriver(onErrorJustReturn: false), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"), outputRegisterButtonEnabled: outputRegisterButtonEnabled.asDriver(onErrorJustReturn: false), outputRegister: outputRegister.asDriver(onErrorJustReturn: ()), outputLoginView: outputLoginView)
+        return Output(outputEmailMessage: outputEmailMessage.asDriver(onErrorJustReturn: false), outputCheckEmailMessage: outputCheckEmailMessage.asDriver(onErrorJustReturn: false), outputPasswordMessage: outputPasswordMessage.asDriver(onErrorJustReturn: false), outputNicknameMessage: outputNicknameMessage.asDriver(onErrorJustReturn: false), outputAlert: outputAlert.asDriver(onErrorJustReturn: "오류가 발생했습니다"), outputRegisterButtonEnabled: outputRegisterButtonEnabled.asDriver(onErrorJustReturn: false), outputRegister: outputRegister.asDriver(onErrorJustReturn: ()), outputLoginView: outputLoginView, outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
 }

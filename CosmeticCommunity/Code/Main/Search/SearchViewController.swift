@@ -35,7 +35,7 @@ final class SearchViewController: BaseViewController {
         let input = SearchViewModel.Input(inputSearchText: mainView.textfield.rx.text, inputSearchEnterTrigger: mainView.textfield.rx.controlEvent(.editingDidEndOnExit), inputRemoveRecent: mainView.removeAllButton.rx.tap, inputCategorySelected: inputCategorySelected, inputRecentSearchTable: inputRecentSearchTable, inputPrepatchTrigger: inputPrepatchTrigger)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
-
+        outputNotInNetworkTrigger = output.outputNotInNetworkTrigger
         output.outputPostItems
             .flatMap { data -> Driver<[PostModel]> in
                 guard let posts = data else {
@@ -123,6 +123,25 @@ final class SearchViewController: BaseViewController {
                 owner.inputPrepatchTrigger.onNext(indexPaths)
             }
             .disposed(by: disposeBag)
+        
+        // MARK: - Network
+        // 새로고침 버튼 tap
+        mainView.notInNetworkView.restartButton.rx.tap
+            .withLatestFrom(viewModel.outputNotInNetworkTrigger)
+            .debug()
+            .bind(with: self) { owner, againFunc in
+                againFunc?()
+            }.disposed(by: disposeBag)
+        
+        outputNotInNetworkTrigger
+            .asDriver(onErrorJustReturn: {})
+            .drive(with: self) { owner, value in
+                if let value {
+                    owner.mainView.notInNetworkView.isHidden = false
+                } else {
+                    owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
+                }
+            }.disposed(by: disposeBag)
     }
 }
 

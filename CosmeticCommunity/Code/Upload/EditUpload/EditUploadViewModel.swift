@@ -14,6 +14,8 @@ final class EditUploadViewModel: InputOutput {
     let postManager = PostManager()
     var disposeBag: RxSwift.DisposeBag = DisposeBag()
     var outputLoginView: RxRelay.PublishRelay<Void> = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
+    
     var photos: [NSItemProviderReading] = [] // 선택한 사진 컬렉션뷰에 그리는 용도
     var photoString = BehaviorSubject<[String]>(value: [])
     let personalCases = PersonalColor.personalCases
@@ -36,6 +38,7 @@ final class EditUploadViewModel: InputOutput {
         let outputEditTrigger: PublishSubject<PostModel?>
         let outputLoginView: PublishRelay<Void>
         let outputPhotoItems: Driver<[NSItemProviderReading]>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
     
     func transform(input: Input) -> Output {
@@ -96,6 +99,11 @@ final class EditUploadViewModel: InputOutput {
                             outputEditTrigger.onNext(nil)
                             return Observable<PostImageStingModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputUploadImagesTrigger.onNext(())
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputUploadImagesTrigger.onNext(())
@@ -110,6 +118,7 @@ final class EditUploadViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 owner.photoString.onNext(value.files)
                 print("사진 업로드성공 후 \(value.files)")
                 input.inputEditTrigger.onNext(())
@@ -130,6 +139,11 @@ final class EditUploadViewModel: InputOutput {
                             outputEditTrigger.onNext(nil)
                             return Observable<PostModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputEditTrigger.onNext(())
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputEditTrigger.onNext(())
@@ -144,7 +158,8 @@ final class EditUploadViewModel: InputOutput {
                         return Observable<PostModel>.never()
                     }
             }
-            .subscribe(with: self) { onwer, value in
+            .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 outputEditTrigger.onNext(value)
             }
             .disposed(by: disposeBag)
@@ -163,7 +178,7 @@ final class EditUploadViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputValid: outputValid.asDriver(onErrorJustReturn: (false, "")), outputEditTrigger: outputEditTrigger, outputLoginView: outputLoginView, outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []))
+        return Output(outputValid: outputValid.asDriver(onErrorJustReturn: (false, "")), outputEditTrigger: outputEditTrigger, outputLoginView: outputLoginView, outputPhotoItems: outputPhotoItems.asDriver(onErrorJustReturn: []), outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
     
     // 5개 이하의 이미지만 업로드 가능

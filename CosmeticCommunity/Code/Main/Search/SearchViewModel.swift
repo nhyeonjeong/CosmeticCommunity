@@ -12,6 +12,7 @@ import RxCocoa
 final class SearchViewModel: InputOutput {
     let postManager = PostManager()
     var outputLoginView: RxRelay.PublishRelay<Void> = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     var disposeBag = DisposeBag()
     
     var postData: [PostModel] = []
@@ -38,6 +39,7 @@ final class SearchViewModel: InputOutput {
         let outputHideRecentSearch: Driver<Bool>
         let outputRecentSearchTable: PublishRelay<[String]>
         let outputMessage: Driver<String>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
     
     func transform(input: Input) -> Output {
@@ -109,13 +111,17 @@ final class SearchViewModel: InputOutput {
                 if self.nextCursor == "0" {
                     return Observable<CheckPostModel>.empty()
                 }
-//                print("🚨\(self.nextCursor), \(category.rawValue), \(hashTag)")
                 let query = HashtagQuery(next: self.nextCursor, limit: self.limit, product_id: "\(ProductId.baseProductId)\(category.rawValue)", hashTag: hashTag)
                 return self.postManager.checkWithHashTag(query: query)
                     .catch { error in
                         guard let error = error as? APIError else {
                             outputPostItems.accept(nil)
                             return Observable<CheckPostModel>.never()
+                        }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                searchTrigger.onNext((hashTag, category))
+                            }
                         }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
@@ -132,6 +138,7 @@ final class SearchViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 owner.postData.append(contentsOf: value.data)
                 outputPostItems.accept(owner.postData)
 
@@ -145,7 +152,6 @@ final class SearchViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        
-        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false), outputRecentSearchTable: outputRecentSearchTable, outputMessage: outputMessage.asDriver(onErrorJustReturn: ""))
+        return Output(outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputHideRecentSearch: outputHideRecentSearch.asDriver(onErrorJustReturn: false), outputRecentSearchTable: outputRecentSearchTable, outputMessage: outputMessage.asDriver(onErrorJustReturn: ""), outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
 }

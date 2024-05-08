@@ -15,6 +15,7 @@ final class SaveViewModel: InputOutput{
     let likeManager = LikeManager()
     
     var outputLoginView = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     
     let recentPosts: [PostModel] = []
     var disposeBag = DisposeBag()
@@ -29,6 +30,7 @@ final class SaveViewModel: InputOutput{
         let outputFetchLikedPosts: Driver<[PostModel]?>
         let outputRecentPosts: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
     
     func transform(input: Input) -> Output {
@@ -48,7 +50,12 @@ final class SaveViewModel: InputOutput{
                     .catch { error in
                         guard let error = error as? APIError else {
                             outputFetchLikedPosts.accept(nil)
-                            return Observable<CheckPostModel>.never()
+                            return Observable<CheckPostModel>.empty()
+                        }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputFetchLikedPosts.onNext(())
+                            }
                         }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
@@ -65,6 +72,7 @@ final class SaveViewModel: InputOutput{
                     }
             }
             .bind(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 outputFetchLikedPosts.accept(value.data)
             }
             .disposed(by: disposeBag)
@@ -83,7 +91,13 @@ final class SaveViewModel: InputOutput{
                     let postObservable = self.postManager.checkSpecificPost(postId: id).catch { error in
                         guard let error = error as? APIError else {
                             outputRecentPosts.accept(nil)
-                            return Observable<PostModel>.never()
+                            return Observable<PostModel>.empty()
+                        }
+                        if error == APIError.notInNetwork {
+                            print("😎네트워크 연결 안돼...")
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputRecentPosts.onNext(())
+                            }
                         }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
@@ -105,6 +119,7 @@ final class SaveViewModel: InputOutput{
                 return wholeSequence
             }
             .subscribe(with: self) { owner, data in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 // 정렬은 userdefault배열대로 다시 정렬
                 var getData: [PostModel] = []
                 getData = data
@@ -112,7 +127,7 @@ final class SaveViewModel: InputOutput{
             }
             .disposed(by: disposeBag)
         
-        return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputFetchLikedPosts: outputFetchLikedPosts.asDriver(onErrorJustReturn: nil), outputRecentPosts: outputRecentPosts.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView)
+        return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputFetchLikedPosts: outputFetchLikedPosts.asDriver(onErrorJustReturn: nil), outputRecentPosts: outputRecentPosts.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     
     }
     func sortRecentPosts(data: [PostModel]) -> [PostModel] {

@@ -38,6 +38,8 @@ final class SaveViewController: BaseViewController {
         let output = viewModel.transform(input: input)
         // 로그인화면으로 넘어가는 로직과 연결
         outputLoginView = output.outputLoginView
+        outputNotInNetworkTrigger = output.outputNotInNetworkTrigger
+        
         output.outputFetchLikedPosts
             .flatMap { data -> Driver<[PostModel]> in
                 guard let posts = data else {
@@ -73,6 +75,27 @@ final class SaveViewController: BaseViewController {
                 }
             }
             .disposed(by: disposeBag)
+        
+        // MARK: - Network
+        // 새로고침 버튼 tap
+        mainView.notInNetworkView.restartButton.rx.tap
+            .withLatestFrom(viewModel.outputNotInNetworkTrigger)
+            .debug()
+            .bind(with: self) { owner, againFunc in
+                againFunc?()
+            }.disposed(by: disposeBag)
+        
+        outputNotInNetworkTrigger
+            .asDriver(onErrorJustReturn: {})
+            .drive(with: self) { owner, value in
+                if let value {
+                    print("보여!!!")
+                    owner.mainView.notInNetworkView.isHidden = false
+                } else {
+                    print("숨겨!!!")
+                    owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
+                }
+            }.disposed(by: disposeBag)
     }
     
     private func bindCollectionView() {

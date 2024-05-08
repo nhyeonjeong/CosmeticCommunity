@@ -15,6 +15,7 @@ final class OtherProfileViewModel: InputOutput {
     var disposeBag = DisposeBag()
     
     var outputLoginView = PublishRelay<Void>()
+    let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     var userId = ""
     var nextCursor: String = ""
     var postData: [PostModel] = []
@@ -29,6 +30,7 @@ final class OtherProfileViewModel: InputOutput {
         let outputPostItems: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
         let outputNoResult: Driver<Bool>
+        let outputNotInNetworkTrigger: PublishRelay<(() -> Void)?>
     }
     
     func transform(input: Input) -> Output {
@@ -54,6 +56,11 @@ final class OtherProfileViewModel: InputOutput {
                             fetchPostsSubject.onNext(nil)
                             return Observable<UserModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                input.inputFetchProfile.onNext(id)
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 input.inputFetchProfile.onNext(id)
@@ -71,6 +78,7 @@ final class OtherProfileViewModel: InputOutput {
             }
             .debug()
             .subscribe(with: self) { owner, data in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 outputProfileResult.onNext(data)
                 fetchPostsSubject.onNext(())
             }
@@ -89,6 +97,11 @@ final class OtherProfileViewModel: InputOutput {
                             outputPostItems.onNext(nil)
                             return Observable<CheckPostModel>.never()
                         }
+                        if error == APIError.notInNetwork {
+                            self.outputNotInNetworkTrigger.accept {
+                                fetchPostsSubject.onNext(())
+                            }
+                        }
                         if error == APIError.accessTokenExpired_419 {
                             TokenManager.shared.accessTokenAPI {
                                 fetchPostsSubject.onNext(())
@@ -104,6 +117,7 @@ final class OtherProfileViewModel: InputOutput {
                     }
             }
             .bind(with: self) { owner, value in
+                owner.outputNotInNetworkTrigger.accept(nil)
                 owner.postData.append(contentsOf: value.data)
                 outputPostItems.onNext(owner.postData)
                 
@@ -132,6 +146,6 @@ final class OtherProfileViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
-        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false))
+        return Output(outputProfileResult: outputProfileResult.asDriver(onErrorJustReturn: nil), outputPostItems: outputPostItems.asDriver(onErrorJustReturn: nil), outputLoginView: outputLoginView, outputNoResult: outputNoResult.asDriver(onErrorJustReturn: false), outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
 }

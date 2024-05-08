@@ -29,6 +29,7 @@ final class RegisterViewController: BaseViewController {
         
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
+        outputNotInNetworkTrigger = output.outputNotInNetworkTrigger
         output.outputEmailMessage
             .drive(with: self) { owner, value in
                 owner.mainView.emailValidMessageLabel.text = value ? "" :  "@를 포함하며 6-20자의 이메일을 작성해주세요"
@@ -70,6 +71,25 @@ final class RegisterViewController: BaseViewController {
         output.outputRegister
             .drive(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true) // 다시 로그인 화면으로 넘어가기
+            }.disposed(by: disposeBag)
+        
+        // MARK: - Network
+        // 새로고침 버튼 tap
+        mainView.notInNetworkView.restartButton.rx.tap
+            .withLatestFrom(viewModel.outputNotInNetworkTrigger)
+            .debug()
+            .bind(with: self) { owner, againFunc in
+                againFunc?()
+            }.disposed(by: disposeBag)
+        
+        outputNotInNetworkTrigger
+            .asDriver(onErrorJustReturn: {})
+            .drive(with: self) { owner, value in
+                if let value {
+                    owner.mainView.notInNetworkView.isHidden = false
+                } else {
+                    owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
+                }
             }.disposed(by: disposeBag)
     }
 }

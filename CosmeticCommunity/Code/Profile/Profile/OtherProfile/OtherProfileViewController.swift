@@ -39,6 +39,7 @@ final class OtherProfileViewController: BaseViewController {
         let input = OtherProfileViewModel.Input(inputFetchProfile: inputFetchProfile, inputPrepatchTrigger: inputPrepatchTrigger)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
+        outputNotInNetworkTrigger = output.outputNotInNetworkTrigger
         output.outputProfileResult
             .drive(with: self) { owner, data in
                 if let data {
@@ -84,5 +85,24 @@ final class OtherProfileViewController: BaseViewController {
                 owner.mainView.noResultLabel.isHidden = value
             }
             .disposed(by: disposeBag)
+        
+        // MARK: - Network
+        // 새로고침 버튼 tap
+        mainView.notInNetworkView.restartButton.rx.tap
+            .withLatestFrom(viewModel.outputNotInNetworkTrigger)
+            .debug()
+            .bind(with: self) { owner, againFunc in
+                againFunc?()
+            }.disposed(by: disposeBag)
+        
+        outputNotInNetworkTrigger
+            .asDriver(onErrorJustReturn: {})
+            .drive(with: self) { owner, value in
+                if let value {
+                    owner.mainView.notInNetworkView.isHidden = false
+                } else {
+                    owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
+                }
+            }.disposed(by: disposeBag)
     }
 }
