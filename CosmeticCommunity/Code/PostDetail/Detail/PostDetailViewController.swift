@@ -152,6 +152,12 @@ final class PostDetailViewController: BaseViewController {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
                 }
             }.disposed(by: disposeBag)
+        
+        // MARK: - 결제버튼
+        mainView.paymentButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.pushViewController(PaymentViewController(), animated: true)
+            }
     }
 
     @objc func commentCreatorClicked(_ sender: UIButton) {

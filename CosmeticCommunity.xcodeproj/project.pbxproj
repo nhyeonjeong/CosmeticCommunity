@@ -107,6 +107,8 @@
 		8B5544F92BE7A57E00601489 /* HomePostNormalCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544F82BE7A57E00601489 /* HomePostNormalCollectionViewCell.swift */; };
 		8B5544FC2BE977BE00601489 /* NotInNetworkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544FB2BE977BE00601489 /* NotInNetworkViewController.swift */; };
 		8B5544FE2BE977CC00601489 /* NotInNetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544FD2BE977CC00601489 /* NotInNetworkView.swift */; };
+		8B5545AB2BF0C7CA00601489 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5545AA2BF0C7CA00601489 /* iamport-ios */; };
+		8B5545AE2BF0F57F00601489 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5545AD2BF0F57E00601489 /* PaymentViewController.swift */; };
 		8B57AB932BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */; };
 		8B57ABB32BD26454004BC76E /* NSItemProviderReading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */; };
 		8B57ABB52BD26B52004BC76E /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */; };
@@ -216,6 +218,7 @@
 		8B5544F82BE7A57E00601489 /* HomePostNormalCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostNormalCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B5544FB2BE977BE00601489 /* NotInNetworkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotInNetworkViewController.swift; sourceTree = "<group>"; };
 		8B5544FD2BE977CC00601489 /* NotInNetworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotInNetworkView.swift; sourceTree = "<group>"; };
+		8B5545AD2BF0F57E00601489 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
 		8B57AB922BD13A02004BC76E /* UploadPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B57ABB22BD26454004BC76E /* NSItemProviderReading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProviderReading+Extension.swift"; sourceTree = "<group>"; };
 		8B57ABB42BD26B52004BC76E /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -235,6 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B5545AB2BF0C7CA00601489 /* iamport-ios in Frameworks */,
 				8B3AFCB82BD517EA0069773F /* IQKeyboardManagerSwift in Frameworks */,
 				8B428C842BCAB95100FD1B69 /* RxSwift in Frameworks */,
 				8B428C7C2BCAB92D00FD1B69 /* Kingfisher in Frameworks */,
@@ -252,6 +256,7 @@
 		8B3AFC992BD3FD630069773F /* PostDetail */ = {
 			isa = PBXGroup;
 			children = (
+				8B5545AC2BF0F56E00601489 /* Payment */,
 				8B3AFD222BD978F00069773F /* BottomSheet */,
 				8B3AFD212BD978E50069773F /* Detail */,
 			);
@@ -619,6 +624,14 @@
 			path = NotNetwork;
 			sourceTree = "<group>";
 		};
+		8B5545AC2BF0F56E00601489 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				8B5545AD2BF0F57E00601489 /* PaymentViewController.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
 		8B57ABB62BD26F62004BC76E /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -698,6 +711,7 @@
 				8B428C832BCAB95100FD1B69 /* RxSwift */,
 				8B3AFCB72BD517EA0069773F /* IQKeyboardManagerSwift */,
 				8B5544F02BE748FB00601489 /* Lottie */,
+				8B5545AA2BF0C7CA00601489 /* iamport-ios */,
 			);
 			productName = CosmeticCommunity;
 			productReference = 8B428C3E2BC980C700FD1B69 /* CosmeticCommunity.app */;
@@ -735,6 +749,7 @@
 				8B428C802BCAB95100FD1B69 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				8B3AFCB62BD517EA0069773F /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				8B5544EF2BE748FB00601489 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				8B5545A92BF0C7CA00601489 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 			);
 			productRefGroup = 8B428C3F2BC980C700FD1B69 /* Products */;
 			projectDirPath = "";
@@ -832,6 +847,7 @@
 				8BB570892BE2B8F7006DF25A /* TagPostCollectionViewCell.swift in Sources */,
 				8B3AFD2F2BDE6BDF0069773F /* SearchViewModel.swift in Sources */,
 				8B57ABB82BD26F6E004BC76E /* PostDetailsView.swift in Sources */,
+				8B5545AE2BF0F57F00601489 /* PaymentViewController.swift in Sources */,
 				8B3AFCC02BD566210069773F /* TokenModel.swift in Sources */,
 				8B428CA42BCCAA2600FD1B69 /* LoginViewController.swift in Sources */,
 				8B3AFCE32BD69AC80069773F /* FollowViewController.swift in Sources */,
@@ -1018,7 +1034,7 @@
 				DEVELOPMENT_TEAM = 3D3V9NJ477;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CosmeticCommunity/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "남현정";
+				INFOPLIST_KEY_CFBundleDisplayName = COCO;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1051,7 +1067,7 @@
 				DEVELOPMENT_TEAM = 3D3V9NJ477;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CosmeticCommunity/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "남현정";
+				INFOPLIST_KEY_CFBundleDisplayName = COCO;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1154,6 +1170,14 @@
 				minimumVersion = 4.4.3;
 			};
 		};
+		8B5545A92BF0C7CA00601489 /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iamport/iamport-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1196,6 +1220,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B5544EF2BE748FB00601489 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		8B5545AA2BF0C7CA00601489 /* iamport-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B5545A92BF0C7CA00601489 /* XCRemoteSwiftPackageReference "iamport-ios" */;
+			productName = "iamport-ios";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
