@@ -156,8 +156,12 @@ final class PostDetailViewController: BaseViewController {
         // MARK: - 결제버튼
         mainView.paymentButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.navigationController?.pushViewController(PaymentViewController(), animated: true)
-            }
+                guard let postData = owner.viewModel.postData else {
+                    owner.view.makeToast("게시글 정보를 불러오지 못했습니다", duration: 1.0, position: .top)
+                    return
+                }
+                owner.navigationController?.pushViewController(PaymentViewController(postData: postData), animated: true)
+            }.disposed(by: disposeBag)
     }
 
     @objc func commentCreatorClicked(_ sender: UIButton) {

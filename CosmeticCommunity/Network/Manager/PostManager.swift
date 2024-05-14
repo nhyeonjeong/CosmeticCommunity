@@ -35,7 +35,7 @@ final class PostManager {
     }
     
     func deletePost(postId: String) -> Observable<Void> {
-        return NetworkManager.shared.deleteFetchAPI(router: Router.deletePost(postId: postId))
+        return NetworkManager.shared.noResponseFetchAPI(router: Router.deletePost(postId: postId))
     }
     // 포스트 수정
     func editPost(postId: String, query: PostQuery) -> Observable<PostModel> {

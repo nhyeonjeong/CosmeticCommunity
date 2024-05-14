@@ -15,6 +15,6 @@ final class CommentManager {
     }
     
     func deleteComment(postId: String, commentId: String) -> Observable<Void> {
-        return NetworkManager.shared.deleteFetchAPI(router: Router.deleteComment(postId: postId, commentId: commentId))
+        return NetworkManager.shared.noResponseFetchAPI(router: Router.deleteComment(postId: postId, commentId: commentId))
     }
 }

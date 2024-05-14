@@ -163,28 +163,30 @@ extension NetworkManager {
 }
 
 extension NetworkManager {
-    func deleteFetchAPI(router: Router, completionHandler: @escaping (() -> Void) = {  }) -> Observable<Void> {
+    func noResponseFetchAPI(router: Router, completionHandler: @escaping (() -> Void) = {  }) -> Observable<Void> {
         return Observable<Void>.create { observer in
             var urlRequest: URLRequest
             do {
                 urlRequest = try router.asURLRequest()
-//                print("urlRequest: ", urlRequest)
+                print("urlRequest: ", urlRequest)
+                print("urlRequest: ", urlRequest.headers)
             } catch {
                 observer.onError(APIError.invalidURLError_444)
                 return Disposables.create()
             }
             
-            AF.request(urlRequest)
-                .responseString { response in
-                    print("responseString : \(response)")
-            }
+//            AF.request(urlRequest)
+//                .responseString { response in
+//                    print("responseString : \(response)")
+//            }
+//            
             
-            
-            AF.request(urlRequest).response { response in
+            AF.request(urlRequest).validate(statusCode: 200..<201).response { response in
+                print("😎", response.response?.statusCode)
                     switch response.result {
                     case .success(let success):
-                        //                        print(success)
-                        completionHandler() // 성공시 실행할 게 있다면 실행하기
+
+//                        completionHandler() // 성공시 실행할 게 있다면 실행하기
                         observer.onNext(())
                         observer.onCompleted()
                         return
@@ -200,12 +202,13 @@ extension NetworkManager {
                         case 418:
                             observer.onError(APIError.refreshTokenExpired_418)
                         case 419:
-                            
                             observer.onError(APIError.accessTokenExpired_419)
                         case .none:
                             print("error ----------> none Error")
+                            observer.onError(APIError.someError)
                             return
                         case .some(_):
+                            observer.onError(APIError.someError)
                             print("error ---------------> some Error")
                             return
                         }
@@ -217,6 +220,5 @@ extension NetworkManager {
             return Disposables.create()
             
         }
-             
     }
 }

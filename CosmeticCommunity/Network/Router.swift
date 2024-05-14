@@ -38,6 +38,9 @@ enum Router {
     case hashtag(query: HashtagQuery)
     // Image
     //    case getImage(query: [String])
+    
+    // payment
+    case paymentValidation(query: PaymentQuery)
 }
 
 extension Router: RouterType {
@@ -47,7 +50,7 @@ extension Router: RouterType {
     
     var method: HTTPMethod {
         switch self {
-        case .login, .join, .validEmail, .uploadPostImage, .upload, .likeStatus, .uploadComment:
+        case .login, .join, .validEmail, .uploadPostImage, .upload, .likeStatus, .uploadComment, .paymentValidation:
             return .post
         case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile,  .myLikedPosts, .hashtag:
             return .get
@@ -68,7 +71,7 @@ extension Router: RouterType {
         case .login, .join, .validEmail:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
-        case .upload, .editPost, .likeStatus, .uploadComment, .hashtag:
+        case .upload, .editPost, .likeStatus, .uploadComment, .hashtag, .paymentValidation:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
@@ -122,6 +125,9 @@ extension Router: RouterType {
             
         case .hashtag:
             return "v1/posts/hashtags"
+            
+        case .paymentValidation:
+            return "v1/payments/validation"
         }
     }
     var parameters: Parameters? {
@@ -147,7 +153,7 @@ extension Router: RouterType {
             return [ParameterKey.like_status.rawValue: query.like_status]
         case .uploadComment(let query, _):
             return [ParameterKey.content.rawValue: query.content]
-        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .deletePost, .myLikedPosts, .deleteComment, .hashtag:
+        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .deletePost, .myLikedPosts, .deleteComment, .hashtag, .paymentValidation:
             return nil
         }
     }
@@ -166,7 +172,7 @@ extension Router: RouterType {
         case .checkUserPosts(_, let query):
             return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit)]
-        case .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost:
+        case .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost, .paymentValidation:
             return nil
         }
     }
@@ -189,6 +195,9 @@ extension Router: RouterType {
             return jsonEncoding(query)
         case .uploadComment(let query, _):
             return jsonEncoding(query)
+        case .paymentValidation(let query):
+            
+            return jsonEncodingpayment(query)
         case .myProfile, .otherProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts, .deletePost, .deleteComment, .hashtag:
             return nil
         }
@@ -196,19 +205,23 @@ extension Router: RouterType {
     
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag, .editPost:
+        case .tokenRefresh, .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag, .editPost, .paymentValidation:
             return nil
         case .uploadPostImage(let query):
             return query
         }
     }
 }
-
     
 extension Router {
     func jsonEncoding<T: Encodable>(_ query: T) -> Data? {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
+        return try? encoder.encode(query)
+    }
+    func jsonEncodingpayment<T: Encodable>(_ query: T) -> Data? {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .useDefaultKeys
         return try? encoder.encode(query)
     }
 }
