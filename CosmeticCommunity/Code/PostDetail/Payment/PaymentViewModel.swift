@@ -20,9 +20,11 @@ final class PaymentViewModel: InputOutput {
     
     struct Output {
         let outputLoginView: PublishRelay<Void>
+        let outputPaySuccess: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
+        let outputPaySuccess = PublishRelay<Void>()
         input.inputCheckValidTrigger
             .flatMap { impId, postData in
                 let query = PaymentQuery(impId: impId, postId: postData.post_id, productName: postData.title, price: 100)
@@ -53,8 +55,9 @@ final class PaymentViewModel: InputOutput {
                     }
             }
             .subscribe(with: self) { owner, _ in
-                print("success🚨")
+                // 결제검증 완료
+                outputPaySuccess.accept(())
             }.disposed(by: disposeBag)
-        return Output(outputLoginView: outputLoginView)
+        return Output(outputLoginView: outputLoginView, outputPaySuccess: outputPaySuccess.asDriver(onErrorJustReturn: ()))
     }
 }

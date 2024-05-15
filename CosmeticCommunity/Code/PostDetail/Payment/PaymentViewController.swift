@@ -64,8 +64,11 @@ final class PaymentViewController: BaseViewController {
     override func bind() {
         let input = PaymentViewModel.Input(inputCheckValidTrigger: inputCheckValidTrigger)
         let output = viewModel.transform(input: input)
-        
         outputLoginView = output.outputLoginView
+        output.outputPaySuccess
+            .drive(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }.disposed(by: disposeBag)
     }
     override func configureHierarchy() {
         view.addViews([wkWebView])
