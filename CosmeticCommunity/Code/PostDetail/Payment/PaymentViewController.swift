@@ -11,6 +11,7 @@ import RxCocoa
 import SnapKit
 import WebKit
 import iamport_ios
+import Toast
 
 final class PaymentViewController: BaseViewController {
     var postData: PostModel
@@ -67,6 +68,7 @@ final class PaymentViewController: BaseViewController {
         outputLoginView = output.outputLoginView
         output.outputPaySuccess
             .drive(with: self) { owner, _ in
+                owner.view.makeToast("결제가 완료되었습니다", duration: 1.0, position: .top)
                 owner.navigationController?.popViewController(animated: true)
             }.disposed(by: disposeBag)
     }

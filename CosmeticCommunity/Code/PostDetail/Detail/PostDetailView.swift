@@ -10,6 +10,7 @@ import SnapKit
 import Lottie
 
 final class PostDetailView: BaseView {
+    
     let notInNetworkView = {
         let view = NotInNetworkView()
         view.isHidden = true
