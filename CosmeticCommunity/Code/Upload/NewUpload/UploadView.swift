@@ -16,6 +16,18 @@ final class UploadView: BaseView {
         view.isHidden = true
         return view
     }()
+    let switchBackgroundView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray6
+        return view
+    }()
+    let switchMessage = {
+        let view = UILabel()
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.normal)
+        view.text = "중고로 올리는 게시물입니다."
+        return view
+    }()
+    let usedItemPostSwitch = UISwitch()
     let addPhotoButton = {
         let view = UIButton()
         view.setImage(UIImage(systemName: "camera"), for: .normal)
@@ -80,7 +92,8 @@ final class UploadView: BaseView {
         addViews([scrollView, button])
         scrollView.addSubview(contentView)
         contentBackView.addSubview(contentTextView)
-        contentView.addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, notInNetworkView])
+        switchBackgroundView.addViews([switchMessage, usedItemPostSwitch])
+        contentView.addViews([switchBackgroundView, addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, notInNetworkView])
     }
     
     override func configureConstraints() {
@@ -91,8 +104,21 @@ final class UploadView: BaseView {
             make.verticalEdges.equalToSuperview()
             make.width.equalTo(scrollView.snp.width)
         }
-        addPhotoButton.snp.makeConstraints { make in
+        switchBackgroundView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(10)
+            make.height.equalTo(50)
+            make.horizontalEdges.equalToSuperview()
+        }
+        switchMessage.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().inset(10)
+        }
+        usedItemPostSwitch.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(10)
+        }
+        addPhotoButton.snp.makeConstraints { make in
+            make.top.equalTo(switchBackgroundView.snp.bottom).offset(10)
             make.leading.equalToSuperview().inset(10)
             make.size.equalTo(100)
         }
