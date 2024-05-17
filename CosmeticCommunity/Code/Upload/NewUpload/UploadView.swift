@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 final class UploadView: BaseView {
+    let scrollView = UIScrollView()
+    let contentView = UIView()
     let notInNetworkView = {
         let view = NotInNetworkView()
         view.isHidden = true
@@ -75,15 +77,23 @@ final class UploadView: BaseView {
     }()
     
     override func configureHierarchy() {
+        addViews([scrollView, button])
+        scrollView.addSubview(contentView)
         contentBackView.addSubview(contentTextView)
-        addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, button, notInNetworkView])
+        contentView.addViews([addPhotoButton, photoCollectionView, titleTextField, personalSelectButton, contentBackView, hashtagTextField, notInNetworkView])
     }
     
     override func configureConstraints() {
-
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        contentView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview()
+            make.width.equalTo(scrollView.snp.width)
+        }
         addPhotoButton.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).inset(10)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(10)
+            make.top.equalToSuperview().inset(10)
+            make.leading.equalToSuperview().inset(10)
             make.size.equalTo(100)
         }
         photoCollectionView.snp.makeConstraints { make in
@@ -94,12 +104,12 @@ final class UploadView: BaseView {
         }
         titleTextField.snp.makeConstraints { make in
             make.top.equalTo(addPhotoButton.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalToSuperview().inset(10)
             make.centerX.equalToSuperview()
         }
         personalSelectButton.snp.makeConstraints { make in
             make.top.equalTo(titleTextField.snp.bottom).offset(8)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalToSuperview().inset(10)
         }
         contentBackView.snp.makeConstraints { make in
             make.top.equalTo(personalSelectButton.snp.bottom).offset(8)
@@ -112,16 +122,16 @@ final class UploadView: BaseView {
         hashtagTextField.snp.makeConstraints { make in
             make.top.equalTo(contentBackView.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(10)
-//            make.bottom.greaterThanOrEqualTo(keyboardLayoutGuide).inset(300)
+            make.bottom.equalTo(contentView).inset(10)
         }
         button.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(10)
             make.bottom.equalTo(safeAreaLayoutGuide).inset(10)
             make.height.equalTo(50)
         }
-        notInNetworkView.snp.makeConstraints { make in
-            make.edges.equalTo(safeAreaLayoutGuide)
-        }
+//        notInNetworkView.snp.makeConstraints { make in
+//            make.edges.equalTo(safeAreaLayoutGuide)
+//        }
     }
 }
 
