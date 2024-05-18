@@ -21,6 +21,7 @@ final class UploadViewModel: InputOutput {
         print("UploadViewModel Deinit")
     }
     struct Input {
+        let inputUsedItemSwitch: ControlProperty<Bool>
         let inputTitleString: ControlProperty<String?>
         let inputPersonalColor: BehaviorSubject<PersonalColor>
         let inputContentString: ControlProperty<String?>
@@ -48,10 +49,15 @@ final class UploadViewModel: InputOutput {
         let outputUploadTrigger = PublishSubject<PostModel?>()
         let outputPhotoItems = PublishRelay<[NSItemProviderReading]>()
         
-        let postObservable = Observable.combineLatest(input.inputTitleString.orEmpty, input.inputPersonalColor.asObservable(), input.inputContentString.orEmpty, input.inputHashTags.orEmpty, photoString.asObserver())
-            .map { title, personalColor, content, hashtags, images in
-                print(title, content, personalColor.rawValue, hashtags, self.photoString)
-                return PostQuery(product_id: "\(ProductId.baseProductId)\(personalColor.rawValue)", title: title, content: "\(content) \n\n\(hashtags)", content1: personalColor.rawValue, files: images)
+        let postObservable = Observable.combineLatest(input.inputUsedItemSwitch, input.inputTitleString.orEmpty, input.inputPersonalColor.asObservable(), input.inputContentString.orEmpty, input.inputHashTags.orEmpty, photoString.asObserver())
+            .map { isUsedItem, title, personalColor, content, hashtags, images in
+                print("🍕", isUsedItem, title, content, personalColor.rawValue, hashtags, self.photoString)
+                print("😎", "\(ProductId.baseProductId)\(ProductId.usedItem.rawValue)")
+                if isUsedItem { // 중고
+                    return PostQuery(product_id: "\(ProductId.baseProductId)\(ProductId.usedItem.rawValue)", title: title, content: "\(content) \n\n\(hashtags)", content1: personalColor.rawValue, files: images)
+                } else {
+                    return PostQuery(product_id: "\(ProductId.baseProductId)\(personalColor.rawValue)", title: title, content: "\(content) \n\n\(hashtags)", content1: personalColor.rawValue, files: images)
+                }
             }
         
         input.inputUploadButton

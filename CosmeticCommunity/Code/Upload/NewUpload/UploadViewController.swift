@@ -44,11 +44,10 @@ class UploadViewController: BaseViewController {
         
     }
     override func bind() {
-        print("Upload")
         bindGallery() // 사진첩 열기 rx 연결
         let inputUploadImageTrigger = PublishSubject<Void>()
         let inputUploadTrigger = PublishSubject<Void>()
-        let input = UploadViewModel.Input(inputTitleString: mainView.titleTextField.textField.rx.text, inputPersonalColor: inputPersonalColor,
+        let input = UploadViewModel.Input(inputUsedItemSwitch: mainView.usedItemPostSwitch.rx.isOn, inputTitleString: mainView.titleTextField.textField.rx.text, inputPersonalColor: inputPersonalColor,
                                           inputContentString: mainView.contentTextView.rx.text,
                                           inputUploadButton: inputUploadButton, inputUploadImagesTrigger: inputUploadImageTrigger,
                                           inputUploadTrigger: inputUploadTrigger, inputSelectPhotos: inputSelectPhotoItems, inputHashTags: mainView.hashtagTextField.textField.rx.text,

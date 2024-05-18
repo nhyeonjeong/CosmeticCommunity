@@ -15,8 +15,9 @@ enum HTTPHeader: String {
     case json = "application/json"
     case multipartData = "multipart/form-data"
 }
-enum ProductId {
+enum ProductId: String {
     static let baseProductId = "nhj_CC_"
+    case usedItem
 }
 enum ParameterKey: String {
     case email
