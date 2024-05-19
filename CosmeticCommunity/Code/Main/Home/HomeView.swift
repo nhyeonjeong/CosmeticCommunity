@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 
 final class HomeView: BaseView {
-//    let scrollView = UIScrollView()
-//    let contentView = UIView()
+    let scrollView = UIScrollView()
+    let contentView = UIView()
     let notInNetworkView = {
         let view = NotInNetworkView()
         view.isHidden = true
@@ -52,25 +52,25 @@ final class HomeView: BaseView {
         return view
     }()
     override func configureHierarchy() {
-//        addSubview(scrollView)
-//        scrollView.addSubview(contentView)
-        addViews([likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView, notInNetworkView])
+        addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addViews([likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView, notInNetworkView])
     }
     override func configureConstraints() {
-//        scrollView.snp.makeConstraints { make in
-//            make.edges.equalTo(safeAreaLayoutGuide)
-//        }
-//        contentView.snp.makeConstraints { make in
-//            make.verticalEdges.equalTo(scrollView)
-//            make.width.equalTo(scrollView.snp.width)
-//        }
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        contentView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview()
+            make.width.equalTo(scrollView.snp.width)
+        }
         likedTitleLabel.snp.makeConstraints { make in
-            make.top.leading.equalTo(safeAreaLayoutGuide).inset(20)
+            make.top.leading.equalToSuperview().inset(20)
             make.height.equalTo(22)
         }
         mostLikedCollectionView.snp.makeConstraints { make in
             make.top.equalTo(likedTitleLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(250)
         }
         tagCollectionView.snp.makeConstraints { make in
@@ -82,9 +82,10 @@ final class HomeView: BaseView {
             make.top.equalTo(tagCollectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(240)
+            make.bottom.equalTo(contentView).inset(10)
         }
         notInNetworkView.snp.makeConstraints { make in
-            make.edges.equalTo(safeAreaLayoutGuide)
+            make.edges.equalToSuperview()
         }
     }
 }

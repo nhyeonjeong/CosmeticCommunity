@@ -119,7 +119,6 @@ final class UploadViewController: BaseViewController {
                 if owner.mainView.contentTextView.text == "" {
                     owner.contentTextIsEditing.onNext(false)
                 }
-                print("😎change")
             }.disposed(by: disposeBag)
         
         mainView.contentTextView.rx.didBeginEditing
@@ -148,7 +147,7 @@ final class UploadViewController: BaseViewController {
         outputNotInNetworkTrigger
             .asDriver(onErrorJustReturn: {})
             .drive(with: self) { owner, value in
-                if let value {
+                if let _ = value {
                     owner.mainView.notInNetworkView.isHidden = false
                 } else {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
