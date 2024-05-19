@@ -51,8 +51,7 @@ final class UploadViewModel: InputOutput {
         
         let postObservable = Observable.combineLatest(input.inputUsedItemSwitch, input.inputTitleString.orEmpty, input.inputPersonalColor.asObservable(), input.inputContentString.orEmpty, input.inputHashTags.orEmpty, photoString.asObserver())
             .map { isUsedItem, title, personalColor, content, hashtags, images in
-                print("🍕", isUsedItem, title, content, personalColor.rawValue, hashtags, self.photoString)
-                print("😎", "\(ProductId.baseProductId)\(ProductId.usedItem.rawValue)")
+//                print("🍕", isUsedItem, title, content, personalColor.rawValue, hashtags, self.photoString)
                 if isUsedItem { // 중고
                     return PostQuery(product_id: "\(ProductId.baseProductId)\(ProductId.usedItem.rawValue)", title: title, content: "\(content) \n\n\(hashtags)", content1: personalColor.rawValue, files: images)
                 } else {

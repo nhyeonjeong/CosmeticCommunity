@@ -11,8 +11,7 @@ import RxCocoa
 import Toast
 import PhotosUI // 갤러리
 
-class UploadViewController: BaseViewController {
-    
+final class UploadViewController: BaseViewController {
     let mainView = UploadView()
     private let viewModel = UploadViewModel()
 
@@ -24,13 +23,20 @@ class UploadViewController: BaseViewController {
     private let inputXbuttonTrigger = PublishSubject<Int>()
     private let inputPersonalColor = BehaviorSubject<PersonalColor>(value: .none)
     private let contentTextIsEditing = BehaviorSubject<Bool>(value: false)
+    // 키보드
+    var isExpand:Bool = false
     override func loadView() {
         view = mainView
     }
     deinit {
         print("UploadVC Deinit")
     }
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // scrollview keyboard
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardAppear(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDisappear(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
     override func viewWillAppear(_ animated: Bool) {
         // 로그아웃된 상태라면 유저디폴트에 userId가 없다.
         let userId = UserDefaults.standard.string(forKey: "userId")
@@ -240,8 +246,35 @@ extension UploadViewController: PHPickerViewControllerDelegate {
             }
         }
         group.notify(queue: .main) {
-//            print("3")
             self.inputSelectPhotoItems.onNext(())
+        }
+    }
+}
+
+extension UploadViewController: ScrollViewKeyboard {
+    @objc func keyboardAppear(notification: NSNotification) {
+        if !isExpand{
+            if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardHeight = keyboardFrame.cgRectValue.height
+                self.mainView.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.mainView.scrollView.frame.height + keyboardHeight)
+            }
+            else{
+                self.mainView.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.mainView.scrollView.frame.height + 250)
+            }
+            isExpand = true
+        }
+    }
+    
+    @objc func keyboardDisappear(notification: NSNotification) {
+        if isExpand{
+            if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardHeight = keyboardFrame.cgRectValue.height
+                self.mainView.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.mainView.scrollView.frame.height - keyboardHeight)
+            }
+            else{
+                self.mainView.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.mainView.scrollView.frame.height - 250)
+            }
+            isExpand = false
         }
     }
 }
