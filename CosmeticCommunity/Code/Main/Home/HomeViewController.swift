@@ -50,8 +50,10 @@ final class HomeViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        // 상단 category
+        bindHomeCategoryCollectionView()
+        
         output.outputMostLikedPostsItem
-            .debug()
             .drive(mainView.mostLikedCollectionView.rx.items(cellIdentifier: HomePostLargeCollectionViewCell.identifier, cellType: HomePostLargeCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
             }
@@ -116,7 +118,6 @@ final class HomeViewController: BaseViewController {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
                 }
             }.disposed(by: disposeBag)
-    
     }
     override func configureView() {
         configureNavigationBar()
@@ -128,7 +129,15 @@ final class HomeViewController: BaseViewController {
         navigationController?.pushViewController(SearchViewController(), animated: true)
     }
 }
-
+extension HomeViewController {
+    func bindHomeCategoryCollectionView() {
+        Observable.just(HomeViewModel.HomeCategory.allCases)
+            .asDriver(onErrorJustReturn: [])
+            .drive(mainView.categoryCollectionView.rx.items(cellIdentifier: HomeCategoryCollectionViewCell.identifier, cellType: HomeCategoryCollectionViewCell.self)) {(row, element, cell) in
+                cell.upgradeCell(element)
+            }.disposed(by: disposeBag)
+    }
+}
 extension HomeViewController {
     func configureNavigationBar() {
         navigationItem.title = "CoCo"

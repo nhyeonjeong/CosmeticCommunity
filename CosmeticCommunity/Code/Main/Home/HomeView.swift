@@ -24,6 +24,12 @@ final class HomeView: BaseView {
         return view
     }()
     
+    lazy var categoryCollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: categoryCollectionViewLayout())
+        view.register(HomeCategoryCollectionViewCell.self, forCellWithReuseIdentifier: HomeCategoryCollectionViewCell.identifier)
+        view.alwaysBounceVertical = false
+        return view
+    }()
     let likedTitleLabel = {
         let view = UILabel()
         view.text = "최근 인기있는 상품"
@@ -54,7 +60,7 @@ final class HomeView: BaseView {
     override func configureHierarchy() {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addViews([likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView, notInNetworkView])
+        contentView.addViews([categoryCollectionView, likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView, notInNetworkView])
     }
     override func configureConstraints() {
         scrollView.snp.makeConstraints { make in
@@ -64,8 +70,14 @@ final class HomeView: BaseView {
             make.verticalEdges.equalToSuperview()
             make.width.equalTo(scrollView.snp.width)
         }
+        categoryCollectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(10)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(50)
+        }
         likedTitleLabel.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().inset(20)
+            make.top.equalTo(categoryCollectionView.snp.bottom).offset(10)
+            make.leading.equalToSuperview().inset(10)
             make.height.equalTo(22)
         }
         mostLikedCollectionView.snp.makeConstraints { make in
@@ -91,6 +103,20 @@ final class HomeView: BaseView {
 }
 
 extension HomeView {
+    func categoryCollectionViewLayout() -> UICollectionViewLayout {
+        // item
+        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(10), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        // Group
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+        let group: NSCollectionLayoutGroup
+        group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.interItemSpacing = .fixed(10) // 가로
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
+        return UICollectionViewCompositionalLayout(section: section)
+    }
     func tagCollectionViewLayout() -> UICollectionViewLayout {
         // item
         let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(10), heightDimension: .fractionalHeight(1.0))
@@ -129,7 +155,7 @@ extension HomeView {
         layout.minimumLineSpacing = 20
         layout.minimumInteritemSpacing = 0
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        layout.scrollDirection = .horizontal // 스크롤 방향도 FlowLayout에 속한다 -> contentMode때문에 Fill로
+        layout.scrollDirection = .horizontal
         return layout
     }
 }

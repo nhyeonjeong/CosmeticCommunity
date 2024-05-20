@@ -10,6 +10,11 @@ import RxSwift
 import RxCocoa
 
 final class HomeViewModel: InputOutput {
+    // 홈 카테고리 종류
+    enum HomeCategory: String, CaseIterable {
+        case home = "홈"
+        case usedItem = "중고"
+    }
     let userManager = UserManager.shared
     let postManager = PostManager()
     let outputLoginView = PublishRelay<Void>()

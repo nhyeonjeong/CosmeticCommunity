@@ -99,6 +99,7 @@
 		8B428D032BCF9EB500FD1B69 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */; };
 		8B428D052BCFA1B600FD1B69 /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B428D042BCFA1B600FD1B69 /* PostManager.swift */; };
 		8B4A89762BF8E66A003610CE /* ScrollViewKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4A89752BF8E66A003610CE /* ScrollViewKeyboard.swift */; };
+		8B4A89782BF9D7C9003610CE /* HomeCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4A89772BF9D7C9003610CE /* HomeCategoryCollectionViewCell.swift */; };
 		8B5544E72BE5884700601489 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544E62BE5884700601489 /* CustomTextField.swift */; };
 		8B5544EA2BE6C37100601489 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5544E92BE6C37100601489 /* IconView.swift */; };
 		8B5544F12BE748FB00601489 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5544F02BE748FB00601489 /* Lottie */; };
@@ -215,6 +216,7 @@
 		8B428D022BCF9EB500FD1B69 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		8B428D042BCFA1B600FD1B69 /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		8B4A89752BF8E66A003610CE /* ScrollViewKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewKeyboard.swift; sourceTree = "<group>"; };
+		8B4A89772BF9D7C9003610CE /* HomeCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B5544E62BE5884700601489 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		8B5544E92BE6C37100601489 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
 		8B5544F22BE74B3800601489 /* thumbsup.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = thumbsup.json; sourceTree = "<group>"; };
@@ -660,9 +662,10 @@
 				8B428CF82BCEA74E00FD1B69 /* HomeViewController.swift */,
 				8B428CF42BCEA73E00FD1B69 /* HomeViewModel.swift */,
 				8B428CF62BCEA74800FD1B69 /* HomeView.swift */,
+				8B4A89772BF9D7C9003610CE /* HomeCategoryCollectionViewCell.swift */,
+				8BB570842BE283A5006DF25A /* HomePostLargeCollectionViewCell.swift */,
 				8BB570862BE2A79F006DF25A /* HomeTagCollectionViewCell.swift */,
 				8BB570882BE2B8F7006DF25A /* TagPostCollectionViewCell.swift */,
-				8BB570842BE283A5006DF25A /* HomePostLargeCollectionViewCell.swift */,
 				8B5544F82BE7A57E00601489 /* HomePostNormalCollectionViewCell.swift */,
 			);
 			path = Home;
@@ -808,6 +811,7 @@
 				8B3AFCA12BD3FD940069773F /* PostDetailViewModel.swift in Sources */,
 				8B3AFD162BD8EA050069773F /* OtherProfileViewController.swift in Sources */,
 				8B3AFD0D2BD81DAD0069773F /* SaveViewModel.swift in Sources */,
+				8B4A89782BF9D7C9003610CE /* HomeCategoryCollectionViewCell.swift in Sources */,
 				8B428C622BCAB52B00FD1B69 /* BaseCollectionViewCell.swift in Sources */,
 				8B3AFCB52BD4F3860069773F /* LikeModel.swift in Sources */,
 				8B3AFD1C2BD8EDC70069773F /* ProfileCustomButton.swift in Sources */,
