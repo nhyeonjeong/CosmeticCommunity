@@ -10,11 +10,6 @@ import RxSwift
 import RxCocoa
 
 final class HomeViewModel: InputOutput {
-    // 홈 카테고리 종류
-    enum HomeCategory: String, CaseIterable {
-        case home = "홈"
-        case usedItem = "중고"
-    }
     let userManager = UserManager.shared
     let postManager = PostManager()
     let outputLoginView = PublishRelay<Void>()
@@ -58,7 +53,6 @@ final class HomeViewModel: InputOutput {
                 outputProfileImageTrigger.accept(imagePath)
             }
             .disposed(by: disposeBag)
-        
         searchPersonalCasesPost
             .flatMap { personalColor in
                 let query = CheckPostQuery(next: "", limit: "100", product_id: "\(ProductId.baseProductId)\(personalColor.rawValue)")
@@ -185,3 +179,6 @@ final class HomeViewModel: InputOutput {
         return Output(outputProfileImageTrigger: outputProfileImageTrigger.asDriver(onErrorJustReturn: ""), outputMostLikedPostsItem: outputMostLikedPostsItem.asDriver(onErrorJustReturn: []), outputTagItems: outputTagItems.asDriver(onErrorJustReturn: []), outputTagPostsItem: outputTagPostsItem.asDriver(onErrorJustReturn: []), outputLoginView: outputLoginView, outputNotInNetworkTrigger: outputNotInNetworkTrigger)
     }
 }
+
+
+

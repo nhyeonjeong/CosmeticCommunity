@@ -49,10 +49,6 @@ final class HomeViewController: BaseViewController {
                 }
             }
             .disposed(by: disposeBag)
-        
-        // 상단 category
-        bindHomeCategoryCollectionView()
-        
         output.outputMostLikedPostsItem
             .drive(mainView.mostLikedCollectionView.rx.items(cellIdentifier: HomePostLargeCollectionViewCell.identifier, cellType: HomePostLargeCollectionViewCell.self)) {(row, element, cell) in
                 cell.upgradeCell(element)
@@ -112,7 +108,7 @@ final class HomeViewController: BaseViewController {
         outputNotInNetworkTrigger
             .asDriver(onErrorJustReturn: {})
             .drive(with: self) { owner, value in
-                if let value {
+                if let _ = value {
                     owner.mainView.notInNetworkView.isHidden = false
                 } else {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
@@ -127,15 +123,6 @@ final class HomeViewController: BaseViewController {
     }
     @objc func searchButtonClicked() {
         navigationController?.pushViewController(SearchViewController(), animated: true)
-    }
-}
-extension HomeViewController {
-    func bindHomeCategoryCollectionView() {
-        Observable.just(HomeViewModel.HomeCategory.allCases)
-            .asDriver(onErrorJustReturn: [])
-            .drive(mainView.categoryCollectionView.rx.items(cellIdentifier: HomeCategoryCollectionViewCell.identifier, cellType: HomeCategoryCollectionViewCell.self)) {(row, element, cell) in
-                cell.upgradeCell(element)
-            }.disposed(by: disposeBag)
     }
 }
 extension HomeViewController {
