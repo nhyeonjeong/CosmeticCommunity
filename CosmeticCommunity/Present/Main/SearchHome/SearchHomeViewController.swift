@@ -67,7 +67,7 @@ final class SearchHomeViewController: BaseViewController {
         setNavigationBar()
     }
     @objc func searchButtonClicked() {
-        navigationController?.pushViewController(SearchViewController(), animated: true)
+        navigationController?.pushViewController(SearchViewController(postType: .home), animated: true)
     }
 }
 

@@ -10,6 +10,10 @@ import RxSwift
 import RxCocoa
 
 final class SearchViewModel: InputOutput {
+    let postType: PostType
+    init(posttype : PostType) {
+        self.postType = posttype
+    }
     let postManager = PostManager()
     var outputLoginView: RxRelay.PublishRelay<Void> = PublishRelay<Void>()
     let outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
@@ -44,7 +48,7 @@ final class SearchViewModel: InputOutput {
     
     func transform(input: Input) -> Output {
         let outputPostItems = BehaviorRelay<[PostModel]?>(value: postData)
-        let searchTrigger = PublishSubject<(String, PersonalColor)>()
+        let searchTrigger = PublishSubject<(String, PersonalColor?)>() // 중고상품일때는 카테고리 선택 X
         let outputNoResult = PublishRelay<Bool>()
         let outputHideRecentSearch = BehaviorRelay<Bool>(value: false)
         let outputRecentSearchTable = PublishRelay<[String]>()
@@ -60,7 +64,8 @@ final class SearchViewModel: InputOutput {
             .debug()
             .withLatestFrom(input.inputSearchText.orEmpty)
             .bind(with: self) { owner, value in
-                searchTrigger.onNext((value, owner.selectedCategory)) // 하나라도 반응하면 네트워크 통신
+                let selectedCategory = owner.postType == .home ? owner.selectedCategory : nil
+                searchTrigger.onNext((value, selectedCategory)) // 하나라도 반응하면 네트워크 통신
                 owner.categoryCases.onNext(PersonalColor.personalCases)
                 if value.trimmingCharacters(in: .whitespaces) != "" {
                     // enter누르면 최근검색어 사라지게
@@ -111,7 +116,13 @@ final class SearchViewModel: InputOutput {
                 if self.nextCursor == "0" {
                     return Observable<CheckPostModel>.empty()
                 }
-                let query = HashtagQuery(next: self.nextCursor, limit: self.limit, product_id: "\(ProductId.baseProductId)\(category.rawValue)", hashTag: hashTag)
+                // PostType에 따라 다른 쿼리 생성
+                let query: HashtagQuery
+                if let category {
+                    query = HashtagQuery(next: self.nextCursor, limit: self.limit, product_id: "\(ProductId.baseProductId)\(category.rawValue)", hashTag: hashTag)
+                } else {
+                    query = HashtagQuery(next: self.nextCursor, limit: self.limit, product_id: "\(ProductId.baseProductId)\(ProductId.usedItem)", hashTag: hashTag)
+                }
                 return self.postManager.checkWithHashTag(query: query)
                     .catch { error in
                         guard let error = error as? APIError else {

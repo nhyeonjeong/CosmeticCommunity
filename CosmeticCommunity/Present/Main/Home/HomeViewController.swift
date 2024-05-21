@@ -31,8 +31,9 @@ final class HomeViewController: BaseViewController {
         inputMostLikedPostsTrigger.onNext(())
     }
     override func bind() {
-        inputTagSelectedTrigger.onNext(viewModel.selectedTagRow)//여기에 해야 indexrange 오류가 안 난다..?
+        usedItemButtonClicked()
         
+        inputTagSelectedTrigger.onNext(viewModel.selectedTagRow)//여기에 해야 indexrange 오류가 안 난다..?
         let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputMostLikedPostsTrigger: inputMostLikedPostsTrigger, inputTagSelectedTrigger: inputTagSelectedTrigger)
         
         let output = viewModel.transform(input: input)
@@ -122,7 +123,13 @@ final class HomeViewController: BaseViewController {
         navigationController?.pushViewController(MyProfileViewController(), animated: true)
     }
     @objc func searchButtonClicked() {
-        navigationController?.pushViewController(SearchViewController(), animated: true)
+        navigationController?.pushViewController(SearchViewController(postType: .home), animated: true)
+    }
+    func usedItemButtonClicked() {
+        mainView.usedItemButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.pushViewController(SearchViewController(postType: .usedItem), animated: true)
+            }.disposed(by: disposeBag)
     }
 }
 extension HomeViewController {

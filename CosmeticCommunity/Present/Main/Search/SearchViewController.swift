@@ -10,9 +10,17 @@ import RxSwift
 import RxCocoa
 
 final class SearchViewController: BaseViewController {
-
+    let postType: PostType
+    let viewModel: SearchViewModel
+    init(postType: PostType) {
+        self.postType = postType
+        self.viewModel = SearchViewModel(posttype: postType)
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     let mainView = SearchView()
-    let viewModel = SearchViewModel()
     
     let inputCategorySelected = BehaviorSubject<PersonalColor>(value: .spring)
     let inputRecentSearchTable = BehaviorSubject<[String]?>(value: UserDefaultManager.shared.getRecentSearch())
