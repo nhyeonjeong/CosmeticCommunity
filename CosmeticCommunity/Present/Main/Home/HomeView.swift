@@ -11,6 +11,14 @@ import SnapKit
 final class HomeView: BaseView {
     let scrollView = UIScrollView()
     let contentView = UIView()
+    let usedItemButton = {
+        let view = UIButton()
+        view.setTitle("중고 상품 구매하러 가기 >", for: .normal)
+        view.setTitleColor(Constants.Color.text, for: .normal)
+        view.layer.borderColor = Constants.Color.subText.cgColor
+        view.layer.borderWidth = 1
+        return view
+    }()
     let notInNetworkView = {
         let view = NotInNetworkView()
         view.isHidden = true
@@ -54,7 +62,7 @@ final class HomeView: BaseView {
     override func configureHierarchy() {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addViews([likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView, notInNetworkView])
+        contentView.addViews([usedItemButton, likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView, notInNetworkView])
     }
     override func configureConstraints() {
         scrollView.snp.makeConstraints { make in
@@ -64,8 +72,13 @@ final class HomeView: BaseView {
             make.verticalEdges.equalToSuperview()
             make.width.equalTo(scrollView.snp.width)
         }
+        usedItemButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(10)
+            make.horizontalEdges.equalToSuperview().inset(10)
+            make.height.equalTo(40)
+        }
         likedTitleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(20)
+            make.top.equalTo(usedItemButton.snp.bottom).offset(20)
             make.leading.equalToSuperview().inset(10)
             make.height.equalTo(22)
         }
