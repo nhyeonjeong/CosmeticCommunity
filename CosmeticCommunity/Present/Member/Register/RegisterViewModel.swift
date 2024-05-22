@@ -64,7 +64,7 @@ final class RegisterViewModel: InputOutput {
                 return password == checkPassword
             }
         // 유효성 검사를 모두 통과해야 회원가입버튼 활성화
-        let registerValidObservable = Observable.combineLatest(outputEmailMessage, outputCheckEmailMessage,  outputPasswordMessage, checkPasswordObservable, outputNicknameMessage)
+        Observable.combineLatest(outputEmailMessage, outputCheckEmailMessage,  outputPasswordMessage, checkPasswordObservable, outputNicknameMessage)
             .bind(with: self) { owner, valids in
 //                print("🤬registerValidObservable : \(valids)")
                 let emailValid = valids.0
@@ -77,7 +77,7 @@ final class RegisterViewModel: InputOutput {
                 } else {
                     outputRegisterButtonEnabled.accept(false)
                 }
-            }
+            }.disposed(by: disposeBag)
         
         input.inputPersonal
             .bind(with: self){ owner, index in

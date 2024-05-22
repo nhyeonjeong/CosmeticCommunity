@@ -73,7 +73,7 @@ final class EditUploadViewController: BaseViewController {
         output.outputEditTrigger
             .bind(with: self) { owner, value in
                 // 업로드가 성공했다면
-                if let value {
+                if let _ = value {
                     print("업로드 성공")
                     owner.navigationController?.dismiss(animated: true)
                     owner.popAfterEditPost?()
@@ -109,7 +109,7 @@ final class EditUploadViewController: BaseViewController {
         outputNotInNetworkTrigger
             .asDriver(onErrorJustReturn: {})
             .drive(with: self) { owner, value in
-                if let value {
+                if let _ = value {
                     owner.mainView.notInNetworkView.isHidden = false
                 } else {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음

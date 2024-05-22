@@ -70,7 +70,7 @@ final class CustomSheetViewController: BaseViewController {
         
         output.outputDeleteButton
             .drive(with: self) { owner, value in
-                if let value {
+                if let _ = value {
                     self.dismiss(animated: false)
                     self.popPostDetailView?()
                 } else {

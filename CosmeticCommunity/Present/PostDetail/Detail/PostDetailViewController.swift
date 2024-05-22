@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 import SnapKit
 import Toast
-import IQKeyboardManagerSwift
 
 final class PostDetailViewController: BaseViewController {
     let postId: String // 받아온 post정보

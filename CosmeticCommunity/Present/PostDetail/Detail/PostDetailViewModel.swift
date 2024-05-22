@@ -98,6 +98,7 @@ final class PostDetailViewModel: InputOutput {
             }
             .disposed(by: disposeBag)
         
+        //MARK: - 포스트 조회 API
         input.inputPostIdTrigger
             .flatMap { id in
 //                print("포스트 조회하기")
@@ -122,7 +123,6 @@ final class PostDetailViewModel: InputOutput {
                                 print("다시 로그인해야돼용")
                                 self.outputLoginView.accept(())
                             }
-
                         }
                         outputPostData.accept(nil)
                         return Observable<PostModel>.never()

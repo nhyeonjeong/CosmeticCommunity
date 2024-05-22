@@ -171,7 +171,7 @@ final class HomeViewModel: InputOutput {
             .bind(with: self) { owner, row in
                 owner.selectedTagRow = row
                 for item in owner.personalCases {
-//                    searchTagPost.onNext((self.tagList[row], item))
+                    searchTagPost.onNext((self.tagList[row], item))
                 }
             }
             .disposed(by: disposeBag)
