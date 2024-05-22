@@ -12,16 +12,16 @@ import RxCocoa
 final class SearchViewController: BaseViewController {
     let postType: PostType
     let viewModel: SearchViewModel
+    let mainView: SearchView
     init(postType: PostType) {
         self.postType = postType
         self.viewModel = SearchViewModel(posttype: postType)
+        self.mainView = SearchView(postType: postType)
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    let mainView = SearchView()
-    
     let inputCategorySelected = BehaviorSubject<PersonalColor>(value: .spring)
     let inputRecentSearchTable = BehaviorSubject<[String]?>(value: UserDefaultManager.shared.getRecentSearch())
     let inputPrepatchTrigger = PublishSubject<[IndexPath]>()
@@ -144,7 +144,7 @@ final class SearchViewController: BaseViewController {
         outputNotInNetworkTrigger
             .asDriver(onErrorJustReturn: {})
             .drive(with: self) { owner, value in
-                if let value {
+                if let _ = value {
                     owner.mainView.notInNetworkView.isHidden = false
                 } else {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음

@@ -8,6 +8,14 @@
 import UIKit
 
 final class SearchView: BaseView {
+    let postType: PostType
+    init(postType: PostType) {
+        self.postType = postType
+        super.init(frame: .zero)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     let notInNetworkView = {
         let view = NotInNetworkView()
         view.isHidden = true
@@ -55,6 +63,13 @@ final class SearchView: BaseView {
         view.tintColor = Constants.Color.subText
         return view
     }()
+    let categoryStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        return view
+        
+    }()
+    let categoryTopView = UIView()
     let categoryTitleLabel = {
         let view = UILabel()
         view.text = "카테고리 |"
@@ -74,15 +89,18 @@ final class SearchView: BaseView {
     }()
     override func configureHierarchy() {
         textFieldView.addViews([textfield, xButton])
+        categoryTopView.addViews([categoryTitleLabel, categoryCollectionView])
+        categoryStackView.addArrangedSubview(categoryTopView)
+        categoryStackView.addArrangedSubview(resultCollectionView)
         resultCollectionView.addSubview(noResultLabel)
         recentView.addViews([removeAllButton, recentSearchTableView])
-        addViews([categoryTitleLabel, categoryCollectionView, resultCollectionView, recentView, notInNetworkView])
+        addViews([categoryStackView, recentView, notInNetworkView])
     }
     override func configureConstraints() {
         textfield.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()
             make.leading.equalToSuperview().inset(10)
-//            make.width.equalTo(330)
+            //            make.width.equalTo(330)
         }
         xButton.snp.makeConstraints { make in
             make.verticalEdges.trailing.equalToSuperview()
@@ -102,23 +120,40 @@ final class SearchView: BaseView {
             make.top.equalTo(removeAllButton.snp.bottom).offset(10)
             make.horizontalEdges.bottom.equalToSuperview()
         }
-        categoryTitleLabel.snp.makeConstraints { make in
+        categoryStackView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(10)
-            make.leading.equalTo(safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
+        }
+        categoryTopView.snp.makeConstraints { make in
+            make.top.equalTo(categoryStackView)
+            make.horizontalEdges.equalTo(categoryStackView).inset(10)
+            make.height.equalTo(50)
+        }
+        categoryTitleLabel.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalToSuperview()
         }
         categoryCollectionView.snp.makeConstraints { make in
             make.centerY.equalTo(categoryTitleLabel)
             make.leading.equalTo(categoryTitleLabel.snp.trailing).offset(4)
-            make.trailing.equalTo(safeAreaLayoutGuide).inset(10)
+            make.trailing.equalToSuperview()
             make.height.equalTo(50)
         }
         resultCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(categoryTitleLabel.snp.bottom).offset(20)
-            make.bottom.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            make.top.equalTo(categoryTopView.snp.bottom).offset(20)
+            make.bottom.horizontalEdges.equalTo(categoryStackView)
         }
         notInNetworkView.snp.makeConstraints { make in
             make.top.equalTo(categoryCollectionView.snp.bottom)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
+        }
+    }
+    override func configureView() {
+        switch postType {
+        case .home:
+            categoryTopView.isHidden = false
+        case .usedItem:
+            categoryTopView.isHidden = true
         }
     }
 }
