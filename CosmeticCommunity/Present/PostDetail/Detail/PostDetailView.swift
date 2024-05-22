@@ -53,6 +53,11 @@ final class PostDetailView: BaseView {
     }()
     let creatorView = UserDataView(.creator)
     let detailsView = PostDetailsView()
+    let paymentStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        return view
+    }()
     let paymentButton = {
         let view = UIButton()
         view.setTitle("결제하러 가기", for: .normal)
@@ -115,7 +120,8 @@ final class PostDetailView: BaseView {
     }()
     override func configureHierarchy() {
         uploadCommentView.addViews([commentTextView, commentButton])
-        contentView.addViews([imageCollectionView, imageCounterLabel, likeButton, creatorView, detailsView, paymentButton, contentLabel, hashTagLabel, creatTimeLabel, commentsTableView, bottomHiddenView])
+        paymentStackView.addArrangedSubview(paymentButton)
+        contentView.addViews([imageCollectionView, imageCounterLabel, likeButton, creatorView, detailsView, paymentStackView, contentLabel, hashTagLabel, creatTimeLabel, commentsTableView, bottomHiddenView])
         scrollView.addSubview(contentView)
         addViews([scrollView, uploadCommentView, likeLottie, notInNetworkView])
     }
@@ -152,10 +158,13 @@ final class PostDetailView: BaseView {
             make.horizontalEdges.equalToSuperview().inset(10)
             make.height.equalTo(100)
         }
-        paymentButton.snp.makeConstraints { make in
+        paymentStackView.snp.makeConstraints { make in
             make.top.equalTo(detailsView.personalColorLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(10)
             make.height.equalTo(40)
+        }
+        paymentButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(paymentButton.snp.bottom).offset(10)
