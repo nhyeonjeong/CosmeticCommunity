@@ -72,6 +72,8 @@ final class PostDetailViewController: BaseViewController {
         output.outputPostData
             .drive(with: self) { owner, value in
                 if let value {
+                    // 결제버튼 유무
+                    owner.mainView.isHidePaymentButton(productId: value.product_id)
                     owner.viewModel.postData = value // 가져온 post데이터 저장
                     owner.imageItems.onNext(value.files)
                     owner.mainView.creatorView.upgradeView(profileImage: value.creator.profileImage, nick: value.creator.nick)
