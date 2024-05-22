@@ -45,7 +45,12 @@ final class HomeView: BaseView {
         view.bounces = false
         return view
     }()
-    
+    let tagTitleLabel = {
+        let view = UILabel()
+        view.text = "최근 뜨고 있는 키워드"
+        view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.bigTitle)
+        return view
+    }()
     lazy var tagCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.tagCollectionViewLayout())
         view.register(HomeTagCollectionViewCell.self, forCellWithReuseIdentifier: HomeTagCollectionViewCell.identifier)
@@ -62,7 +67,7 @@ final class HomeView: BaseView {
     override func configureHierarchy() {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addViews([usedItemButton, likedTitleLabel, mostLikedCollectionView, tagCollectionView, tagPostCollectionView, notInNetworkView])
+        contentView.addViews([usedItemButton, likedTitleLabel, mostLikedCollectionView, tagTitleLabel, tagCollectionView, tagPostCollectionView, notInNetworkView])
     }
     override func configureConstraints() {
         scrollView.snp.makeConstraints { make in
@@ -87,9 +92,14 @@ final class HomeView: BaseView {
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(250)
         }
-        tagCollectionView.snp.makeConstraints { make in
+        tagTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(mostLikedCollectionView.snp.bottom).offset(20)
             make.horizontalEdges.equalToSuperview().inset(10)
+            make.height.equalTo(22)
+        }
+        tagCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(tagTitleLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(30)
         }
         tagPostCollectionView.snp.makeConstraints { make in
