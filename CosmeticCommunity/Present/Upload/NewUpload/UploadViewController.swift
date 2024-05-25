@@ -224,22 +224,16 @@ extension UploadViewController {
 }
 
 extension UploadViewController: PHPickerViewControllerDelegate {
-    // 사진을 선택했을 대 Add눌렀을 때?
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-//        print("1")
         let group = DispatchGroup()
         
         for image in results {
             group.enter()
-//            print("2")
             let itemProvider = image.itemProvider
             if itemProvider.canLoadObject(ofClass: UIImage.self) {
-//                print("2-1")
                 itemProvider.loadObject(ofClass: UIImage.self) { item, error in
-//                    print("2-2")
                     self.viewModel.appendPhotos(item)
-//                    print(self.viewModel.photos)
                     group.leave()
                 }
             }

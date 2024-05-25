@@ -33,7 +33,7 @@ final class HomeViewController: BaseViewController {
     override func bind() {
         usedItemButtonClicked()
         
-        inputTagSelectedTrigger.onNext(viewModel.selectedTagRow)//여기에 해야 indexrange 오류가 안 난다..?
+//        inputTagSelectedTrigger.onNext(viewModel.selectedTagRow)//여기에 해야 indexrange 오류가 안 난다..?
         let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputMostLikedPostsTrigger: inputMostLikedPostsTrigger, inputTagSelectedTrigger: inputTagSelectedTrigger)
         
         let output = viewModel.transform(input: input)
