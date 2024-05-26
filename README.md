@@ -40,6 +40,8 @@
 - 엑세스토큰 만료시 대응할 일들을 TokenManager에 클로저로 전달
   > 리프레시 토큰만료시 로그인화면을 띄워주는 Observer에 이벤트 전달
 - 외부에서 객체를 생성해 인스턴스 생성시 DI
+- Multipart통신
+- 페이지네이션
 
 
 ## 💄트러블슈팅
@@ -151,3 +153,6 @@ configureSement메서드에서 반복문을 돌리면서 메뉴 삽입
 </details>
 customSegment를 사용하려는 뷰에서 SegmentCase프로토콜을 따르는 Enum 생성
 프로토콜으로서의 타입을 사용해서 segment객체 생성시 주입
+
+
+## 💄기술회고
