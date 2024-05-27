@@ -19,14 +19,17 @@
 - 퍼스널컬러별로 검색기능
 - 중고상품 결제 기능
 - 사용자가 올린 게시글과 프로필 조회
+- 채팅기능(구현예정)
 
 ## 💄사용한 기술스택
 - UIKit, CodeBaseUI, MVVM
 - RxSwift, RxCocoa, Alamofire, Snapkit, Kingfisher, Toast, Lottie, iamport
 - Singleton, DI, UserDefault, Access Control, Router Pattern
 - CompositionalLayout
+- Socket(구현예정)
 
 ## 💄기술설명
+(이유작성하기)
 - MVVM InputOutput패턴
   > ViewController과 ViewModel을 분리하고 RxSwift, RxCocoa를 사용해 MVVM InputOutput패턴으로 작성
 - Alamofire을 사용한 네트워크통신 NetworkManager Singleton패턴으로 구성
@@ -40,8 +43,8 @@
 - 엑세스토큰 만료시 대응할 일들을 TokenManager에 클로저로 전달
   > 리프레시 토큰만료시 로그인화면을 띄워주는 Observer에 이벤트 전달
 - 외부에서 객체를 생성해 인스턴스 생성시 DI
-- Multipart통신
-- 페이지네이션
+- Multipart통신으로 서버에 이미지를 포함한 데이터 업로드
+- 커서기반 페이지네이션
 
 
 ## 💄트러블슈팅
@@ -156,3 +159,8 @@ customSegment를 사용하려는 뷰에서 SegmentCase프로토콜을 따르는 
 
 
 ## 💄기술회고
+일기형식으로 쓰지 말고 아쉬운 점
+
+
+
+
