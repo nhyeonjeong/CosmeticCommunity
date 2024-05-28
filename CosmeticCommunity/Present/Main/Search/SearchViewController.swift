@@ -112,8 +112,7 @@ final class SearchViewController: BaseViewController {
             .disposed(by: disposeBag)
         mainView.resultCollectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, postData in
-                let vc = PostDetailViewController()
-                vc.postId = postData.post_id
+                let vc = PostDetailViewController(postId: postData.post_id)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)

@@ -60,8 +60,7 @@ final class MyProfileViewController: BaseViewController {
 
         mainView.postsCollectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, data in
-                let vc = PostDetailViewController()
-                vc.postId = data.post_id
+                let vc = PostDetailViewController(postId: data.post_id)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -91,7 +90,7 @@ final class MyProfileViewController: BaseViewController {
         outputNotInNetworkTrigger
             .asDriver(onErrorJustReturn: {})
             .drive(with: self) { owner, value in
-                if let value {
+                if let _ = value {
                     owner.mainView.notInNetworkView.isHidden = false
                 } else {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음

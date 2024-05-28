@@ -32,7 +32,6 @@ final class CustomSheetViewModel: InputOutput {
         input.inputDeletebuttonTrigger
             .withLatestFrom(input.inputPostId)
             .flatMap { postId in
-                print(postId)
                 guard let postId else {
                     print("postId가 nil이다")
                     outputDeleteButton.accept(nil)

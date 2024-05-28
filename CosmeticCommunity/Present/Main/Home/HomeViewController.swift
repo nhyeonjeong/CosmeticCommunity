@@ -33,7 +33,7 @@ final class HomeViewController: BaseViewController {
     override func bind() {
         usedItemButtonClicked()
         
-        inputTagSelectedTrigger.onNext(viewModel.selectedTagRow)//여기에 해야 indexrange 오류가 안 난다..?
+//        inputTagSelectedTrigger.onNext(viewModel.selectedTagRow)//여기에 해야 indexrange 오류가 안 난다..?
         let input = HomeViewModel.Input(inputProfileImageTrigger: inputProfileImageTrigger, inputMostLikedPostsTrigger: inputMostLikedPostsTrigger, inputTagSelectedTrigger: inputTagSelectedTrigger)
         
         let output = viewModel.transform(input: input)
@@ -66,8 +66,7 @@ final class HomeViewController: BaseViewController {
                 cell.upgradeCell(element)
                 cell.collectionView.rx.modelSelected(PostModel.self)
                     .bind(with: self) { owner, post in
-                        let vc = PostDetailViewController()
-                        vc.postId = post.post_id
+                        let vc = PostDetailViewController(postId: post.post_id)
                         owner.navigationController?.pushViewController(vc, animated: true)
                     }
                     .disposed(by: cell.disposeBag)
@@ -75,8 +74,7 @@ final class HomeViewController: BaseViewController {
             .disposed(by: disposeBag)
         mainView.mostLikedCollectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, post in
-                let vc = PostDetailViewController()
-                vc.postId = post.post_id
+                let vc = PostDetailViewController(postId: post.post_id)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -91,8 +89,7 @@ final class HomeViewController: BaseViewController {
         
         mainView.tagPostCollectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, post in
-                let vc = PostDetailViewController()
-                vc.postId = post.post_id
+                let vc = PostDetailViewController(postId: post.post_id)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)

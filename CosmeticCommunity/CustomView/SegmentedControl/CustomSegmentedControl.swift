@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 final class CustomSegmentedControl<T: SegmentCase>: UISegmentedControl {
-    
     private lazy var underlineView: UIView = {
         let view = UIView()
         view.backgroundColor = Constants.Color.point

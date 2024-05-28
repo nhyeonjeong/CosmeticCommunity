@@ -66,6 +66,7 @@ final class SearchView: BaseView {
     let categoryStackView = {
         let view = UIStackView()
         view.axis = .vertical
+        view.spacing = 10
         return view
         
     }()
@@ -121,13 +122,13 @@ final class SearchView: BaseView {
             make.horizontalEdges.bottom.equalToSuperview()
         }
         categoryStackView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).inset(10)
+            make.top.equalTo(safeAreaLayoutGuide)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
         categoryTopView.snp.makeConstraints { make in
             make.top.equalTo(categoryStackView)
             make.horizontalEdges.equalTo(categoryStackView).inset(10)
-            make.height.equalTo(50)
+            make.height.equalTo(40)
         }
         categoryTitleLabel.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()
@@ -137,7 +138,7 @@ final class SearchView: BaseView {
             make.centerY.equalTo(categoryTitleLabel)
             make.leading.equalTo(categoryTitleLabel.snp.trailing).offset(4)
             make.trailing.equalToSuperview()
-            make.height.equalTo(50)
+            make.height.equalTo(40)
         }
         resultCollectionView.snp.makeConstraints { make in
             make.top.equalTo(categoryTopView.snp.bottom).offset(20)

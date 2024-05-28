@@ -53,6 +53,12 @@ final class PostDetailView: BaseView {
     }()
     let creatorView = UserDataView(.creator)
     let detailsView = PostDetailsView()
+    let stackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.spacing = 10
+        return view
+    }()
     let paymentButton = {
         let view = UIButton()
         view.setTitle("결제하러 가기", for: .normal)
@@ -115,7 +121,9 @@ final class PostDetailView: BaseView {
     }()
     override func configureHierarchy() {
         uploadCommentView.addViews([commentTextView, commentButton])
-        contentView.addViews([imageCollectionView, imageCounterLabel, likeButton, creatorView, detailsView, paymentButton, contentLabel, hashTagLabel, creatTimeLabel, commentsTableView, bottomHiddenView])
+        stackView.addArrangedSubview(paymentButton)
+        stackView.addArrangedSubview(contentLabel)
+        contentView.addViews([imageCollectionView, imageCounterLabel, likeButton, creatorView, detailsView, stackView, hashTagLabel, creatTimeLabel, commentsTableView, bottomHiddenView])
         scrollView.addSubview(contentView)
         addViews([scrollView, uploadCommentView, likeLottie, notInNetworkView])
     }
@@ -152,17 +160,21 @@ final class PostDetailView: BaseView {
             make.horizontalEdges.equalToSuperview().inset(10)
             make.height.equalTo(100)
         }
-        paymentButton.snp.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.top.equalTo(detailsView.personalColorLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(10)
+        }
+        paymentButton.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(40)
         }
         contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(paymentButton.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(10)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
         hashTagLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentLabel.snp.bottom).offset(10)
+            make.top.equalTo(stackView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
         }
         creatTimeLabel.snp.makeConstraints { make in
@@ -196,6 +208,14 @@ final class PostDetailView: BaseView {
         }
         notInNetworkView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
+        }
+    }
+}
+extension PostDetailView {
+    func isHidePaymentButton(productId: String) {
+        // 중고가 아닌 게시글로 올렸을 때
+        if productId != "\(ProductId.baseProductId)\(ProductId.usedItem)" {
+            paymentButton.isHidden = true
         }
     }
 }

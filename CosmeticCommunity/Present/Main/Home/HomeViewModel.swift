@@ -82,7 +82,8 @@ final class HomeViewModel: InputOutput {
             .subscribe(with: self) { owner, value in
                 owner.outputNotInNetworkTrigger.accept(nil)
                 // 퍼스널컬러별로 100개씩 가져와서 정렬
-                self.allPosts.append(contentsOf: value.data)
+                self.allPosts = value.data
+//                self.allPosts.append(contentsOf: value.data)
                 owner.fetchCount += 1
                 if owner.fetchCount > 3 {
                     let likeSortedList = self.allPosts.sorted { post1, post2 in
@@ -105,12 +106,18 @@ final class HomeViewModel: InputOutput {
                     }.map { dic in
                         dic.key
                     }
-                    outputMostLikedPostsItem.accept(Array(likeSortedList[..<min(10, likeSortedList.count)])) // 24개까지만 가져오기
+                    outputMostLikedPostsItem.accept(Array(likeSortedList[..<min(10, likeSortedList.count)])) // 10개까지만 가져오기
                     owner.tagList = Array(sortedTagList[..<min(sortedTagList.count, 5)])
-                    outputTagItems.accept(owner.tagList)
-                    if owner.selectedTagRow == 0 {
-                        input.inputTagSelectedTrigger.onNext(0)
+                    
+                    // 만약 최근 뜨고 있는 키워드 tag가 1개 이상이라면 디폴트로 0번재 인덱스가 선택
+                    print("🏂", owner.tagList)
+                    if owner.tagList.count > 0 {
+                        input.inputTagSelectedTrigger.onNext(owner.selectedTagRow)
                     }
+                    outputTagItems.accept(owner.tagList)
+//                    if owner.selectedTagRow == 0 {
+//                        input.inputTagSelectedTrigger.onNext(0)
+//                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -166,12 +173,14 @@ final class HomeViewModel: InputOutput {
                 }
             }
             .disposed(by: disposeBag)
-        
+        // Tag아이템을 눌렀을 때
         input.inputTagSelectedTrigger
             .bind(with: self) { owner, row in
                 owner.selectedTagRow = row
                 for item in owner.personalCases {
-//                    searchTagPost.onNext((self.tagList[row], item))
+                    print("💎", row)
+                    print("🥶", owner.tagList)
+//                    searchTagPost.onNext((owner.tagList[row], item))
                 }
             }
             .disposed(by: disposeBag)

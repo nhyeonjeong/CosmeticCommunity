@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 import Alamofire // 알라모파이어 사용
 
-// struct vs class
 final class NetworkManager {
     static let shared = NetworkManager()
     
@@ -71,7 +70,7 @@ final class NetworkManager {
                             case .some(_):
                                 print("error ---------------> some Error")
                                 print("🚨\(router)")
-                                print("\(response.response?.statusCode)")
+//                                print("\(response.response?.statusCode)")
                                 observer.onError(APIError.serverError_500)
                                 return
                             }
@@ -182,9 +181,9 @@ extension NetworkManager {
 //            
             
             AF.request(urlRequest).validate(statusCode: 200..<201).response { response in
-                print("😎", response.response?.statusCode)
+//                print("😎", response.response?.statusCode)
                     switch response.result {
-                    case .success(let success):
+                    case .success(_):
 
 //                        completionHandler() // 성공시 실행할 게 있다면 실행하기
                         observer.onNext(())

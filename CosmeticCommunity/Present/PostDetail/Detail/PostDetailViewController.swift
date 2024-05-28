@@ -10,11 +10,16 @@ import RxSwift
 import RxCocoa
 import SnapKit
 import Toast
-import IQKeyboardManagerSwift
 
 final class PostDetailViewController: BaseViewController {
-    var postId: String? // 받아온 post정보
-
+    let postId: String // 받아온 post정보
+    init(postId: String) {
+        self.postId = postId
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     private let mainView = PostDetailView()
     private let viewModel = PostDetailViewModel()
     
@@ -33,7 +38,7 @@ final class PostDetailViewController: BaseViewController {
         print(#function, "🐰")
         super.viewWillAppear(true)
         print("😍\(postId)")
-        inputPostIdTrigger.onNext(postId ?? "")
+        inputPostIdTrigger.onNext(postId)
         // userdefault에 최근 본 포스트 저장
         mainView.uploadCommentView.isUserInteractionEnabled = true
     }
@@ -67,6 +72,8 @@ final class PostDetailViewController: BaseViewController {
         output.outputPostData
             .drive(with: self) { owner, value in
                 if let value {
+                    // 결제버튼 유무
+                    owner.mainView.isHidePaymentButton(productId: value.product_id)
                     owner.viewModel.postData = value // 가져온 post데이터 저장
                     owner.imageItems.onNext(value.files)
                     owner.mainView.creatorView.upgradeView(profileImage: value.creator.profileImage, nick: value.creator.nick)
@@ -146,7 +153,7 @@ final class PostDetailViewController: BaseViewController {
         outputNotInNetworkTrigger
             .asDriver(onErrorJustReturn: {})
             .drive(with: self) { owner, value in
-                if let value {
+                if let _ = value {
                     owner.mainView.notInNetworkView.isHidden = false
                 } else {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
@@ -171,7 +178,7 @@ final class PostDetailViewController: BaseViewController {
         let sheet = CustomSheetViewController()
         sheet.postData = viewModel.postData
         sheet.popAfterEditPost = {
-            self.inputPostIdTrigger.onNext(self.postId ?? "") // 수정후에는 다시 패치
+            self.inputPostIdTrigger.onNext(self.postId) // 수정후에는 다시 패치
         }
         sheet.popPostDetailView = {
             self.navigationController?.popViewController(animated: true)

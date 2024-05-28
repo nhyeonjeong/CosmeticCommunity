@@ -88,11 +88,9 @@ final class SaveViewController: BaseViewController {
         outputNotInNetworkTrigger
             .asDriver(onErrorJustReturn: {})
             .drive(with: self) { owner, value in
-                if let value {
-                    print("보여!!!")
+                if let _ = value {
                     owner.mainView.notInNetworkView.isHidden = false
                 } else {
-                    print("숨겨!!!")
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
                 }
             }.disposed(by: disposeBag)
@@ -101,8 +99,7 @@ final class SaveViewController: BaseViewController {
     private func bindCollectionView() {
         mainView.likedPostsCollection.collectionView.rx.modelSelected(PostModel.self)
             .bind(with: self) { owner, value in
-                let vc = PostDetailViewController()
-                vc.postId = value.post_id
+                let vc = PostDetailViewController(postId: value.post_id)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -110,8 +107,7 @@ final class SaveViewController: BaseViewController {
         mainView.recentPostsCollection.collectionView.rx
             .modelSelected(PostModel.self)
             .bind(with: self) { owner, value in
-                let vc = PostDetailViewController()
-                vc.postId = value.post_id
+                let vc = PostDetailViewController(postId: value.post_id)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)

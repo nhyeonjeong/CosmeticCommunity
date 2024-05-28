@@ -94,7 +94,6 @@ final class SaveViewModel: InputOutput{
                             return Observable<PostModel>.empty()
                         }
                         if error == APIError.notInNetwork {
-                            print("😎네트워크 연결 안돼...")
                             self.outputNotInNetworkTrigger.accept {
                                 input.inputRecentPosts.onNext(())
                             }
@@ -109,7 +108,7 @@ final class SaveViewModel: InputOutput{
                             }
                         }
                         outputRecentPosts.accept(nil)
-                        return Observable<PostModel>.empty() // 블로그
+                        return Observable<PostModel>.empty()
                     }
                     postModelArray.append(postObservable) // Observable<PostModel> 배열 추가
                 }
@@ -119,6 +118,7 @@ final class SaveViewModel: InputOutput{
                 return wholeSequence
             }
             .subscribe(with: self) { owner, data in
+                print("🍕", data)
                 owner.outputNotInNetworkTrigger.accept(nil)
                 // 정렬은 userdefault배열대로 다시 정렬
                 var getData: [PostModel] = []
