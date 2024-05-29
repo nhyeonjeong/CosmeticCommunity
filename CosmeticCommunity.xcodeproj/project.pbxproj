@@ -125,6 +125,9 @@
 		8BB4329C2BFCDD0500B687F4 /* UsedItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB4329B2BFCDD0500B687F4 /* UsedItemViewController.swift */; };
 		8BB4329E2BFCDD1500B687F4 /* UsedItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB4329D2BFCDD1500B687F4 /* UsedItemViewModel.swift */; };
 		8BB432A02BFCE10000B687F4 /* PostType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB4329F2BFCE10000B687F4 /* PostType.swift */; };
+		8BB432A32C07781200B687F4 /* ChattingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB432A22C07781200B687F4 /* ChattingViewModel.swift */; };
+		8BB432A52C07782C00B687F4 /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB432A42C07782C00B687F4 /* ChattingViewController.swift */; };
+		8BB432A72C07785600B687F4 /* ChattingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB432A62C07785600B687F4 /* ChattingView.swift */; };
 		8BB570852BE283A5006DF25A /* HomePostLargeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB570842BE283A5006DF25A /* HomePostLargeCollectionViewCell.swift */; };
 		8BB570872BE2A79F006DF25A /* HomeTagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB570862BE2A79F006DF25A /* HomeTagCollectionViewCell.swift */; };
 		8BB570892BE2B8F7006DF25A /* TagPostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB570882BE2B8F7006DF25A /* TagPostCollectionViewCell.swift */; };
@@ -243,6 +246,9 @@
 		8BB4329B2BFCDD0500B687F4 /* UsedItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedItemViewController.swift; sourceTree = "<group>"; };
 		8BB4329D2BFCDD1500B687F4 /* UsedItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedItemViewModel.swift; sourceTree = "<group>"; };
 		8BB4329F2BFCE10000B687F4 /* PostType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostType.swift; sourceTree = "<group>"; };
+		8BB432A22C07781200B687F4 /* ChattingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewModel.swift; sourceTree = "<group>"; };
+		8BB432A42C07782C00B687F4 /* ChattingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewController.swift; sourceTree = "<group>"; };
+		8BB432A62C07785600B687F4 /* ChattingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingView.swift; sourceTree = "<group>"; };
 		8BB570842BE283A5006DF25A /* HomePostLargeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostLargeCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BB570862BE2A79F006DF25A /* HomeTagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTagCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BB570882BE2B8F7006DF25A /* TagPostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPostCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -459,6 +465,7 @@
 		8B428C662BCAB5B900FD1B69 /* Present */ = {
 			isa = PBXGroup;
 			children = (
+				8BB432A12C07780600B687F4 /* Chatting */,
 				8B5544FA2BE9779A00601489 /* NotNetwork */,
 				8B428CA12BCCA98B00FD1B69 /* Member */,
 				8B3AFD072BD81D930069773F /* Save */,
@@ -698,6 +705,16 @@
 			path = UsedItem;
 			sourceTree = "<group>";
 		};
+		8BB432A12C07780600B687F4 /* Chatting */ = {
+			isa = PBXGroup;
+			children = (
+				8BB432A22C07781200B687F4 /* ChattingViewModel.swift */,
+				8BB432A42C07782C00B687F4 /* ChattingViewController.swift */,
+				8BB432A62C07785600B687F4 /* ChattingView.swift */,
+			);
+			path = Chatting;
+			sourceTree = "<group>";
+		};
 		8BB5708A2BE2C1E4006DF25A /* NewUpload */ = {
 			isa = PBXGroup;
 			children = (
@@ -841,6 +858,7 @@
 				8B3AFCAB2BD428B60069773F /* PostImageCollectionViewCell.swift in Sources */,
 				8B3AFD242BD979070069773F /* CustomSheetViewModel.swift in Sources */,
 				8BB4329E2BFCDD1500B687F4 /* UsedItemViewModel.swift in Sources */,
+				8BB432A72C07785600B687F4 /* ChattingView.swift in Sources */,
 				8B3AFCEB2BD6D0EE0069773F /* Profile.swift in Sources */,
 				8B5544FE2BE977CC00601489 /* NotInNetworkView.swift in Sources */,
 				8B3AFCE72BD69AD70069773F /* FollowViewModel.swift in Sources */,
@@ -898,6 +916,7 @@
 				8B428C9A2BCC13D000FD1B69 /* RouterType.swift in Sources */,
 				8B3AFD202BD96BAA0069773F /* CustomSheetViewController.swift in Sources */,
 				8B428CCC2BCD1CED00FD1B69 /* RegisterView.swift in Sources */,
+				8BB432A52C07782C00B687F4 /* ChattingViewController.swift in Sources */,
 				8B428C8A2BCACABA00FD1B69 /* Constants.swift in Sources */,
 				8B57ABBE2BD2C395004BC76E /* SearchHomeView.swift in Sources */,
 				8BB4329A2BFCDCFE00B687F4 /* UsedItemView.swift in Sources */,
@@ -916,6 +935,7 @@
 				8B428C8E2BCBC25D00FD1B69 /* InputOutput.swift in Sources */,
 				8B428C922BCBCB3600FD1B69 /* UserManager.swift in Sources */,
 				8B3AFCA52BD4195B0069773F /* CommentManager.swift in Sources */,
+				8BB432A32C07781200B687F4 /* ChattingViewModel.swift in Sources */,
 				8B3AFC962BD3DCF50069773F /* KingfisherManager.swift in Sources */,
 				8B3AFCBA2BD522CE0069773F /* LikeManager.swift in Sources */,
 				8B5545E72BF3366E00601489 /* PaymentManger.swift in Sources */,
