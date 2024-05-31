@@ -8,10 +8,12 @@
 import UIKit
 
 final class ProfileCustomButton: UIButton {
-    var title: String
+    var title: String?
+    var image : UIImage?
 
-    init(_ title: String) {
+    init(title: String? = nil, image: UIImage? = nil) {
         self.title = title
+        self.image = image
         super.init(frame: .zero)
         configureView()
     }
@@ -22,6 +24,7 @@ final class ProfileCustomButton: UIButton {
     
     private func configureView() {
         setTitle(title, for: .normal)
+        setImage(image, for: .normal)
         setTitleColor(Constants.Color.text, for: .normal)
         backgroundColor = .white
         layer.cornerRadius = 10

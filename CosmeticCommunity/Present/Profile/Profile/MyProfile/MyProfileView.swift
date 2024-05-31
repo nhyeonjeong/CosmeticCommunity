@@ -55,8 +55,8 @@ final class MyProfileView: BaseView {
         view.spacing = 10
         return view
     }()
-    lazy var EditProfileButton = ProfileCustomButton("프로필 수정")
-    lazy var logoutButton = ProfileCustomButton("로그아웃")
+    lazy var EditProfileButton = ProfileCustomButton(title: "프로필 수정")
+    lazy var logoutButton = ProfileCustomButton(title: "로그아웃")
     
     lazy var postsCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())

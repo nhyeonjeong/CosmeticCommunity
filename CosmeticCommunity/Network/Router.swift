@@ -41,6 +41,9 @@ enum Router {
     
     // payment
     case paymentValidation(query: PaymentQuery)
+    
+    // chatting
+    case makeChattingRoom(query: ChattingRoomQuery)
 }
 
 extension Router: RouterType {
@@ -50,7 +53,7 @@ extension Router: RouterType {
     
     var method: HTTPMethod {
         switch self {
-        case .login, .join, .validEmail, .uploadPostImage, .upload, .likeStatus, .uploadComment, .paymentValidation:
+        case .login, .join, .validEmail, .uploadPostImage, .upload, .likeStatus, .uploadComment, .paymentValidation, .makeChattingRoom:
             return .post
         case .tokenRefresh, .checkPosts, .checkSpecificPost, .checkUserPosts, .myProfile, .otherProfile,  .myLikedPosts, .hashtag:
             return .get
@@ -71,7 +74,7 @@ extension Router: RouterType {
         case .login, .join, .validEmail:
             return [HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue]
-        case .upload, .editPost, .likeStatus, .uploadComment, .hashtag, .paymentValidation:
+        case .upload, .editPost, .likeStatus, .uploadComment, .hashtag, .paymentValidation, .makeChattingRoom:
             return [HTTPHeader.sesacKey.rawValue: APIKey.sesacKey.rawValue,
                     HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                     HTTPHeader.authorization.rawValue: UserManager.shared.getAccessToken() ?? ""]
@@ -128,6 +131,9 @@ extension Router: RouterType {
             
         case .paymentValidation:
             return "v1/payments/validation"
+            
+        case .makeChattingRoom:
+            return "v1/chats"
         }
     }
     var parameters: Parameters? {
@@ -153,7 +159,7 @@ extension Router: RouterType {
             return [ParameterKey.like_status.rawValue: query.like_status]
         case .uploadComment(let query, _):
             return [ParameterKey.content.rawValue: query.content]
-        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .deletePost, .myLikedPosts, .deleteComment, .hashtag, .paymentValidation:
+        case .join, .myProfile, .otherProfile, .tokenRefresh, .uploadPostImage, .checkPosts, .checkUserPosts, .checkSpecificPost, .deletePost, .myLikedPosts, .deleteComment, .hashtag, .paymentValidation, .makeChattingRoom:
             return nil
         }
     }
@@ -172,7 +178,7 @@ extension Router: RouterType {
         case .checkUserPosts(_, let query):
             return [URLQueryItem(name: QueryKey.next.rawValue, value: query.next),
                     URLQueryItem(name: QueryKey.limit.rawValue, value: query.limit)]
-        case .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost, .paymentValidation:
+        case .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .tokenRefresh, .uploadPostImage, .checkSpecificPost, .deletePost, .likeStatus, .myLikedPosts, .uploadComment, .deleteComment, .editPost, .paymentValidation, .makeChattingRoom:
             return nil
         }
     }
@@ -196,8 +202,9 @@ extension Router: RouterType {
         case .uploadComment(let query, _):
             return jsonEncoding(query)
         case .paymentValidation(let query):
-            
             return jsonEncodingpayment(query)
+        case .makeChattingRoom(let query):
+            return jsonEncoding(query)
         case .myProfile, .otherProfile, .uploadPostImage, .checkPosts, .checkSpecificPost, .checkUserPosts, .myLikedPosts, .deletePost, .deleteComment, .hashtag:
             return nil
         }
@@ -205,7 +212,7 @@ extension Router: RouterType {
     
     var multipartBody: [Data]? {
         switch self {
-        case .tokenRefresh, .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag, .editPost, .paymentValidation:
+        case .tokenRefresh, .login, .join, .validEmail, .myProfile, .otherProfile, .upload, .checkPosts, .checkSpecificPost, .checkUserPosts, .deletePost, .likeStatus, .uploadComment, .deleteComment, .myLikedPosts, .hashtag, .editPost, .paymentValidation, .makeChattingRoom:
             return nil
         case .uploadPostImage(let query):
             return query

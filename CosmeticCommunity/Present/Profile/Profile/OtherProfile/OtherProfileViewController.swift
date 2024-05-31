@@ -36,6 +36,7 @@ final class OtherProfileViewController: BaseViewController {
         inputFetchProfile.onNext(userId)
     }
     override func bind() {
+        bindChattingVieW()
         let input = OtherProfileViewModel.Input(inputFetchProfile: inputFetchProfile, inputPrepatchTrigger: inputPrepatchTrigger)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
@@ -102,6 +103,15 @@ final class OtherProfileViewController: BaseViewController {
                 } else {
                     owner.mainView.notInNetworkView.isHidden = true // 네트워크 연결되었음
                 }
+            }.disposed(by: disposeBag)
+    }
+}
+extension OtherProfileViewController {
+    func bindChattingVieW() {
+        mainView.chattingButton.rx.tap
+            .bind(with: self) { owner, _ in
+                // 상대방의 userId넘기기
+                owner.navigationController?.pushViewController(ChattingViewController(opponentId: owner.userId), animated: true)
             }.disposed(by: disposeBag)
     }
 }

@@ -27,6 +27,8 @@ enum Constants {
         static let cursorClickImage = UIImage(systemName: "cursorarrow.rays")
         static let checkedItem = UIImage(systemName: "checkmark.circle")
         static let againNetwork = UIImage(systemName: "arrow.counterclockwise.circle.fill")
+        
+        static let chattingImage = UIImage(systemName: "paperplane.fill")
     }
     enum Font {
         static let bigTitle = UIFont.systemFont(ofSize: 20, weight: .semibold)

@@ -33,7 +33,7 @@ final class OtherProfileView: BaseView {
     
     let followStackView = {
         let view = UIStackView()
-//        view.spacing = 10
+        //        view.spacing = 10
         view.distribution = .fillEqually
         view.axis = .horizontal
         return view
@@ -50,13 +50,22 @@ final class OtherProfileView: BaseView {
         view.label.text = "팔로잉"
         return view
     }()
-
+    let buttonStack = {
+        let view = UIStackView()
+        view.distribution = .fillEqually
+        view.spacing = 10
+        return view
+    }()
     let followButton = {
-        let view = ProfileCustomButton("팔로우")
+        let view = ProfileCustomButton(title: "팔로우")
         view.backgroundColor = Constants.Color.secondPoint
         return view
     }()
-    
+    let chattingButton = {
+        let view = ProfileCustomButton(image: Constants.Image.chattingImage)
+        view.tintColor = Constants.Color.point
+        return view
+    }()
     lazy var postsCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
         view.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
@@ -65,8 +74,9 @@ final class OtherProfileView: BaseView {
     override func configureHierarchy() {
         followStackView.addArrangedSubview(followersCountButton)
         followStackView.addArrangedSubview(followingCountButton)
-
-        addViews([profileView, personalLabel, followStackView, followButton, postsCollectionView, noResultLabel, notInNetworkView])
+        buttonStack.addArrangedSubview(followButton)
+        buttonStack.addArrangedSubview(chattingButton)
+        addViews([profileView, personalLabel, followStackView, buttonStack, postsCollectionView, noResultLabel, notInNetworkView])
     }
     override func configureConstraints() {
         profileView.snp.makeConstraints { make in
@@ -89,10 +99,16 @@ final class OtherProfileView: BaseView {
         followingCountButton.snp.makeConstraints { make in
             make.verticalEdges.bottom.equalToSuperview()
         }
-        followButton.snp.makeConstraints { make in
+        buttonStack.snp.makeConstraints { make in
             make.top.equalTo(followStackView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(15)
             make.height.equalTo(40)
+        }
+        followButton.snp.makeConstraints { make in
+            make.leading.verticalEdges.equalToSuperview()
+        }
+        chattingButton.snp.makeConstraints { make in
+            make.verticalEdges.trailing.equalToSuperview()
         }
         postsCollectionView.snp.makeConstraints { make in
             make.top.equalTo(followButton.snp.bottom).offset(10)

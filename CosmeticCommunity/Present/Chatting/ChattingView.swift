@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class ChattingView: BaseView {
-    let chattingTableView = UITableView()
+    private let chattingTableView = UITableView()
     
     override func configureHierarchy() {
         addViews([chattingTableView])
