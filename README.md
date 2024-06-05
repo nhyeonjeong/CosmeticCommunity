@@ -19,21 +19,20 @@
 - 퍼스널컬러별로 검색기능
 - 중고상품 결제 기능
 - 사용자가 올린 게시글과 프로필 조회
-- 채팅기능(구현예정)
 
 ## 💄사용한 기술스택
 - UIKit, CodeBaseUI, MVVM
-- RxSwift, RxCocoa, Alamofire, Snapkit, Kingfisher, Toast, Lottie, iamport
-- Singleton, DI, UserDefault, Access Control, Router Pattern
-- CompositionalLayout
-- Socket(구현예정)
+- RxSwift, RxCocoa, Alamofire, HTTP multipart/form-data, Snapkit, Kingfisher, Toast, Lottie, iamport
+- Singleton, DI, UserDefault, Access Control, Router Pattern, ATS
+- UICompositionalLayout, PHPickerViewControllerDelegate
 
 ## 💄기술설명
 (이유작성하기)
 - MVVM InputOutput패턴
   > ViewController과 ViewModel을 분리하고 RxSwift, RxCocoa를 사용해 MVVM InputOutput패턴으로 작성
+  > 
 - Alamofire을 사용한 네트워크통신 NetworkManager Singleton패턴으로 구성
-  > Alamofire 통신 후 Generic을 사용해 받아온 타입으로 Decoding
+  > Generic을 사용해 Decodable한 타입들로 디코딩
   > Decoding 결과는 RxSwift를 사용한 MVVM패턴을 위해 Observable로 반환
   > 통신 결과를 분기처리하여 실패 했다면 상태코드에 맞는 Error이벤트 전송
   > Router Pattern으로 헤더, 바디, 쿼리를 한번에 처리하여 urlRequest로 API통신
@@ -45,19 +44,20 @@
 - 외부에서 객체를 생성해 인스턴스 생성시 DI
 - Multipart통신으로 서버에 이미지를 포함한 데이터 업로드
 - 커서기반 페이지네이션
+- 네트워크가 끊겼을 때 새로고침 화면
 
 
 ## 💄트러블슈팅
-### 1. 사진첩 사진 선택후 CollectionView에 사진반영 시점이 맞지 않음
+### 1. loadObject클로저 구문으로 인해 사진이 추가되기 전 collectionview가 그려지는 문제
 
 1-1) 문제
 
 
 
-사진첩에서 사진을 가져오기 위해 PHPickerViewControllerDelegate프로토콜 채택
-아래 메서드로 사진이 선택됐을 때 결과 results를 반복문을 돌면서 viewModel에 있는 appendPhotos메서드로 photos라는 [NSItemProviderReading]타입으로 저장.
-반복문 내부에서 NSItemProvider를 UIImage로 변환하는 과정인 loadObject에서 클로저로 인해 비동기로 동작
-선택한 사진을 저장하는 것보다 선택한 사진 CollectionView뷰를 그려주는 inputSelectedPhotoItems.onNext가 먼저 실행되는 문제 발생
+사진첩에서 사진을 가져오기 위해 PHPickerViewControllerDelegate프로토콜 채택.
+사진이 선택됐을 때 결과 results를 반복문을 돌면서 viewModel에 있는 appendPhotos메서드로 photos라는 [NSItemProviderReading]타입으로 저장.
+반복문 내부에서 NSItemProvider를 UIImage로 변환하는 과정인 loadObject에서 클로저로 인해 비동기로 동작.
+선택한 사진을 저장하는 것보다 선택한 사진 CollectionView뷰를 그려주는 inputSelectedPhotoItems.onNext가 먼저 실행되는 문제 발생.
 
 1-2) 해결
 
@@ -72,12 +72,11 @@ UIImage로 변경할 때마다 group.leave()를 실행, group.notify로 inputSel
 </div>
 </details>
 
-### 2. 게시글 CollectionView화면에서 게시글의 상세정보를 확인후 다시 뒤로 갔을 때 페이지네이션 문제
+### 2. 커서 기반 페이지네이션으로 패치한 게시글 갯수 저장
 2-1) 문제
 
 
-
-다시 위로 돌아가서 ColletionView를 보여줘야 할 때 이전에 패치했던 게시글의 수대로 보여주는게 아닌 다시 첫 페이지만을 보여주는 문제 발생
+게시글 상세 확인 후 다시 뒤로 돌아가서 ColletionView를 보여줘야 할 때 이전에 패치했던 게시글의 수대로 보여주는게 아닌 다시 첫 페이지만을 보여주는 문제 발생
 
 2-2) 해결
 
@@ -102,7 +101,7 @@ ViewController viewWillAppear메서드에서 화면이 보여지는 시점일때
 </div>
 </details>
 
-### 3. 최근 본 게시물 이미 삭제된 게시글일 때 대응
+### 3. 최근 본 게시물 이미 삭제된 게시글일 때 Observable.empty()처리
 3-1) 문제
 
 
@@ -159,7 +158,10 @@ customSegment를 사용하려는 뷰에서 SegmentCase프로토콜을 따르는 
 
 
 ## 💄기술회고
-일기형식으로 쓰지 말고 아쉬운 점
+viewModel에서 API통신을 할 때마다 엑세스토큰이 만료될 때 발생하는 에러를 캐치하고 그때마다 엑세스토큰을 갱신하는 통신을 하도록 했음. API통신함수를 호출하는 Manager에 이 부분을 작성해서 코드의 반복을 줄이고 Alamofire의 Interpretor을 사용해서 엑세스토큰을 갱신을 API통신 함수에서 했으면 하면 아쉬움이 있음. 
+또한 리프레시토큰이 만료되었을 때마다 viewModel에서 ViewController로 로그인 화면을 present하도록 신호를 보냈는데 notification center를 사용해서 뷰모델에서 신호를 보내지 않고 내부적으로 처리했다면 모든 뷰모델에 반복적으로 같은 코드를 사용하지 않을 수 있을 것 같아서 역시 아쉬움.
+네트워크 통신은 Router Pattern으로 관리하긴 했지만 여러 통신종류에 따라서 분리를 해줬다면 더 가독성 있는 코드가 되었을 텐데 하나의 열거형에 모두 넣어서 코드가 너무 길어져서 아쉬움.
+
 
 
 
