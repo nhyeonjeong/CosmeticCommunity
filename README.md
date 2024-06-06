@@ -30,10 +30,12 @@
 (이유작성하기)
 - MVVM InputOutput패턴
   > ViewController과 ViewModel을 분리하고 RxSwift, RxCocoa를 사용해 MVVM InputOutput패턴으로 작성
-  > 
+  > 이전에는 직접 Observable클래스로 직접 반응형코드를 구현했었는데 Operator를 사용해서 data stream을 쉽게 바꾸고 UI에 대한 반응도 더 쉽게 처리하기 위해 Rx를 사용해봄.
+  > InputOuput패턴을 사용으로 viewModel과 viewController사이의 데이터 흐름 이해도 증가.
 - Alamofire을 사용한 네트워크통신 NetworkManager Singleton패턴으로 구성
-  > Generic을 사용해 Decodable한 타입들로 디코딩
+  > Generic을 사용해 Decodable한 타입들로 디코딩                                                
   > Decoding 결과는 RxSwift를 사용한 MVVM패턴을 위해 Observable로 반환
+  > 네트워크 통신이 자주 쓰이기 때문에 싱글톤 패턴으로 구성
   > 통신 결과를 분기처리하여 실패 했다면 상태코드에 맞는 Error이벤트 전송
   > Router Pattern으로 헤더, 바디, 쿼리를 한번에 처리하여 urlRequest로 API통신
   > 게시글 / 좋아요 / 유저 / 결제를 담당하는 Manager에서 NetworkManager메서드에 접근
