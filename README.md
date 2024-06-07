@@ -27,7 +27,6 @@
 - UICompositionalLayout, PHPickerViewControllerDelegate
 
 ## 💄기술설명
-(이유작성하기)
 - MVVM InputOutput패턴
   > ViewController과 ViewModel을 분리하고 RxSwift, RxCocoa를 사용해 MVVM InputOutput패턴으로 작성
   > 이전에는 직접 Observable클래스로 직접 반응형코드를 구현했었는데 Operator를 사용해서 data stream을 쉽게 바꾸고 UI에 대한 반응도 더 쉽게 처리하기 위해 Rx를 사용해봄.
@@ -40,10 +39,9 @@
   > Router Pattern으로 헤더, 바디, 쿼리를 한번에 처리하여 urlRequest로 API통신
   > 게시글 / 좋아요 / 유저 / 결제를 담당하는 Manager에서 NetworkManager메서드에 접근
 - KinfisherManager를 extension하여 헤더를 추가해 이미지경로로 서버에서 이미지를 가져오는 API통신
-- UserDefault를 담당하는 클래스 Singleton 사용
 - 엑세스토큰 만료시 대응할 일들을 TokenManager에 클로저로 전달
   > 리프레시 토큰만료시 로그인화면을 띄워주는 Observer에 이벤트 전달
-- 외부에서 객체를 생성해 인스턴스 생성시 DI
+- 외부에서 객체를 생성해 코드의 재사용성과 유연성을 높이기 위해 인스턴스 생성시 DI
 - Multipart통신으로 서버에 이미지를 포함한 데이터 업로드
 - 커서기반 페이지네이션
 - 네트워크가 끊겼을 때 새로고침 화면
