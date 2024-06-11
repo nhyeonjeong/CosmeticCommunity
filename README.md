@@ -48,7 +48,7 @@
 
 
 ## 💄트러블슈팅
-### 1. loadObject클로저 구문으로 인해 사진이 추가되기 전 collectionview가 그려지는 문제
+### `1. loadObject클로저 구문으로 인해 사진이 추가되기 전 collectionview가 그려지는 문제`
 
 1-1) 문제
 
@@ -72,7 +72,7 @@ UIImage로 변경할 때마다 group.leave()를 실행, group.notify로 inputSel
 </div>
 </details>
 
-### 2. 커서 기반 페이지네이션으로 패치한 게시글 갯수 저장
+### `2. 커서 기반 페이지네이션으로 패치한 게시글 갯수 저장`
 2-1) 문제
 
 
@@ -101,7 +101,7 @@ ViewController viewWillAppear메서드에서 화면이 보여지는 시점일때
 </div>
 </details>
 
-### 3. 최근 본 게시물 이미 삭제된 게시글일 때 Observable.empty()처리
+### `3. 최근 본 게시물 이미 삭제된 게시글일 때 Observable.empty()처리`
 3-1) 문제
 
 
@@ -124,15 +124,13 @@ ViewController viewWillAppear메서드에서 화면이 보여지는 시점일때
 </div>
 </details>
 
-### 4. segment재사용성을 위한 제네릭과 프로토콜
+### `4. segment재사용성을 위한 제네릭과 프로토콜`
 4-1) 고민
-
 
 
 segment를 여러곳에서 재사용하기 위해서는 어떤 구조가 좋을까 고민
 
 4-2) 해결
-
 
 
 segment에 들어갈 메뉴 이름과 그 인덱스를 담을 프로토콜 생성
@@ -142,7 +140,8 @@ segment에 들어갈 메뉴 이름과 그 인덱스를 담을 프로토콜 생�
 <img width="545" alt="%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-05-23%20%EC%98%A4%EC%A0%84%209 18 45" src="https://github.com/nhyeonjeong/CosmeticCommunity/assets/102401977/b88ab572-20ef-41e4-ac31-1bc5a0ccf378">
 </div>
 </details>
-커스텀 SegmentControl으로 제네릭타입으로 SementCase프로토콜을 따르는 클래스를 전달
+
+> 커스텀 SegmentControl으로 제네릭타입으로 SementCase프로토콜을 따르는 클래스를 전달
 configureSement메서드에서 반복문을 돌리면서 메뉴 삽입
 메뉴가 무엇이든, 몇 개든 제네릭으로 쉽게 처리
 <details>
@@ -153,7 +152,8 @@ configureSement메서드에서 반복문을 돌리면서 메뉴 삽입
 
 </div>
 </details>
-customSegment를 사용하려는 뷰에서 SegmentCase프로토콜을 따르는 Enum 생성
+
+> customSegment를 사용하려는 뷰에서 SegmentCase프로토콜을 따르는 Enum 생성
 프로토콜으로서의 타입을 사용해서 segment객체 생성시 주입
 
 
