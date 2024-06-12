@@ -35,7 +35,7 @@
   - Generic을 사용해 Decodable한 타입들로 디코딩                                                
   - Decoding 결과는 RxSwift를 사용한 MVVM패턴을 위해 Observable로 반환
   - 네트워크 통신이 자주 쓰이기 때문에 싱글톤 패턴으로 구성
-  - 통신 결과를 분기처리하여 실패 했다면 상태코드에 맞는 Error이벤트 전송
+  - 통신 결과 statuscode를 분기처리하여 실패 했다면 그에 맞는 Error이벤트 전송
   - Router Pattern으로 헤더, 바디, 쿼리를 한번에 처리하여 urlRequest로 API통신
   - 게시글 / 좋아요 / 유저 / 결제를 담당하는 Manager에서 NetworkManager메서드에 접근
 - KinfisherManager를 extension하여 헤더를 추가해 이미지경로로 서버에서 이미지를 가져오는 API통신
@@ -45,6 +45,7 @@
 - Multipart통신으로 서버에 이미지를 포함한 데이터 업로드
 - 커서기반 페이지네이션
 - 네트워크가 끊겼을 때 새로고침 화면
+- 여러 부분에서 사용되는 UI customView로 분리
 
 
 ## 💄트러블슈팅
