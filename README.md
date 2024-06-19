@@ -29,8 +29,8 @@
 ## 💄기술설명
 - MVVM InputOutput패턴
   - ViewController과 ViewModel을 분리하고 RxSwift, RxCocoa를 사용해 MVVM InputOutput패턴으로 작성
-  - 이전에는 직접 Observable클래스로 직접 반응형코드를 구현했었는데 Operator를 사용해서 data stream을 쉽게 바꾸고 UI에 대한 반응도 더 쉽게 처리하기 위해 Rx를 사용해봄.
-  - InputOuput패턴을 사용으로 viewModel과 viewController사이의 데이터 흐름 이해도 증가.
+  - 이전에는 직접 Observable클래스로 직접 반응형코드를 구현했었는데 Operator를 사용해서 data stream을 쉽게 바꾸고 UI에 대한 반응도 더 쉽게 처리하기 위해 Rx 사용
+  - InputOuput패턴을 사용으로 viewModel과 viewController사이의 데이터 흐름 이해도 증가
 - Alamofire을 사용한 네트워크통신 NetworkManager Singleton패턴으로 구성
   - Generic을 사용해 Decodable한 타입들로 디코딩                                                
   - Decoding 결과는 RxSwift를 사용한 MVVM패턴을 위해 Observable로 반환
@@ -44,8 +44,8 @@
 - 외부에서 객체를 생성해 코드의 재사용성과 유연성을 높이기 위해 인스턴스 생성시 DI
 - Multipart통신으로 서버에 이미지를 포함한 데이터 업로드
 - 커서기반 페이지네이션
-- 네트워크가 끊겼을 때 새로고침 화면
-- 여러 부분에서 사용되는 UI customView로 분리
+- 네트워크 불안정시 새로고침 화면
+- 여러 부분에서 사용되는 UI를 customView로 분리
 
 
 ## 💄트러블슈팅
@@ -159,9 +159,10 @@ configureSement메서드에서 반복문을 돌리면서 메뉴 삽입
 
 
 ## 💄기술회고
-viewModel에서 API통신을 할 때마다 엑세스토큰이 만료될 때 발생하는 에러를 캐치하고 그때마다 엑세스토큰을 갱신하는 통신을 하도록 했음. API통신함수를 호출하는 Manager에 이 부분을 작성해서 코드의 반복을 줄이고 Alamofire의 Interpretor을 사용해서 엑세스토큰을 갱신을 API통신 함수에서 했으면 하면 아쉬움이 있음. 
-또한 리프레시토큰이 만료되었을 때마다 viewModel에서 ViewController로 로그인 화면을 present하도록 신호를 보냈는데 notification center를 사용해서 뷰모델에서 신호를 보내지 않고 내부적으로 처리했다면 모든 뷰모델에 반복적으로 같은 코드를 사용하지 않을 수 있을 것 같아서 역시 아쉬움.
-네트워크 통신은 Router Pattern으로 관리하긴 했지만 여러 통신종류에 따라서 분리를 해줬다면 더 가독성 있는 코드가 되었을 텐데 하나의 열거형에 모두 넣어서 코드가 너무 길어져서 아쉬움.
+viewModel에서 API통신을 할 때마다 엑세스토큰이 만료될 때 발생하는 에러를 캐치하고 그때마다 엑세스토큰을 갱신하는 통신을 하였습니다. 
+하지만 API통신함수를 호출하는 Manager에 이 부분을 작성해서 코드의 반복을 줄이고 Alamofire의 Interpretor을 사용해 엑세스토큰 갱신을 API통신 함수에서 하는 것이 더 나을 것 같다고 생각했습니다. 
+또한 리프레시토큰이 만료되었을 때마다 viewModel에서 ViewController로 로그인 화면을 present하도록 신호를 보냈지만, notification center를 사용해 뷰모델에서 신호를 보내지 않고 내부적으로 처리했다면 모든 뷰모델에 반복적으로 같은 코드를 작성하지 않을 수 있을 것 같습니다.
+네트워크 통신은 하나의 열거형으로 Router Pattern울 관리했고 URLRequest타입으로 통신하여 깔끔했지만, 통신종류에 따라서 열거형분리를 해줬다면 더 가독성 있는 코드가 될 것 같습니다.
 
 
 
