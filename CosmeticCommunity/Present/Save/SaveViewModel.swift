@@ -26,7 +26,7 @@ final class SaveViewModel: InputOutput{
         
     }
     struct Output {
-        let outputProfileImageTrigger: Driver<String>
+        let outputProfileImageTrigger: Driver<String?>
         let outputFetchLikedPosts: Driver<[PostModel]?>
         let outputRecentPosts: Driver<[PostModel]?>
         let outputLoginView: PublishRelay<Void>
@@ -34,7 +34,7 @@ final class SaveViewModel: InputOutput{
     }
     
     func transform(input: Input) -> Output {
-        let outputProfileImageTrigger = PublishRelay<String>()
+        let outputProfileImageTrigger = PublishRelay<String?>()
         let outputFetchLikedPosts = PublishRelay<[PostModel]?>()
         let outputRecentPosts = PublishRelay<[PostModel]?>()
         

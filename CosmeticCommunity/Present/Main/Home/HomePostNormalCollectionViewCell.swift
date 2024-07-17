@@ -24,14 +24,16 @@ class HomePostNormalCollectionViewCell: BaseCollectionViewCell {
         view.clipsToBounds = true
         return view
     }()
+    /*
     let titleLabel = {
         let view = UILabel()
         view.configureLabel(textColor: Constants.Color.text, font: Constants.Font.small)
         view.numberOfLines = 2
         return view
     }()
+     */
     override func configureHierarchy() {
-        contentView.addViews([imageView, personalLabel, titleLabel])
+        contentView.addViews([imageView, personalLabel])
     }
     override func configureConstraints() {
         imageView.snp.makeConstraints { make in
@@ -41,11 +43,14 @@ class HomePostNormalCollectionViewCell: BaseCollectionViewCell {
 //            make.top.equalTo(imageView.snp.bottom).offset(4)
             make.leading.equalTo(contentView).inset(6)
             make.height.equalTo(20)
+            make.bottom.equalTo(contentView).inset(6)
         }
+        /*
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(personalLabel.snp.bottom).offset(2)
             make.bottom.horizontalEdges.equalTo(contentView).inset(6)
         }
+         */
     }
     override func configureView() {
         contentView.clipsToBounds = true
@@ -67,6 +72,6 @@ class HomePostNormalCollectionViewCell: BaseCollectionViewCell {
         personalLabel.text = " \(item.personalColor.rawValue) "
         personalLabel.textColor = item.personalColor.textColor
         personalLabel.backgroundColor = item.personalColor.backgroundColor
-        titleLabel.text = item.title
+//        titleLabel.text = item.title
     }
 }

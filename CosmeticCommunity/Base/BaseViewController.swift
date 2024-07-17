@@ -13,17 +13,24 @@ class BaseViewController: UIViewController, RxProtocol {
     var outputLoginView = PublishRelay<Void>()
     var outputNotInNetworkTrigger = PublishRelay<(() -> Void)?>()
     var disposeBag = DisposeBag()
+    
+    let backBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(clickBackButton))
+    
+    @objc func clickBackButton() {
+        self.dismiss(animated: true)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setViewTapGesture(mainView: self.view)
-        
+        backBarButtonItem.tintColor = Constants.Color.point
         bind()
         configureHierarchy()
         configureConstraints()
         configureView()
         bindLoginView()
     }
+    
     func bind() {
         
     }

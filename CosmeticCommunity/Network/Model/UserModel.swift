@@ -45,7 +45,7 @@ struct LoginModel: Decodable {
         self.user_id = try container.decode(String.self, forKey: .user_id)
         self.email = try container.decode(String.self, forKey: .email)
         self.nick = try container.decode(String.self, forKey: .nick)
-        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? Constants.Image.defualtProfilePath // 기본 이미지
+        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""// 기본 이미지
         self.accessToken = try container.decode(String.self, forKey: .accessToken)
         self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     }
@@ -78,7 +78,7 @@ struct UserModel: Decodable {
         let personalColorString = try container.decodeIfPresent(String.self, forKey: .birthDay) ?? PersonalColor.none.rawValue
         self.personalColor = PersonalColor(rawValue: personalColorString) ?? PersonalColor.none
         
-        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? Constants.Image.defualtProfilePath
+        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
         self.followers = try container.decode([CreatorModel].self, forKey: .followers)
         self.following = try container.decode([CreatorModel].self, forKey: .following)
         self.posts = try container.decode([String].self, forKey: .posts)
@@ -100,7 +100,7 @@ struct CreatorModel: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.user_id = try container.decode(String.self, forKey: .user_id)
         self.nick = try container.decode(String.self, forKey: .nick)
-        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? Constants.Image.defualtProfilePath
+        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
     }
 }
 struct JoinModel: Decodable {

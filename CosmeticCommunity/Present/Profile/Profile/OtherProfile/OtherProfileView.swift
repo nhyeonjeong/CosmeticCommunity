@@ -30,7 +30,7 @@ final class OtherProfileView: BaseView {
         view.clipsToBounds = true
         return view
     }()
-    
+    /*
     let followStackView = {
         let view = UIStackView()
         //        view.spacing = 10
@@ -50,6 +50,7 @@ final class OtherProfileView: BaseView {
         view.label.text = "팔로잉"
         return view
     }()
+     
     let buttonStack = {
         let view = UIStackView()
         view.distribution = .fillEqually
@@ -66,17 +67,18 @@ final class OtherProfileView: BaseView {
         view.tintColor = Constants.Color.point
         return view
     }()
+     */
     lazy var postsCollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout())
         view.register(PostImageCollectionViewCell.self, forCellWithReuseIdentifier: PostImageCollectionViewCell.identifier)
         return view
     }()
     override func configureHierarchy() {
-        followStackView.addArrangedSubview(followersCountButton)
-        followStackView.addArrangedSubview(followingCountButton)
-        buttonStack.addArrangedSubview(followButton)
-        buttonStack.addArrangedSubview(chattingButton)
-        addViews([profileView, personalLabel, followStackView, buttonStack, postsCollectionView, noResultLabel, notInNetworkView])
+//        followStackView.addArrangedSubview(followersCountButton)
+//        followStackView.addArrangedSubview(followingCountButton)
+//        buttonStack.addArrangedSubview(followButton)
+//        buttonStack.addArrangedSubview(chattingButton)
+        addViews([profileView, personalLabel, postsCollectionView, noResultLabel, notInNetworkView])
     }
     override func configureConstraints() {
         profileView.snp.makeConstraints { make in
@@ -88,6 +90,7 @@ final class OtherProfileView: BaseView {
             make.centerY.equalTo(profileView)
             make.height.equalTo(30)
         }
+        /*
         followStackView.snp.makeConstraints { make in
             make.top.equalTo(personalLabel.snp.bottom).offset(16)
             make.centerX.equalToSuperview()
@@ -110,12 +113,13 @@ final class OtherProfileView: BaseView {
         chattingButton.snp.makeConstraints { make in
             make.verticalEdges.trailing.equalToSuperview()
         }
+         */
         postsCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(followButton.snp.bottom).offset(10)
+            make.top.equalTo(personalLabel.snp.bottom).offset(30)
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
         noResultLabel.snp.makeConstraints { make in
-            make.top.equalTo(followButton.snp.bottom).offset(20)
+//            make.top.equalTo(followButton.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
         }
         notInNetworkView.snp.makeConstraints { make in
@@ -130,8 +134,8 @@ final class OtherProfileView: BaseView {
         personalLabel.text = data.personalColor.rawValue
         personalLabel.backgroundColor = data.personalColor.backgroundColor
         
-        followersCountButton.countLabel.text = "\(data.followers.count)"
-        followingCountButton.countLabel.text = "\(data.following.count)"
+//        followersCountButton.countLabel.text = "\(data.followers.count)"
+//        followingCountButton.countLabel.text = "\(data.following.count)"
     }
     
 }

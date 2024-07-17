@@ -30,9 +30,9 @@ final class MyProfileView: BaseView {
         view.clipsToBounds = true
         return view
     }()
+    /*
     let followStackView = {
         let view = UIStackView()
-//        view.spacing = 10
         view.distribution = .fillEqually
         view.axis = .horizontal
         return view
@@ -49,13 +49,14 @@ final class MyProfileView: BaseView {
         view.label.text = "팔로잉"
         return view
     }()
+     */
     let buttonStack = {
         let view = UIStackView()
         view.distribution = .fillEqually
         view.spacing = 10
         return view
     }()
-    lazy var EditProfileButton = ProfileCustomButton(title: "프로필 수정")
+//    lazy var EditProfileButton = ProfileCustomButton(title: "프로필 수정")
     lazy var logoutButton = ProfileCustomButton(title: "로그아웃")
     
     lazy var postsCollectionView = {
@@ -64,12 +65,12 @@ final class MyProfileView: BaseView {
         return view
     }()
     override func configureHierarchy() {
-        followStackView.addArrangedSubview(followersCountButton)
-        followStackView.addArrangedSubview(followingCountButton)
+//        followStackView.addArrangedSubview(followersCountButton)
+//        followStackView.addArrangedSubview(followingCountButton)
         
-        buttonStack.addArrangedSubview(EditProfileButton)
+//        buttonStack.addArrangedSubview(EditProfileButton)
         buttonStack.addArrangedSubview(logoutButton)
-        addViews([profileView, personalLabel, followStackView, buttonStack, postsCollectionView, noResultLabel, notInNetworkView])
+        addViews([profileView, personalLabel, buttonStack, postsCollectionView, noResultLabel, notInNetworkView])
     }
     override func configureConstraints() {
         profileView.snp.makeConstraints { make in
@@ -81,6 +82,7 @@ final class MyProfileView: BaseView {
             make.centerY.equalTo(profileView)
             make.height.equalTo(30)
         }
+        /*
         followStackView.snp.makeConstraints { make in
             make.top.equalTo(personalLabel.snp.bottom).offset(16)
             make.centerX.equalToSuperview()
@@ -92,16 +94,19 @@ final class MyProfileView: BaseView {
         followingCountButton.snp.makeConstraints { make in
             make.verticalEdges.bottom.equalToSuperview()
         }
+         */
         buttonStack.snp.makeConstraints { make in
-            make.top.equalTo(followStackView.snp.bottom).offset(10)
+            make.top.equalTo(personalLabel.snp.bottom).offset(30)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(15)
             make.height.equalTo(40)
         }
+        /*
         EditProfileButton.snp.makeConstraints { make in
             make.leading.verticalEdges.equalToSuperview()
         }
+         */
         logoutButton.snp.makeConstraints { make in
-            make.verticalEdges.trailing.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         postsCollectionView.snp.makeConstraints { make in
             make.top.equalTo(buttonStack.snp.bottom).offset(10)
@@ -122,8 +127,8 @@ final class MyProfileView: BaseView {
         personalLabel.text = " \(data.personalColor.rawValue) "
         personalLabel.backgroundColor = data.personalColor.backgroundColor
         
-        followersCountButton.countLabel.text = "\(data.followers.count)"
-        followingCountButton.countLabel.text = "\(data.following.count)"
+//        followersCountButton.countLabel.text = "\(data.followers.count)"
+//        followingCountButton.countLabel.text = "\(data.following.count)"
     }
 }
 extension MyProfileView {

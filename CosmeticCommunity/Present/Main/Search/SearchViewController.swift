@@ -34,6 +34,8 @@ final class SearchViewController: BaseViewController {
         // 포스트로 갔다가 뒤로 돌아올 때 이전에 패치했던 부분까지 다시 패치
         viewModel.limit = "\(max(viewModel.postData.count, 20))"
         inputCategorySelected.onNext(viewModel.selectedCategory)
+        
+        self.navigationItem.leftBarButtonItem = backBarButtonItem
     }
     
     override func configureView() {

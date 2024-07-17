@@ -36,7 +36,7 @@ final class OtherProfileViewController: BaseViewController {
         inputFetchProfile.onNext(userId)
     }
     override func bind() {
-        bindChattingVieW()
+//        bindChattingVieW()
         let input = OtherProfileViewModel.Input(inputFetchProfile: inputFetchProfile, inputPrepatchTrigger: inputPrepatchTrigger)
         let output = viewModel.transform(input: input)
         outputLoginView = output.outputLoginView
@@ -107,6 +107,7 @@ final class OtherProfileViewController: BaseViewController {
     }
 }
 extension OtherProfileViewController {
+    /*
     func bindChattingVieW() {
         mainView.chattingButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -114,4 +115,5 @@ extension OtherProfileViewController {
                 owner.navigationController?.pushViewController(ChattingViewController(opponentId: owner.userId), animated: true)
             }.disposed(by: disposeBag)
     }
+     */
 }

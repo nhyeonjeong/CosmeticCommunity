@@ -30,7 +30,7 @@ final class HomeViewModel: InputOutput {
     }
     
     struct Output {
-        let outputProfileImageTrigger: Driver<String>
+        let outputProfileImageTrigger: Driver<String?>
         let outputMostLikedPostsItem: Driver<[PostModel]>
         let outputTagItems: Driver<[String]>
         let outputTagPostsItem: Driver<[[PostModel]]>
@@ -40,7 +40,7 @@ final class HomeViewModel: InputOutput {
     var disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
-        let outputProfileImageTrigger = PublishRelay<String>()
+        let outputProfileImageTrigger = PublishRelay<String?>()
         let outputMostLikedPostsItem = PublishRelay<[PostModel]>()
         let outputTagItems = PublishRelay<[String]>()
         let searchPersonalCasesPost = PublishSubject<PersonalColor>()
@@ -164,6 +164,7 @@ final class HomeViewModel: InputOutput {
                         return post1.likes.count > post2.likes.count
                     }
                     owner.tagPosts.append(Array(likeSortedList[..<min(6, likeSortedList.count)]))
+                    print("😱\(owner.tagPosts)")
                 }
                 if owner.tagFetchCount > 3 {
                     outputTagItems.accept(owner.tagList)
@@ -180,7 +181,7 @@ final class HomeViewModel: InputOutput {
                 for item in owner.personalCases {
                     print("💎", row)
                     print("🥶", owner.tagList)
-//                    searchTagPost.onNext((owner.tagList[row], item))
+                    searchTagPost.onNext((owner.tagList[row], item))
                 }
             }
             .disposed(by: disposeBag)

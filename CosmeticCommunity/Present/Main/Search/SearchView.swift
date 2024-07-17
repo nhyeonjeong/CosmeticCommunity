@@ -149,6 +149,7 @@ final class SearchView: BaseView {
             make.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
     }
+    // 중고 search인지 아닌지에 따라서
     override func configureView() {
         switch postType {
         case .home:

@@ -67,15 +67,19 @@ final class UserDataView: BaseView {
     }
     
     func upgradeView(profileImage: String, nick: String) {
-        print(#function, profileImage)
+//        print(#function, profileImage)
+        nickname.text = nick
+        if profileImage == "" {
+            profileImageView.image = Constants.Image.defulatProfileImage
+            return
+        }
         kingfisher.getImageURL(path: profileImage) { url in
             if let url {
-                print("url valid")
+                print("😎url valid \(profileImage)")
                 profileImageView.kf.setImage(with: url, options: [.requestModifier(kingfisher.modifier)])
             } else {
                 profileImageView.image = Constants.Image.defulatProfileImage
             }
         }
-        nickname.text = nick
     }
 }

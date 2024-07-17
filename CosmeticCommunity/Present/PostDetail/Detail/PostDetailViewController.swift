@@ -41,6 +41,8 @@ final class PostDetailViewController: BaseViewController {
         inputPostIdTrigger.onNext(postId)
         // userdefault에 최근 본 포스트 저장
         mainView.uploadCommentView.isUserInteractionEnabled = true
+        
+        self.navigationItem.leftBarButtonItem = backBarButtonItem
     }
     override func bind() {
         let input = PostDetailViewModel.Input(inputProfileButtonTrigger: mainView.creatorView.creatorClearButton.rx.tap, inputPostIdTrigger: inputPostIdTrigger,
@@ -245,6 +247,6 @@ extension PostDetailViewController {
         let editAction = UIAction(title: "수정", image: UIImage(systemName: "pencil")) { _ in
             //
         }
-        return [deleteAction, editAction]
+        return [deleteAction]
     }
 }

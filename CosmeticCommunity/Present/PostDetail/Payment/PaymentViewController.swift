@@ -27,7 +27,7 @@ final class PaymentViewController: BaseViewController {
     lazy var payment = IamportPayment(
             pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
             merchant_uid: "ios_\(APIKey.sesacKey)_\(Int(Date().timeIntervalSince1970))",
-            amount: "100").then {
+            amount: "6000").then {
                 $0.pay_method = PayMethod.card.rawValue // 결제할 수단
                 $0.name = postData.title // 결제할 상품명
                 $0.buyer_name = "남현정" // 주문자 이름

@@ -54,15 +54,15 @@ final class UserManager {
     }
     
     // 프로필이미지 경로 가져오기
-    func getProfileImagePath() -> String {
+    func getProfileImagePath() -> String? {
         if let path = UserDefaults.standard.string(forKey: UserDefaultKey.User.profileImagePath.rawValue) {
             return path
         } else {
-            return Constants.Image.defualtProfilePath
+            return nil
         }
     }
     // 프로필이미지 경로 저장
-    func saveProfileImagePath(_ path: String) {
+    func saveProfileImagePath(_ path: String?) {
         UserDefaults.standard.setValue(path, forKey: UserDefaultKey.User.profileImagePath.rawValue)
     }
 
