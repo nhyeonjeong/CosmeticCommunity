@@ -1,6 +1,8 @@
 # COCO 리드미
 
 ## 💄스크린샷
+![CoCo리드미스크린샷 001](https://github.com/user-attachments/assets/031e3cca-7d32-4e69-8b62-da5ff641b3d4)
+![CoCo리드미스크린샷 002](https://github.com/user-attachments/assets/76991b24-0607-43f5-b875-5f2cc5c5421b)
 
 ## 💄프로젝트 소개
 > 화장품 후기를 올리며 인기있는 상품을 확인하고 중고화장품을 사고 팔 수 있는 커뮤니티 앱
